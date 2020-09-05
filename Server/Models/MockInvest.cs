@@ -1,0 +1,53 @@
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
+
+namespace Server.Models
+{
+    public class MockInvest
+    {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
+
+        public string UserId { get; set; }
+
+        public string Code { get; set; }
+
+        public int Amount { get; set; }
+
+        public int BuyPrice { get; set; }
+
+        [BsonIgnore]
+        public int? Price { get; set; }
+
+        [BsonIgnore]
+        public int? Income => Price.HasValue ? BuyPrice - Price.Value : (int?)null;
+
+        [BsonIgnore]
+        public int TotalBuyPrice => Amount * BuyPrice;
+
+        [BsonIgnore]
+        public int? TotalPrice => Price.HasValue ? Price.Value * Amount : (int?)null;
+
+        [BsonIgnore]
+        public int? TotalIncome => TotalPrice.HasValue ? TotalPrice.Value - TotalBuyPrice : (int?)null;
+
+        [BsonIgnore]
+        public double? IncomeRate => TotalPrice.HasValue && TotalBuyPrice != 0 ? 100.0 - (double)TotalBuyPrice / (double)TotalPrice.Value * 100.0 : (double?)null;
+
+        public Protocols.Common.MockInvest ToProtocol()
+        {
+            return new Protocols.Common.MockInvest
+            {
+                Id = Id,
+                UserId = UserId,
+                Code = Code,
+                Amount = Amount,
+                BuyPrice = BuyPrice,
+                CurrentPrice = Price,
+                Income = Income
+            };
+        }
+    }
+}
