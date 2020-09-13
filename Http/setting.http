@@ -1,0 +1,61 @@
+### Code get Kosdaq
+
+POST https://localhost:5001/Code/Load?stockType=Kosdaq
+Content-Type: application/json
+
+### Code get Kospi
+
+POST https://localhost:5001/Code/Load?stockType=Kospi
+Content-Type: application/json
+
+
+### Code get konex
+
+POST https://localhost:5001/Code/Load?stockType=Konex
+Content-Type: application/json
+
+### User Create
+
+POST https://localhost:5001/User
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Balance": 100000000
+}
+
+### Crawling All
+
+POST https://localhost:5001/Crawling
+Content-Type: application/json
+
+{
+    "All": true,
+    "Page": 5
+}
+
+
+### Analysis all
+
+POST https://localhost:5001/Analysis
+Content-Type: application/json
+
+{
+    "All": true,
+    "Days":[5, 20],
+    "Type": "GoldenCross"
+}
+
+
+
+### MockInvest Analysis-Buy
+
+POST https://localhost:5001/MockInvest/Analysis-Buy
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Type": "GoldenCross",
+    "Count":10,    
+    "TotalPrice":10000000
+}
