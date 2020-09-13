@@ -38,6 +38,9 @@ namespace WebUtil.Util
         public async Task<List<T>> FindAsync(FilterDefinition<T> filter) =>
             (await Collection.FindAsync(filter)).ToList();
 
+        public List<T> Find(FilterDefinition<T> filter) =>
+             Collection.Find(filter).ToList();
+
         public List<T> List(FilterDefinition<T> filter) => Collection.Find(filter).ToList();
 
         public T Create(T t)

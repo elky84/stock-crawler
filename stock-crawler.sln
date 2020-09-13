@@ -3,7 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockCrawler", "StockCrawler\StockCrawler.csproj", "{10E80C77-1D3C-497E-8F58-87D20A929FB0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockCrawler", "StockCrawler\StockCrawler.csproj", "{10E80C77-1D3C-497E-8F58-87D20A929FB0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9759E3F-5BFE-4CED-82A4-89F097E01D62} = {F9759E3F-5BFE-4CED-82A4-89F097E01D62}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cli", "Cli\Cli.csproj", "{8752E5E4-009B-4E54-B07F-BD5C5B8A798D}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -17,9 +20,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csp
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUtil", "WebUtil\WebUtil.csproj", "{F9759E3F-5BFE-4CED-82A4-89F097E01D62}"
-	ProjectSection(ProjectDependencies) = postProject
-		{10E80C77-1D3C-497E-8F58-87D20A929FB0} = {10E80C77-1D3C-497E-8F58-87D20A929FB0}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

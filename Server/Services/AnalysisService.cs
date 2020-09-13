@@ -34,14 +34,14 @@ namespace Server.Services
 
             var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Value) : analysis.Codes;
 
-            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 256 }, async code =>
+            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 256 }, code =>
             {
                 var today = DateTime.Now.Date;
                 var stockEvaluate = new Models.StockEvaluate();
 
                 var builder = Builders<NaverStock>.Filter;
                 var filter = builder.Lt(x => x.Date, today) & builder.Gte(x => x.Date, today.AddDays(-(analysis.Days.Last() / 5) * 7 + analysis.Days.Last() % 5)) & builder.Eq(x => x.Code, code);
-                var stockDatas = await _mongoDbNaverStock.FindAsync(filter);
+                var stockDatas = _mongoDbNaverStock.Find(filter);
 
                 foreach (var day in analysis.Days)
                 {
@@ -57,13 +57,15 @@ namespace Server.Services
                 {
                     stockEvaluate.BuyStockValue = (double)stockEvaluate.MovingAverageLines.First().Value - (double)stockEvaluate.MovingAverageLines.Last().Value;
 
-                    var analysisData = await _mongoDbAnalysis.CreateAsync(new Models.Analysis
+                    var analysisData = new Models.Analysis
                     {
                         Type = analysis.Type,
                         Code = code,
                         Date = today,
                         StockEvaluate = stockEvaluate
-                    });
+                    };
+
+                    _mongoDbAnalysis.CreateAsync(analysisData).ConfigureAwait(false);
 
                     analysisDatas.Add(analysisData);
                 }
@@ -71,7 +73,7 @@ namespace Server.Services
 
             return new Protocols.Response.Analysis
             {
-                ResultCode = Code.ResultCode.Success,
+                ResultCode = ResultCode.Success,
                 Type = analysis.Type,
                 AnalysisDatas = analysisDatas.ConvertAll(x => x.ToProtocol())
             };

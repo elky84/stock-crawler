@@ -54,9 +54,9 @@ namespace Server.Services
         {
             var codes = crawling.All ? (await _codeService.All()).Select(x => x.Value) : crawling.Codes;
             Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 16 },
-                async code =>
+                code =>
                 {
-                    await Task.WhenAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());
+                    Task.WaitAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());
                 }
             );
 
