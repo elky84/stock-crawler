@@ -1,0 +1,37 @@
+### MockInvest Get
+
+GET https://localhost:5001/MockInvest?UserId=elky
+
+### MockInvest Analysis-Buy
+
+POST https://localhost:5001/MockInvest/Analysis-Buy
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Type": "GoldenCross",
+    "Count":10,    
+    "TotalPrice":10000000
+}
+
+### MockInvest Buy
+
+POST https://localhost:5001/MockInvest/Buy
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Code": "053030",
+    "Amount":100
+}
+
+### MockInvest Sell
+
+POST https://localhost:5001/MockInvest/Sell
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Code": "028040",
+    "Amount":10
+}

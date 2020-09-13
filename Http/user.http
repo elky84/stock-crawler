@@ -1,0 +1,28 @@
+### User Create
+
+POST https://localhost:5001/User
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Balance": 100000000
+}
+
+### User Get
+
+GET https://localhost:5001/User/5f5a25cc6e6fbaf1a5e7ccca
+
+### User Update
+
+PUT https://localhost:5001/User/5f5a25cc6e6fbaf1a5e7ccca
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Balance": 100000000
+}
+
+### User Delete
+
+DELETE https://localhost:5001/User/5f5a25cc6e6fbaf1a5e7ccca
+
