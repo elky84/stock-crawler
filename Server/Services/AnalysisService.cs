@@ -34,7 +34,7 @@ namespace Server.Services
 
             var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Value) : analysis.Codes;
 
-            Parallel.ForEach(codes, async code =>
+            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 256 }, async code =>
             {
                 var today = DateTime.Now.Date;
                 var stockEvaluate = new Models.StockEvaluate();

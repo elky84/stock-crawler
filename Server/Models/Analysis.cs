@@ -11,6 +11,7 @@ namespace Server.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        [BsonRepresentation(BsonType.String)]
         public AnalysisType Type { get; set; }
 
         public string Code { get; set; }

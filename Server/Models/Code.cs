@@ -15,6 +15,7 @@ namespace Server.Models
 
         public string Name { get; set; }
 
+        [BsonRepresentation(BsonType.String)]
         public StockType Type { get; set; }
 
         public Protocols.Common.Code ToProtocol()
