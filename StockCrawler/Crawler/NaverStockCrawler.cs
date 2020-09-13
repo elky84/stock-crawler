@@ -26,7 +26,7 @@ namespace StockCrawler
         protected override void OnPageCrawl(AngleSharp.Html.Dom.IHtmlDocument document)
         {
             var thContent = document.QuerySelectorAll("tbody tr th").Select(x => x.TextContent.Trim()).ToArray();
-            var tdContent = document.QuerySelectorAll("tbody tr td span").Select(x => x.TextContent.Trim()).ToArray();
+            var tdContent = document.QuerySelectorAll("tbody tr td span").Select(x => x.TextContent.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
             if (!thContent.Any() || !tdContent.Any())
             {
                 Log.Logger.Error($"Not Found Data {Code}");
