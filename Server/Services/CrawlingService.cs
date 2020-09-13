@@ -53,7 +53,7 @@ namespace Server.Services
         public async Task<Protocols.Response.Crawling> Execute(Protocols.Request.Crawling crawling)
         {
             var codes = crawling.All ? (await _codeService.All()).Select(x => x.Value) : crawling.Codes;
-            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 16 },
+            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 32 },
                 code =>
                 {
                     Task.WaitAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());

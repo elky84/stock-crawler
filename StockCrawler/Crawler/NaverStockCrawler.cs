@@ -25,7 +25,7 @@ namespace StockCrawler
 
         protected override void OnPageCrawl(AngleSharp.Html.Dom.IHtmlDocument document)
         {
-            var thContent = document.QuerySelectorAll("tbody tr th").Select(x => x.TextContent.Trim()).ToList();
+            var thContent = document.QuerySelectorAll("tbody tr th").Select(x => x.TextContent.Trim()).ToArray();
             var tdContent = document.QuerySelectorAll("tbody tr td span").Select(x => x.TextContent.Trim()).ToArray();
             if (!thContent.Any() || !tdContent.Any())
             {
@@ -33,16 +33,16 @@ namespace StockCrawler
                 return;
             }
 
-            Parallel.For(0, tdContent.Length / thContent.Count, n =>
+            Parallel.For(0, tdContent.Length / thContent.Length, n =>
             {
-                var cursor = n * thContent.Count;
-                var date = DateTime.Parse(tdContent[thContent.IndexOf("날짜")]);
-                var latest = tdContent[thContent.IndexOf("종가")].ToInt();
-                var start = tdContent[thContent.IndexOf("시가")].ToInt();
+                var cursor = n * thContent.Length;
+                var date = DateTime.Parse(tdContent[cursor + 0]);
+                var latest = tdContent[cursor + 1].ToInt();
+                var start = tdContent[cursor + 3].ToInt();
                 var change = latest - start;
-                var high = tdContent[thContent.IndexOf("고가")].ToInt();
-                var low = tdContent[thContent.IndexOf("저가")].ToInt();
-                var tradeCount = tdContent[thContent.IndexOf("거래량")].ToInt();
+                var high = tdContent[cursor + 4].ToInt();
+                var low = tdContent[cursor + 5].ToInt();
+                var tradeCount = tdContent[cursor + 6].ToInt();
 
                 _ = OnCrawlData(new NaverStock
                 {
