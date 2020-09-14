@@ -28,6 +28,7 @@ namespace Server.Services
             var origin = await _mongoDbNaverStock.FindOneAsync(Builders<NaverStock>.Filter.Eq(x => x.Code, naverStock.Code) & Builders<NaverStock>.Filter.Eq(x => x.Date, naverStock.Date));
             if (origin != null)
             {
+                naverStock.Id = origin.Id;
                 await _mongoDbNaverStock.UpdateAsync(origin.Id, naverStock);
             }
             else
@@ -64,6 +65,16 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success
             };
+        }
+
+
+        public async Task ExecuteBackground()
+        {
+            var codes = (await _codeService.All()).Select(x => x.Value);
+            foreach (var code in codes)
+            {
+                await new NaverStockCrawlerMongoDb(_mongoDbNaverStock, 1, code).RunAsync();
+            }
         }
     }
 }

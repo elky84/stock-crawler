@@ -19,7 +19,7 @@ namespace Server.Protocols.Common
 
         public int? CurrentPrice { get; set; }
 
-        public int? Income { get; set; }
+        public int? Income => CurrentPrice.HasValue ? CurrentPrice.Value - BuyPrice : (int?)null;
 
         public int TotalBuyPrice => Amount * BuyPrice;
 

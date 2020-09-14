@@ -13,6 +13,8 @@ namespace Server.Protocols.Common
 
         public double BuyStockValue { get; set; }
 
+        public double TransactionPrice { get; set; }
+
         public bool BuyStockTiming => BuyStockValue > 0;
     }
 }

@@ -6,7 +6,18 @@ Content-Type: application/json
 {
     "All": true,
     "Days":[5, 20],
-    "Type": "GoldenCross"
+    "Type": "GoldenCrossTradeCount"
+}
+
+### Analysis all
+
+POST https://localhost:5001/Analysis
+Content-Type: application/json
+
+{
+    "All": true,
+    "Days":[5, 20],
+    "Type": "GoldenCrossTransactionPrice"
 }
 
 ### Analysis

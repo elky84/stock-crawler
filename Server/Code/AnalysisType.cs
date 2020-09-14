@@ -7,6 +7,7 @@ namespace Server.Code
 {
     public enum AnalysisType
     {
-        GoldenCross,
+        GoldenCrossTradeCount,
+        GoldenCrossTransactionPrice,
     }
 }

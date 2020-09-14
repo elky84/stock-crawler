@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class MockInvests : Header
+    public class MockInvestRefresh : Header
     {
         public Common.User User { get; set; }
 

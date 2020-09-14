@@ -22,7 +22,7 @@ namespace Server.Models
         public int? Price { get; set; }
 
         [BsonIgnore]
-        public int? Income => Price.HasValue ? BuyPrice - Price.Value : (int?)null;
+        public int? Income => Price.HasValue ? Price.Value - BuyPrice : (int?)null;
 
         [BsonIgnore]
         public int TotalBuyPrice => Amount * BuyPrice;
@@ -45,8 +45,7 @@ namespace Server.Models
                 Code = Code,
                 Amount = Amount,
                 BuyPrice = BuyPrice,
-                CurrentPrice = Price,
-                Income = Income
+                CurrentPrice = Price
             };
         }
     }

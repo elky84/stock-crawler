@@ -18,13 +18,16 @@ namespace Server.Models
 
         public bool BuyStockTiming => BuyStockValue > 0;
 
+        public double TransactionPrice { get; set; }
+
         public Protocols.Common.StockEvaluate ToProtocol()
         {
             return new Protocols.Common.StockEvaluate
             {
                 MovingAverageLines = MovingAverageLines,
                 TradeCount = TradeCount,
-                BuyStockValue = BuyStockValue
+                BuyStockValue = BuyStockValue,
+                TransactionPrice = TransactionPrice
             };
         }
     }

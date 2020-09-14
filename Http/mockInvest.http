@@ -2,6 +2,31 @@
 
 GET https://localhost:5001/MockInvest?UserId=elky
 
+### MockInvest Get
+
+GET https://localhost:5001/MockInvest?UserId=elky_1m
+
+
+### MockInvest Refresh
+
+POST https://localhost:5001/MockInvest/Refresh
+Content-Type: application/json
+
+{
+    "UserId":"elky"
+}
+
+
+### MockInvest Refresh
+
+POST https://localhost:5001/MockInvest/Refresh
+Content-Type: application/json
+
+{
+    "UserId":"elky_1m"
+}
+
+
 ### MockInvest Analysis-Buy
 
 POST https://localhost:5001/MockInvest/Analysis-Buy
@@ -9,9 +34,23 @@ Content-Type: application/json
 
 {
     "UserId":"elky",
-    "Type": "GoldenCross",
+    "Type": "GoldenCrossTransactionPrice",
     "Count":10,    
-    "TotalPrice":10000000
+    "TotalPrice":10000000,
+    "Date": "2020-09-15"
+}
+
+### MockInvest Analysis-Buy
+
+POST https://localhost:5001/MockInvest/Analysis-Buy
+Content-Type: application/json
+
+{
+    "UserId":"elky_1m",
+    "Type": "GoldenCrossTransactionPrice",
+    "Count":10,    
+    "TotalPrice":100000,
+    "Date": "2020-09-15"
 }
 
 ### MockInvest Buy
@@ -32,6 +71,5 @@ Content-Type: application/json
 
 {
     "UserId":"elky",
-    "Code": "028040",
-    "Amount":10
+    "All":true
 }

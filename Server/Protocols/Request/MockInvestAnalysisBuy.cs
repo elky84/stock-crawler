@@ -10,6 +10,8 @@ namespace Server.Protocols.Request
     {
         public string UserId { get; set; }
 
+        public DateTime Date { get; set; }
+
         public AnalysisType Type { get; set; }
 
         public int Count { get; set; }

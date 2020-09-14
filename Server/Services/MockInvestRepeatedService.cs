@@ -35,10 +35,12 @@ namespace Server.Services
                 var diff = buyTime - now;
                 if (Math.Abs(diff.TotalSeconds) <= 5)
                 {
+                    // 하드 코딩 제거 필요. elky id, type, total price
+
                     _ = _mockInvestService.AnalysisBuy(new Protocols.Request.MockInvestAnalysisBuy
                     {
                         UserId = "elky",
-                        Type = Code.AnalysisType.GoldenCross,
+                        Type = Code.AnalysisType.GoldenCrossTradeCount,
                         Count = 10,
                         TotalPrice = 10000000
                     });
@@ -50,16 +52,12 @@ namespace Server.Services
                 var diff = sellTime - now;
                 if (Math.Abs(diff.TotalSeconds) <= 5)
                 {
-                    var mockInvests = _mockInvestService.Get("elky").Result;
-                    foreach (var mockInvest in mockInvests.InvestList)
+                    // 하드 코딩 제거 필요. elky id
+                    _ = _mockInvestService.Sell(new Protocols.Request.MockInvestSell
                     {
-                        _ = _mockInvestService.Sell(new Protocols.Request.MockInvestSell
-                        {
-                            UserId = mockInvest.UserId,
-                            Id = mockInvest.Id,
-                            Amount = mockInvest.Amount
-                        });
-                    }
+                        UserId = "elky",
+                        All = true
+                    });
                 }
             }
         }

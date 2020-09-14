@@ -24,6 +24,7 @@ namespace Server.Models
 
         public int TradeCount { get; set; }
 
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime Date { get; set; }
     }
 }

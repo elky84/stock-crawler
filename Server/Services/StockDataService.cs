@@ -30,7 +30,8 @@ namespace Server.Services
         {
             var builder = Builders<NaverStock>.Filter;
             var filter = builder.Gte(x => x.Date, DateTime.Now.Date.AddDays(-day)) & builder.Eq(x => x.Code, code);
-            return (await _mongoDbNaverStock.FindAsync(filter)).OrderBy(x => x.Date).Last();
+            var stockDatas = await _mongoDbNaverStock.FindAsync(filter);
+            return stockDatas.OrderByDescending(x => x.Date).First();
         }
     }
 }

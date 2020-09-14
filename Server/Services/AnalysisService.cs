@@ -8,6 +8,7 @@ using MongoDB.Driver;
 using Server.Protocols.Common;
 using System.Linq;
 using Server.Code;
+using Server.Exception;
 
 namespace Server.Services
 {
@@ -19,12 +20,16 @@ namespace Server.Services
 
         private readonly CodeService _codeService;
 
+        private readonly StockDataService _stockDataService;
+
         public AnalysisService(MongoDbService mongoDbService,
-            CodeService codeService)
+            CodeService codeService,
+            StockDataService stockDataService)
         {
             _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);
             _mongoDbAnalysis = new MongoDbUtil<Models.Analysis>(mongoDbService.Database);
             _codeService = codeService;
+            _stockDataService = stockDataService;
         }
 
         public async Task<Protocols.Response.Analysis> Execute(Protocols.Request.Analysis analysis)
@@ -49,6 +54,7 @@ namespace Server.Services
                     if (stocks.Any())
                     {
                         stockEvaluate.MovingAverageLines.Add(day, stocks.Sum(x => x.Latest) / stocks.Count);
+                        stockEvaluate.TransactionPrice = stocks.Last().Latest * stocks.Last().TradeCount;
                         stockEvaluate.TradeCount = stocks.Sum(x => x.TradeCount) / stocks.Count;
                     }
                 }
@@ -79,9 +85,25 @@ namespace Server.Services
             };
         }
 
-        public async Task<List<Models.Analysis>> Get(AnalysisType type, int count)
+        public async Task<List<Models.Analysis>> Get(DateTime date, AnalysisType type, int count, int page)
         {
-            return (await _mongoDbAnalysis.FindAsync(Builders<Models.Analysis>.Filter.Eq(x => x.Type, type) & Builders<Models.Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0))).OrderByDescending(x => x.StockEvaluate.TradeCount).Take(count).ToList();
+            return (await _mongoDbAnalysis.FindAsync(Builders<Models.Analysis>.Filter.Eq(x => x.Date, date) & Builders<Models.Analysis>.Filter.Eq(x => x.Type, type) & Builders<Models.Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0)))
+                .OrderByDescending(Standard(type))
+                .Skip(page * count).Take(count).ToList();
+        }
+
+        private Func<Models.Analysis, double> Standard(AnalysisType type)
+        {
+            switch (type)
+            {
+                case AnalysisType.GoldenCrossTradeCount:
+                    return new Func<Models.Analysis, double>(x => x.StockEvaluate.TradeCount);
+                case AnalysisType.GoldenCrossTransactionPrice:
+                    return new Func<Models.Analysis, double>(x => x.StockEvaluate.TransactionPrice);
+                default:
+                    throw new DeveloperException(ResultCode.NotImplementedYet);
+            }
+
         }
     }
 }

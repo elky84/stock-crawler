@@ -31,13 +31,9 @@ namespace Server.Services
             var openTime = now.Date.AddHours(9);
             var closeTime = now.Date.AddHours(15);
 
-            if (openTime >= now && closeTime <= now)
+            if (openTime <= now && closeTime >= now)
             {
-                _ = _crawlingService.Execute(new Protocols.Request.Crawling
-                {
-                    Page = 1,
-                    All = true
-                });
+                _ = _crawlingService.ExecuteBackground();
             }
         }
     }

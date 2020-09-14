@@ -43,7 +43,7 @@ Content-Type: application/json
 {
     "All": true,
     "Days":[5, 20],
-    "Type": "GoldenCross"
+    "Type": "GoldenCrossTransactionPrice"
 }
 
 
@@ -55,7 +55,8 @@ Content-Type: application/json
 
 {
     "UserId":"elky",
-    "Type": "GoldenCross",
+    "Type": "GoldenCrossTransactionPrice",
     "Count":10,    
-    "TotalPrice":10000000
+    "TotalPrice":10000000,
+    "Date": "2020-09-14"
 }
