@@ -25,7 +25,8 @@ namespace Server.Services
                 var created = await _mongoDbUser.CreateAsync(new User
                 {
                     UserId = user.UserId,
-                    Balance = user.Balance
+                    Balance = user.Balance,
+                    OriginBalance = user.OriginBalance
                 });
 
                 return new Protocols.Response.User
@@ -60,7 +61,8 @@ namespace Server.Services
             {
                 Id = id,
                 UserId = user.UserId,
-                Balance = user.Balance
+                Balance = user.Balance,
+                OriginBalance = user.OriginBalance
             };
 
             var updated = await _mongoDbUser.UpdateAsync(id, update);

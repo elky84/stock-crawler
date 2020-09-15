@@ -6,6 +6,7 @@ using MongoDB.Driver;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Server.Exception;
 
 namespace Server.Services
 {
@@ -26,12 +27,18 @@ namespace Server.Services
         }
 
 
-        public async Task<NaverStock> Latest(int day, string code)
+        public async Task<NaverStock> Latest(int day, string code, DateTime? date = null)
         {
+            date = date.HasValue ? date.Value.Date : DateTime.Now.Date;
             var builder = Builders<NaverStock>.Filter;
-            var filter = builder.Gte(x => x.Date, DateTime.Now.Date.AddDays(-day)) & builder.Eq(x => x.Code, code);
+            var filter = builder.Lt(x => x.Date, date.Value) & builder.Gte(x => x.Date, date.Value.AddDays(-day)) & builder.Eq(x => x.Code, code);
             var stockDatas = await _mongoDbNaverStock.FindAsync(filter);
-            return stockDatas.OrderByDescending(x => x.Date).First();
+            var first = stockDatas.OrderByDescending(x => x.Date).FirstOrDefault();
+            if (first == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundStockData);
+            }
+            return first;
         }
     }
 }

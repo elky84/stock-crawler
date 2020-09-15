@@ -39,18 +39,19 @@ namespace Server.Services
 
             var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Value) : analysis.Codes;
 
+            var date = analysis.Date != null ? analysis.Date.Date : DateTime.Now.Date;
+
             Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 256 }, code =>
             {
-                var today = DateTime.Now.Date;
                 var stockEvaluate = new Models.StockEvaluate();
 
                 var builder = Builders<NaverStock>.Filter;
-                var filter = builder.Lt(x => x.Date, today) & builder.Gte(x => x.Date, today.AddDays(-(analysis.Days.Last() / 5) * 7 + analysis.Days.Last() % 5)) & builder.Eq(x => x.Code, code);
+                var filter = builder.Lt(x => x.Date, date) & builder.Gte(x => x.Date, date.AddDays(-(analysis.Days.Last() / 5) * 7 + analysis.Days.Last() % 5)) & builder.Eq(x => x.Code, code);
                 var stockDatas = _mongoDbNaverStock.Find(filter);
 
                 foreach (var day in analysis.Days)
                 {
-                    var stocks = stockDatas.Where(x => x.Date < today && x.Date >= today.AddDays(-(day / 5) * 7 + day % 5)).ToList();
+                    var stocks = stockDatas.Where(x => x.Date < date && x.Date >= date.AddDays(-(day / 5) * 7 + day % 5)).ToList();
                     if (stocks.Any())
                     {
                         stockEvaluate.MovingAverageLines.Add(day, stocks.Sum(x => x.Latest) / stocks.Count);
@@ -67,11 +68,20 @@ namespace Server.Services
                     {
                         Type = analysis.Type,
                         Code = code,
-                        Date = today,
+                        Date = date,
                         StockEvaluate = stockEvaluate
                     };
 
-                    _mongoDbAnalysis.CreateAsync(analysisData).ConfigureAwait(false);
+                    var origin = _mongoDbAnalysis.FindOne(Builders<Models.Analysis>.Filter.Eq(x => x.Date, date) & Builders<Models.Analysis>.Filter.Eq(x => x.Type, analysis.Type) & Builders<Models.Analysis>.Filter.Eq(x => x.Code, code));
+                    if (origin != null)
+                    {
+                        analysisData.Id = origin.Id;
+                        _mongoDbAnalysis.Update(analysisData.Id, analysisData);
+                    }
+                    else
+                    {
+                        _mongoDbAnalysis.Create(analysisData);
+                    }
 
                     analysisDatas.Add(analysisData);
                 }

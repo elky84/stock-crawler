@@ -1,10 +1,10 @@
 ### MockInvest Get
 
-GET https://localhost:5001/MockInvest?UserId=elky
+GET https://localhost:5001/MockInvest?UserId=elky&Date=2020-09-14
 
 ### MockInvest Get
 
-GET https://localhost:5001/MockInvest?UserId=elky_1m
+GET https://localhost:5001/MockInvest?UserId=elky_1m&Date=2020-09-14
 
 
 ### MockInvest Refresh
@@ -70,6 +70,6 @@ POST https://localhost:5001/MockInvest/Sell
 Content-Type: application/json
 
 {
-    "UserId":"elky",
+    "UserId":"elky_1m",
     "All":true
 }

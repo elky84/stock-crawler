@@ -43,23 +43,25 @@ namespace Server.Services
             _mongoDbMockInvest = new MongoDbUtil<MockInvest>(mongoDbService.Database);
         }
 
-        public async Task<Protocols.Response.MockInvests> Get(string userId)
+        public async Task<Protocols.Response.MockInvests> Get(string userId, DateTime date)
         {
             var user = await _userService.GetByUserId(userId);
 
             var invests = (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, userId)));
             foreach (var invest in invests)
             {
-                var latest = await _stockDataService.Latest(7, invest.Code);
+                var latest = await _stockDataService.Latest(7, invest.Code, date);
                 invest.Price = latest.Latest;
             }
 
+            var valuationBalance = user.Balance + invests.Sum(x => x.TotalPrice.GetValueOrDefault(0));
             return new Protocols.Response.MockInvests
             {
                 ResultCode = Code.ResultCode.Success,
                 User = user.ToProtocol(),
                 InvestList = invests.ConvertAll(x => x.ToProtocol()),
-                ValuationBalance = user.Balance + invests.Sum(x => x.TotalPrice.GetValueOrDefault(0))
+                ValuationBalance = valuationBalance,
+                ValuationIncome = 100.0 - (double)user.OriginBalance / (double)valuationBalance * 100
             };
         }
 
@@ -77,12 +79,14 @@ namespace Server.Services
                 invest.Price = latest.Latest;
             }
 
+            var valuationBalance = user.Balance + invests.Sum(x => x.TotalPrice.GetValueOrDefault(0));
             return new Protocols.Response.MockInvestRefresh
             {
                 ResultCode = Code.ResultCode.Success,
                 User = user.ToProtocol(),
                 InvestList = invests.ConvertAll(x => x.ToProtocol()),
-                ValuationBalance = user.Balance + invests.Sum(x => x.TotalPrice.GetValueOrDefault(0))
+                ValuationBalance = valuationBalance,
+                ValuationIncome = 100.0 - (double)user.OriginBalance / (double)valuationBalance * 100
             };
         }
 

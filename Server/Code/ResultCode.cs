@@ -13,6 +13,7 @@ namespace Server.Code
         CannotOverHaveStockAmount,
         NotFoundStockCodeData,
         NotImplementedYet,
+        NotFoundStockData,
         UnknownException
     }
 }

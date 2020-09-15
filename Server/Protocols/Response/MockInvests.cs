@@ -12,5 +12,7 @@ namespace Server.Protocols.Response
         public List<Common.MockInvest> InvestList { get; set; }
 
         public long ValuationBalance { get; set; }
+
+        public double ValuationIncome { get; set; }
     }
 }

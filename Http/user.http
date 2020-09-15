@@ -24,7 +24,7 @@ GET https://localhost:5001/User/5f5a25cc6e6fbaf1a5e7ccca
 
 ### User Update
 
-PUT https://localhost:5001/User/5f5a25cc6e6fbaf1a5e7ccca
+PUT https://localhost:5001/User/5f5eea74ea4f2840f4e1951b
 Content-Type: application/json
 
 {

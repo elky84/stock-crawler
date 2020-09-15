@@ -14,13 +14,16 @@ namespace Server.Models
 
         public long Balance { get; set; }
 
+        public long OriginBalance { get; set; }
+
         public Protocols.Common.User ToProtocol()
         {
             return new Protocols.Common.User
             {
                 Id = Id,
                 UserId = UserId,
-                Balance = Balance
+                Balance = Balance,
+                OriginBalance = OriginBalance
             };
         }
     }

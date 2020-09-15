@@ -6,7 +6,8 @@ Content-Type: application/json
 {
     "All": true,
     "Days":[5, 20],
-    "Type": "GoldenCrossTradeCount"
+    "Type": "GoldenCrossTradeCount",
+    "Date": "2020-09-15"
 }
 
 ### Analysis all
@@ -17,7 +18,8 @@ Content-Type: application/json
 {
     "All": true,
     "Days":[5, 20],
-    "Type": "GoldenCrossTransactionPrice"
+    "Type": "GoldenCrossTransactionPrice",
+    "Date": "2020-09-15"
 }
 
 ### Analysis

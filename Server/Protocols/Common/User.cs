@@ -12,5 +12,7 @@ namespace Server.Protocols.Common
         public string UserId { get; set; }
 
         public long Balance { get; set; }
+
+        public long OriginBalance { get; set; }
     }
 }
