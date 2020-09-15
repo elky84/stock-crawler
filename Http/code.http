@@ -1,3 +1,8 @@
+### Code get all
+
+POST https://localhost:5001/Code/Load?stockType=All
+Content-Type: application/json
+
 ### Code get Kosdaq
 
 POST https://localhost:5001/Code/Load?stockType=Kosdaq

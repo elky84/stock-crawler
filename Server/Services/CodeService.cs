@@ -37,7 +37,8 @@ namespace Server.Services
             int executionCount = 0;
 
             WebClient client = new WebClient();
-            var byteArr = await client.DownloadDataTaskAsync(new Uri($"http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&marketType={stockType.GetDescription()}"));
+            var queryMarketType = string.IsNullOrEmpty(stockType.GetDescription()) ? string.Empty : "marketType=" + stockType.GetDescription();
+            var byteArr = await client.DownloadDataTaskAsync(new Uri($"http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&{queryMarketType}"));
             var str = Encoding.GetEncoding("ksc_5601").GetString(byteArr);
 
             var parser = new HtmlParser();

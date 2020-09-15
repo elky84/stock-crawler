@@ -12,6 +12,9 @@ namespace Server.Code
         Kospi,
 
         [Description("konexMkt")]
-        Konex
+        Konex,
+
+        [Description("")]
+        All,
     }
 }

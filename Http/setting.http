@@ -1,18 +1,8 @@
-### Code get Kosdaq
+### Code get all
 
-POST https://localhost:5001/Code/Load?stockType=Kosdaq
+POST https://localhost:5001/Code/Load?stockType=All
 Content-Type: application/json
 
-### Code get Kospi
-
-POST https://localhost:5001/Code/Load?stockType=Kospi
-Content-Type: application/json
-
-
-### Code get konex
-
-POST https://localhost:5001/Code/Load?stockType=Konex
-Content-Type: application/json
 
 ### User Create
 
@@ -58,5 +48,5 @@ Content-Type: application/json
     "Type": "GoldenCrossTransactionPrice",
     "Count":10,    
     "TotalPrice":10000000,
-    "Date": "2020-09-14"
+    "Date": "2020-09-15"
 }
