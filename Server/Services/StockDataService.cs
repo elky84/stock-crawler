@@ -31,7 +31,7 @@ namespace Server.Services
         {
             date = date.HasValue ? date.Value.Date : DateTime.Now.Date;
             var builder = Builders<NaverStock>.Filter;
-            var filter = builder.Lt(x => x.Date, date.Value) & builder.Gte(x => x.Date, date.Value.AddDays(-day)) & builder.Eq(x => x.Code, code);
+            var filter = builder.Lte(x => x.Date, date.Value) & builder.Gte(x => x.Date, date.Value.AddDays(-day)) & builder.Eq(x => x.Code, code);
             var stockDatas = await _mongoDbNaverStock.FindAsync(filter);
             var first = stockDatas.OrderByDescending(x => x.Date).FirstOrDefault();
             if (first == null)
