@@ -19,10 +19,12 @@ namespace Server.Services
             _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);
         }
 
-        public async Task<List<NaverStock>> Get(int day, string code)
+        public async Task<List<NaverStock>> Get(int day, string code, DateTime? date = null)
         {
+            date = date.HasValue ? date.Value.Date : DateTime.Now.Date;
+
             var builder = Builders<NaverStock>.Filter;
-            var filter = builder.Gte(x => x.Date, DateTime.Now.Date.AddDays(-day)) & builder.Eq(x => x.Code, code);
+            var filter = builder.Lte(x => x.Date, date.Value) & builder.Gte(x => x.Date, date.Value.AddDays(-day)) & builder.Eq(x => x.Code, code);
             return await _mongoDbNaverStock.FindAsync(filter);
         }
 

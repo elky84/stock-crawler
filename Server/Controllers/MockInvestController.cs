@@ -24,7 +24,7 @@ namespace Server.Controllers
         }
 
         [HttpGet]
-        public async Task<Protocols.Response.MockInvests> Get([FromQuery] string userId, [FromQuery] DateTime date)
+        public async Task<Protocols.Response.MockInvests> Get([FromQuery] string userId, [FromQuery] DateTime? date)
         {
             return await _mockInvestService.Get(userId, date);
         }

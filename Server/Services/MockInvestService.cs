@@ -43,7 +43,7 @@ namespace Server.Services
             _mongoDbMockInvest = new MongoDbUtil<MockInvest>(mongoDbService.Database);
         }
 
-        public async Task<Protocols.Response.MockInvests> Get(string userId, DateTime date)
+        public async Task<Protocols.Response.MockInvests> Get(string userId, DateTime? date)
         {
             var user = await _userService.GetByUserId(userId);
 
