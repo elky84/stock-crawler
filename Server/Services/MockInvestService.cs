@@ -106,7 +106,7 @@ namespace Server.Services
 
                 foreach (var analysisData in analysisDatas)
                 {
-                    var latest = await _stockDataService.Latest(7, analysisData.Code);
+                    var latest = await _stockDataService.Latest(7, analysisData.Code, mockInvestAnalysisBuy.Date);
                     if (latest.Latest > mockInvestAnalysisBuy.TotalPrice)
                     {
                         continue;
@@ -156,7 +156,7 @@ namespace Server.Services
         {
             var user = await _userService.GetByUserId(mockInvestBuy.UserId);
 
-            var latest = await _stockDataService.Latest(7, mockInvestBuy.Code);
+            var latest = await _stockDataService.Latest(7, mockInvestBuy.Code, mockInvestBuy.Date);
 
             user.Balance -= latest.Latest * mockInvestBuy.Amount;
             if (user.Balance < 0)

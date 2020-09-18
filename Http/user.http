@@ -5,7 +5,8 @@ Content-Type: application/json
 
 {
     "UserId":"elky",
-    "Balance": 100000000
+    "Balance": 100000000,
+    "OriginBalance": 100000000
 }
 
 ### User Create
@@ -15,7 +16,8 @@ Content-Type: application/json
 
 {
     "UserId":"elky_1m",
-    "Balance": 1000000
+    "Balance": 1000000,
+    "OriginBalance": 1000000
 }
 
 ### User Get
@@ -29,7 +31,8 @@ Content-Type: application/json
 
 {
     "UserId":"elky",
-    "Balance": 100000000
+    "Balance": 100000000,
+    "OriginBalance": 100000000,
 }
 
 ### User Delete
