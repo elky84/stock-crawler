@@ -97,23 +97,21 @@ namespace Server.Services
 
         public async Task<List<Models.Analysis>> Get(DateTime date, AnalysisType type, int count, int page)
         {
-            return (await _mongoDbAnalysis.FindAsync(Builders<Models.Analysis>.Filter.Eq(x => x.Date, date) & Builders<Models.Analysis>.Filter.Eq(x => x.Type, type) & Builders<Models.Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0)))
-                .OrderByDescending(Standard(type))
-                .Skip(page * count).Take(count).ToList();
+            return await _mongoDbAnalysis.Page(Builders<Models.Analysis>.Filter.Eq(x => x.Date, date) & Builders<Models.Analysis>.Filter.Eq(x => x.Type, type) & Builders<Models.Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0),
+                page * count, count, ToSortKeyword(type), false);
         }
 
-        private Func<Models.Analysis, double> Standard(AnalysisType type)
+        private string ToSortKeyword(AnalysisType type)
         {
             switch (type)
             {
                 case AnalysisType.GoldenCrossTradeCount:
-                    return new Func<Models.Analysis, double>(x => x.StockEvaluate.TradeCount);
+                    return ClassUtil.GetMemberNameWithDeclaringType((Models.Analysis x) => x.StockEvaluate.TradeCount);
                 case AnalysisType.GoldenCrossTransactionPrice:
-                    return new Func<Models.Analysis, double>(x => x.StockEvaluate.TransactionPrice);
+                    return ClassUtil.GetMemberNameWithDeclaringType((Models.Analysis x) => x.StockEvaluate.TransactionPrice);
                 default:
                     throw new DeveloperException(ResultCode.NotImplementedYet);
             }
-
         }
     }
 }
