@@ -10,5 +10,7 @@ namespace Server.Protocols.Response
         public Common.User User { get; set; }
 
         public Common.MockInvest InvestData { get; set; }
+
+        public DateTime? Date { get; set; }
     }
 }

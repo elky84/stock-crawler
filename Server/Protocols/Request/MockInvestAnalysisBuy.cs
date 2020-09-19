@@ -10,7 +10,7 @@ namespace Server.Protocols.Request
     {
         public string UserId { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; } = DateTime.Now.Date;
 
         public AnalysisType Type { get; set; }
 

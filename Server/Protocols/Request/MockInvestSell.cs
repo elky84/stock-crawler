@@ -12,5 +12,7 @@ namespace Server.Protocols.Request
         public bool All { get; set; }
 
         public List<Common.MockInvestSell> SellList = new List<Common.MockInvestSell>();
+
+        public DateTime Date { get; set; } = DateTime.Now.Date;
     }
 }

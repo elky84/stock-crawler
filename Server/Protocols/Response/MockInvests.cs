@@ -14,5 +14,7 @@ namespace Server.Protocols.Response
         public long ValuationBalance { get; set; }
 
         public double ValuationIncome { get; set; }
+
+        public DateTime? Date { get; set; }
     }
 }

@@ -13,6 +13,6 @@ namespace Server.Protocols.Request
 
         public int Amount { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; } = DateTime.Now.Date;
     }
 }

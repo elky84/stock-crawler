@@ -61,7 +61,8 @@ namespace Server.Services
                 User = user.ToProtocol(),
                 InvestList = invests.ConvertAll(x => x.ToProtocol()),
                 ValuationBalance = valuationBalance,
-                ValuationIncome = 100.0 - (double)user.OriginBalance / (double)valuationBalance * 100
+                ValuationIncome = 100.0 - (double)user.OriginBalance / (double)valuationBalance * 100,
+                Date = date
             };
         }
 
@@ -98,7 +99,7 @@ namespace Server.Services
             int page = 0;
             while (investDatas.Count < mockInvestAnalysisBuy.Count)
             {
-                var analysisDatas = await _analysisService.Get(mockInvestAnalysisBuy.Date, mockInvestAnalysisBuy.Type, mockInvestAnalysisBuy.Count, page);
+                var analysisDatas = await _analysisService.Get(mockInvestAnalysisBuy.Date.GetValueOrDefault(), mockInvestAnalysisBuy.Type, mockInvestAnalysisBuy.Count, page);
                 if (!analysisDatas.Any())
                 {
                     break;
@@ -148,7 +149,8 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 User = user.ToProtocol(),
-                InvestDatas = investDatas.ConvertAll(x => x.ToProtocol())
+                InvestDatas = investDatas.ConvertAll(x => x.ToProtocol()),
+                Date = mockInvestAnalysisBuy.Date
             };
         }
 
@@ -181,7 +183,8 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 User = user.ToProtocol(),
-                InvestData = mockInvest.ToProtocol()
+                InvestData = mockInvest.ToProtocol(),
+                Date = mockInvestBuy.Date
             };
         }
 
@@ -199,7 +202,7 @@ namespace Server.Services
             {
                 var mockInvest = await _mongoDbMockInvest.FindOneAsyncById(sell.Id);
 
-                var latest = await _stockDataService.Latest(7, mockInvest.Code);
+                var latest = await _stockDataService.Latest(7, mockInvest.Code, mockInvestSell.Date);
                 user.Balance += latest.Latest * sell.Amount;
                 mockInvest.Price = latest.Latest;
 
@@ -228,7 +231,8 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 User = (await _userService.GetByUserId(mockInvestSell.UserId))?.ToProtocol(),
-                InvestDatas = investDatas.ConvertAll(x => x.ToProtocol())
+                InvestDatas = investDatas.ConvertAll(x => x.ToProtocol()),
+                Date = mockInvestSell.Date
             };
         }
     }
