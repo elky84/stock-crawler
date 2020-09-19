@@ -44,6 +44,7 @@ namespace StockCrawler
                 var low = tdContent[cursor + 5].ToInt();
                 var tradeCount = tdContent[cursor + 6].ToInt();
 
+#if DEBUG //TODO 운용중인 PC 성능 이슈로 DEBUG가 더 빠른컴퓨터인지라 의도적으로 비동기로 처리했다.
                 _ = OnCrawlData(new NaverStock
                 {
                     Date = date,
@@ -55,6 +56,19 @@ namespace StockCrawler
                     TradeCount = tradeCount,
                     Code = Code
                 });
+#else
+                OnCrawlData(new NaverStock
+                {
+                    Date = date,
+                    Latest = latest,
+                    Change = change,
+                    Start = start,
+                    Low = low,
+                    High = high,
+                    TradeCount = tradeCount,
+                    Code = Code
+                }).Wait();
+#endif
             });
         }
 

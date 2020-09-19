@@ -54,12 +54,21 @@ namespace Server.Services
         public async Task<Protocols.Response.Crawling> Execute(Protocols.Request.Crawling crawling)
         {
             var codes = crawling.All ? (await _codeService.All()).Select(x => x.Value) : crawling.Codes;
+#if DEBUG //TODO 운용중인 PC 성능 이슈로 DEBUG가 더 빠른컴퓨터인지라 의도적으로 이렇게 처리했다.
             Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 32 },
                 code =>
                 {
                     Task.WaitAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());
                 }
             );
+#else
+            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 4 },
+                code =>
+                {
+                    Task.WaitAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());
+                }
+            );
+#endif
 
             return new Protocols.Response.Crawling
             {

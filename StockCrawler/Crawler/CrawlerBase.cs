@@ -56,7 +56,7 @@ namespace StockCrawler
 
             while (false == await ExecuteAsync(Page))
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
             }
         }
 
