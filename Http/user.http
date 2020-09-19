@@ -1,6 +1,6 @@
 ### User Create
 
-POST https://localhost:5001/User
+POST {{host}}/User
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 
 ### User Create
 
-POST https://localhost:5001/User
+POST {{host}}/User
 Content-Type: application/json
 
 {
@@ -22,11 +22,11 @@ Content-Type: application/json
 
 ### User Get
 
-GET https://localhost:5001/User/5f5a25cc6e6fbaf1a5e7ccca
+GET {{host}}/User/5f5a25cc6e6fbaf1a5e7ccca
 
 ### User Update
 
-PUT https://localhost:5001/User/5f5eea74ea4f2840f4e1951b
+PUT {{host}}/User/5f5eea74ea4f2840f4e1951b
 Content-Type: application/json
 
 {
@@ -37,5 +37,5 @@ Content-Type: application/json
 
 ### User Delete
 
-DELETE https://localhost:5001/User/5f5a25cc6e6fbaf1a5e7ccca
+DELETE {{host}}/User/5f5a25cc6e6fbaf1a5e7ccca
 

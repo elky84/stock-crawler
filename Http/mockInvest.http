@@ -1,15 +1,15 @@
 ### MockInvest Get
 
-GET https://localhost:5001/MockInvest?UserId=elky
+GET {{host}}/MockInvest?UserId=elky
 
 ### MockInvest Get
 
-GET https://localhost:5001/MockInvest?UserId=elky_1m
+GET {{host}}/MockInvest?UserId=elky_1m
 
 
 ### MockInvest Refresh
 
-POST https://localhost:5001/MockInvest/Refresh
+POST {{host}}/MockInvest/Refresh
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 
 ### MockInvest Refresh
 
-POST https://localhost:5001/MockInvest/Refresh
+POST {{host}}/MockInvest/Refresh
 Content-Type: application/json
 
 {
@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ### MockInvest Analysis-Buy
 
-POST https://localhost:5001/MockInvest/Analysis-Buy
+POST {{host}}/MockInvest/Analysis-Buy
 Content-Type: application/json
 
 {
@@ -42,7 +42,7 @@ Content-Type: application/json
 
 ### MockInvest Analysis-Buy
 
-POST https://localhost:5001/MockInvest/Analysis-Buy
+POST {{host}}/MockInvest/Analysis-Buy
 Content-Type: application/json
 
 {
@@ -55,7 +55,7 @@ Content-Type: application/json
 
 ### MockInvest Buy
 
-POST https://localhost:5001/MockInvest/Buy
+POST {{host}}/MockInvest/Buy
 Content-Type: application/json
 
 {
@@ -66,7 +66,7 @@ Content-Type: application/json
 
 ### MockInvest Sell
 
-POST https://localhost:5001/MockInvest/Sell
+POST {{host}}/MockInvest/Sell
 Content-Type: application/json
 
 {

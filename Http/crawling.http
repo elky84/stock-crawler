@@ -1,6 +1,6 @@
 ### Crawling All
 
-POST https://localhost:5001/Crawling
+POST {{host}}/Crawling
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ### Crawling multi
 
-POST https://localhost:5001/Crawling
+POST {{host}}/Crawling
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 
 ### Crawling invalid one
 
-POST https://localhost:5001/Crawling
+POST {{host}}/Crawling
 Content-Type: application/json
 
 {
@@ -32,7 +32,7 @@ Content-Type: application/json
 
 ### Crawling valid one
 
-POST https://localhost:5001/Crawling
+POST {{host}}/Crawling
 Content-Type: application/json
 
 {

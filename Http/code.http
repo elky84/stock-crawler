@@ -1,20 +1,20 @@
 ### Code get all
 
-POST https://localhost:5001/Code/Load?stockType=All
+POST {{host}}/Code/Load?stockType=All
 Content-Type: application/json
 
 ### Code get Kosdaq
 
-POST https://localhost:5001/Code/Load?stockType=Kosdaq
+POST {{host}}/Code/Load?stockType=Kosdaq
 Content-Type: application/json
 
 ### Code get Kospi
 
-POST https://localhost:5001/Code/Load?stockType=Kospi
+POST {{host}}/Code/Load?stockType=Kospi
 Content-Type: application/json
 
 
 ### Code get konex
 
-POST https://localhost:5001/Code/Load?stockType=Konex
+POST {{host}}/Code/Load?stockType=Konex
 Content-Type: application/json

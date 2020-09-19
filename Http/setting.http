@@ -1,12 +1,12 @@
 ### Code get all
 
-POST https://localhost:5001/Code/Load?stockType=All
+POST {{host}}/Code/Load?stockType=All
 Content-Type: application/json
 
 
 ### User Create
 
-POST https://localhost:5001/User
+POST {{host}}/User
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 
 ### Crawling All
 
-POST https://localhost:5001/Crawling
+POST {{host}}/Crawling
 Content-Type: application/json
 
 {
@@ -27,7 +27,7 @@ Content-Type: application/json
 
 ### Analysis all
 
-POST https://localhost:5001/Analysis
+POST {{host}}/Analysis
 Content-Type: application/json
 
 {
@@ -40,7 +40,7 @@ Content-Type: application/json
 
 ### MockInvest Analysis-Buy
 
-POST https://localhost:5001/MockInvest/Analysis-Buy
+POST {{host}}/MockInvest/Analysis-Buy
 Content-Type: application/json
 
 {

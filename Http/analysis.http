@@ -1,6 +1,6 @@
 ### Analysis all
 
-POST https://localhost:5001/Analysis
+POST {{host}}/Analysis
 Content-Type: application/json
 
 {
@@ -12,7 +12,7 @@ Content-Type: application/json
 
 ### Analysis all
 
-POST https://localhost:5001/Analysis
+POST {{host}}/Analysis
 Content-Type: application/json
 
 {
@@ -24,7 +24,7 @@ Content-Type: application/json
 
 ### Analysis
 
-POST https://localhost:5001/Analysis
+POST {{host}}/Analysis
 Content-Type: application/json
 
 {
@@ -41,7 +41,7 @@ Content-Type: application/json
 
 ### Analysis
 
-POST https://localhost:5001/Analysis
+POST {{host}}/Analysis
 Content-Type: application/json
 
 {
