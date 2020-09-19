@@ -28,17 +28,18 @@ Content-Type: application/json
 
 ### User Get
 
-GET {{host}}/User/5f5a25cc6e6fbaf1a5e7ccca
+GET {{host}}/User/5f608e55953dc198528c7e57
 
 ### User Update
 
-PUT {{host}}/User/5f5eea74ea4f2840f4e1951b
+PUT {{host}}/User/5f608e55953dc198528c7e57
 Content-Type: application/json
 
 {
+    "Id": "5f608e55953dc198528c7e57",
     "UserId":"elky",
-    "Balance": 100000000,
-    "OriginBalance": 100000000,
+    "Balance": 1000000,
+    "OriginBalance": 1000000,
     "AutoTrade": true,
     "AutoTradeCount": 10,
     "AnalysisType": "GoldenCrossTransactionPrice"
@@ -46,5 +47,5 @@ Content-Type: application/json
 
 ### User Delete
 
-DELETE {{host}}/User/5f5a25cc6e6fbaf1a5e7ccca
+DELETE {{host}}/User/5f608e55953dc198528c7e57
 
