@@ -11,7 +11,11 @@ Content-Type: application/json
 
 {
     "UserId":"elky",
-    "Balance": 100000000
+    "Balance": 100000000,
+    "OriginBalance": 100000000,
+    "AutoTrade": true,
+    "AutoTradeCount": 10,
+    "AnalysisType": "GoldenCrossTransactionPrice"
 }
 
 ### Crawling All

@@ -17,10 +17,14 @@ namespace Server.Services
     {
         private readonly MockInvestService _mockInvestService;
 
-        public MockInvestRepeatedService(MockInvestService mockInvestService)
+        private readonly UserService _userService;
+
+        public MockInvestRepeatedService(MockInvestService mockInvestService,
+            UserService userService)
             : base(new TimeSpan(0, 5, 0))
         {
             _mockInvestService = mockInvestService;
+            _userService = userService;
         }
 
         protected override void DoWork(object state)
@@ -35,15 +39,16 @@ namespace Server.Services
                 var diff = buyTime - now;
                 if (Math.Abs(diff.TotalSeconds) <= 5)
                 {
-                    // 하드 코딩 제거 필요. elky id, type, total price
-
-                    _ = _mockInvestService.AnalysisBuy(new Protocols.Request.MockInvestAnalysisBuy
+                    foreach (var user in _userService.GetAutoTradeUsers().Result)
                     {
-                        UserId = "elky",
-                        Type = Code.AnalysisType.GoldenCrossTradeCount,
-                        Count = 10,
-                        TotalPrice = 10000000
-                    });
+                        _ = _mockInvestService.AnalysisBuy(new Protocols.Request.MockInvestAnalysisBuy
+                        {
+                            UserId = user.UserId,
+                            Type = user.AnalysisType.GetValueOrDefault(Code.AnalysisType.GoldenCrossTransactionPrice),
+                            Count = user.AutoTradeCount,
+                            TotalPrice = user.Balance
+                        });
+                    }
                 }
             }
 
@@ -52,15 +57,16 @@ namespace Server.Services
                 var diff = sellTime - now;
                 if (Math.Abs(diff.TotalSeconds) <= 5)
                 {
-                    // 하드 코딩 제거 필요. elky id
-                    _ = _mockInvestService.Sell(new Protocols.Request.MockInvestSell
+                    foreach (var user in _userService.GetAutoTradeUsers().Result)
                     {
-                        UserId = "elky",
-                        All = true
-                    });
+                        _ = _mockInvestService.Sell(new Protocols.Request.MockInvestSell
+                        {
+                            UserId = user.UserId,
+                            All = true
+                        });
+                    }
                 }
             }
         }
-
     }
 }

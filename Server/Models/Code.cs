@@ -18,15 +18,6 @@ namespace Server.Models
         [BsonRepresentation(BsonType.String)]
         public StockType Type { get; set; }
 
-        public Protocols.Common.Code ToProtocol()
-        {
-            return new Protocols.Common.Code
-            {
-                Id = Id,
-                Value = Value,
-                Name = Name,
-                Type = Type
-            };
-        }
+
     }
 }

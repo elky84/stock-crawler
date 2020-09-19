@@ -20,15 +20,5 @@ namespace Server.Models
 
         public double TransactionPrice { get; set; }
 
-        public Protocols.Common.StockEvaluate ToProtocol()
-        {
-            return new Protocols.Common.StockEvaluate
-            {
-                MovingAverageLines = MovingAverageLines,
-                TradeCount = TradeCount,
-                BuyStockValue = BuyStockValue,
-                TransactionPrice = TransactionPrice
-            };
-        }
     }
 }

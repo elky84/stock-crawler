@@ -20,15 +20,5 @@ namespace Server.Models
 
         public DateTime Date { get; set; }
 
-        public Protocols.Common.Analysis ToProtocol()
-        {
-            return new Protocols.Common.Analysis
-            {
-                Id = Id,
-                Code = Code,
-                StockEvaluate = StockEvaluate?.ToProtocol(),
-                Date = Date
-            };
-        }
     }
 }

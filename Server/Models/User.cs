@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Server.Code;
 using System;
 
 namespace Server.Models
@@ -16,15 +17,12 @@ namespace Server.Models
 
         public long OriginBalance { get; set; }
 
-        public Protocols.Common.User ToProtocol()
-        {
-            return new Protocols.Common.User
-            {
-                Id = Id,
-                UserId = UserId,
-                Balance = Balance,
-                OriginBalance = OriginBalance
-            };
-        }
+        public bool AutoTrade { get; set; }
+
+        public int AutoTradeCount { get; set; }
+
+        [BsonRepresentation(BsonType.String)]
+        public AnalysisType? AnalysisType { get; set; }
+
     }
 }

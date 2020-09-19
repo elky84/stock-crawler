@@ -36,17 +36,5 @@ namespace Server.Models
         [BsonIgnore]
         public double? IncomeRate => TotalPrice.HasValue && TotalBuyPrice != 0 ? 100.0 - (double)TotalBuyPrice / (double)TotalPrice.Value * 100.0 : (double?)null;
 
-        public Protocols.Common.MockInvest ToProtocol()
-        {
-            return new Protocols.Common.MockInvest
-            {
-                Id = Id,
-                UserId = UserId,
-                Code = Code,
-                Amount = Amount,
-                BuyPrice = BuyPrice,
-                CurrentPrice = Price
-            };
-        }
     }
 }

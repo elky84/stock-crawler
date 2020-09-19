@@ -16,6 +16,6 @@ namespace Server.Protocols.Request
 
         public int Count { get; set; }
 
-        public int TotalPrice { get; set; }
+        public long TotalPrice { get; set; }
     }
 }

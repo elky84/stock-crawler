@@ -113,7 +113,7 @@ namespace Server.Services
                         continue;
                     }
 
-                    var amount = mockInvestAnalysisBuy.TotalPrice / latest.Latest;
+                    var amount = (int)(mockInvestAnalysisBuy.TotalPrice / latest.Latest);
 
                     user.Balance -= latest.Latest * amount;
 

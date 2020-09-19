@@ -24,18 +24,9 @@ namespace Server.Models
 
         public int? Price { get; set; }
 
-        public Protocols.Common.MockInvestHistory ToProtocol()
+        public MockInvestHistory()
         {
-            return new Protocols.Common.MockInvestHistory
-            {
-                Id = Id,
-                Type = Type,
-                UserId = UserId,
-                Code = Code,
-                Amount = Amount,
-                BuyPrice = BuyPrice,
-                Price = Price
-            };
+
         }
 
         public MockInvestHistory(HistoryType type, MockInvest mockInvest, int? amount = null)

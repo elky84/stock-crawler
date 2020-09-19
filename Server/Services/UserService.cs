@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using WebUtil.Services;
 using MongoDB.Driver;
 using Server.Exception;
+using System.Collections.Generic;
 
 namespace Server.Services
 {
@@ -22,12 +23,7 @@ namespace Server.Services
         {
             try
             {
-                var created = await _mongoDbUser.CreateAsync(new User
-                {
-                    UserId = user.UserId,
-                    Balance = user.Balance,
-                    OriginBalance = user.OriginBalance
-                });
+                var created = await _mongoDbUser.CreateAsync(user.ToModel());
 
                 return new Protocols.Response.User
                 {
@@ -55,15 +51,20 @@ namespace Server.Services
             return await _mongoDbUser.FindOneAsync(Builders<User>.Filter.Eq(x => x.UserId, userId));
         }
 
+        public async Task<List<User>> Get(FilterDefinition<User> filter)
+        {
+            return await _mongoDbUser.FindAsync(filter);
+        }
+
+        public async Task<List<User>> GetAutoTradeUsers()
+        {
+            return await _mongoDbUser.FindAsync(Builders<User>.Filter.Eq(x => x.AutoTrade, true));
+        }
+
+
         public async Task<Protocols.Response.User> Update(string id, Protocols.Request.User user)
         {
-            var update = new User
-            {
-                Id = id,
-                UserId = user.UserId,
-                Balance = user.Balance,
-                OriginBalance = user.OriginBalance
-            };
+            var update = user.ToModel();
 
             var updated = await _mongoDbUser.UpdateAsync(id, update);
             return new Protocols.Response.User
