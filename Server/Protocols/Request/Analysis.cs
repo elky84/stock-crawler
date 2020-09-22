@@ -14,7 +14,7 @@ namespace Server.Protocols.Request
 
         public List<string> Codes { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
         public bool All { get; set; }
     }
