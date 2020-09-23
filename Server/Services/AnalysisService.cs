@@ -38,7 +38,7 @@ namespace Server.Services
 
             var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Value) : analysis.Codes;
 
-            var date = analysis.Date != null ? analysis.Date.Date : DateTime.Now.Date;
+            var date = analysis.Date.GetValueOrDefault(DateTime.Now).Date;
 
             Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 256 }, code =>
             {

@@ -13,18 +13,36 @@ using Microsoft.Extensions.Hosting;
 
 namespace Server.Services
 {
-    public class CrawlingRepeatedService : RepeatedService
+    public class CrawlingLoopingService : LoopingService
     {
         private readonly CrawlingService _crawlingService;
 
-        public CrawlingRepeatedService(CrawlingService crawlingService
+        public CrawlingLoopingService(CrawlingService crawlingService
             )
-            : base(new TimeSpan(0, 5, 0))
         {
             _crawlingService = crawlingService;
         }
 
-        protected override void DoWork(object state)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                try
+                {
+                    DoWork();
+                }
+                catch (System.Exception e)
+                {
+                    Log.Logger.Error($"Implement Task Exception. Reason:{e.Message}");
+
+                }
+
+                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+            }
+        }
+
+
+        protected void DoWork()
         {
             var now = DateTime.Now;
 
