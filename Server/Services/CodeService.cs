@@ -25,6 +25,12 @@ namespace Server.Services
         public CodeService(MongoDbService mongoDbService)
         {
             _mongoDbCode = new MongoDbUtil<Models.Code>(mongoDbService.Database);
+
+            _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Code>(
+                Builders<Models.Code>.IndexKeys.Ascending(x => x.Value)));
+
+            _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Code>(
+                Builders<Models.Code>.IndexKeys.Ascending(x => x.Type)));
         }
 
         public async Task<List<Models.Code>> All()

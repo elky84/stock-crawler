@@ -17,6 +17,9 @@ namespace Server.Services
         public StockDataService(MongoDbService mongoDbService)
         {
             _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);
+
+            _mongoDbNaverStock.Collection.Indexes.CreateOne(new CreateIndexModel<NaverStock>(
+                Builders<NaverStock>.IndexKeys.Descending(x => x.Date).Ascending(x => x.Code)));
         }
 
         public async Task<List<NaverStock>> Get(int day, string code, DateTime? date = null)

@@ -24,9 +24,11 @@ namespace Server.Models
 
         public int? Price { get; set; }
 
+        public DateTime DateTime { get; set; }
+
         public MockInvestHistory()
         {
-
+            DateTime = DateTime.Now;
         }
 
         public MockInvestHistory(HistoryType type, MockInvest mockInvest, int? amount = null)
@@ -37,6 +39,7 @@ namespace Server.Models
             this.Amount = amount ?? mockInvest.Amount;
             this.BuyPrice = mockInvest.BuyPrice;
             this.Price = mockInvest.Price;
+            this.DateTime = DateTime.Now;
         }
     }
 }

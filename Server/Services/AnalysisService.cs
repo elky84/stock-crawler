@@ -15,7 +15,7 @@ namespace Server.Services
     {
         private readonly MongoDbUtil<NaverStock> _mongoDbNaverStock;
 
-        private readonly MongoDbUtil<Models.Analysis> _mongoDbAnalysis;
+        private readonly MongoDbUtil<Analysis> _mongoDbAnalysis;
 
         private readonly CodeService _codeService;
 
@@ -26,14 +26,17 @@ namespace Server.Services
             StockDataService stockDataService)
         {
             _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);
-            _mongoDbAnalysis = new MongoDbUtil<Models.Analysis>(mongoDbService.Database);
+            _mongoDbAnalysis = new MongoDbUtil<Analysis>(mongoDbService.Database);
             _codeService = codeService;
             _stockDataService = stockDataService;
+
+            _mongoDbAnalysis.Collection.Indexes.CreateOne(new CreateIndexModel<Analysis>(
+                Builders<Analysis>.IndexKeys.Descending(x => x.Date).Ascending(x => x.Code)));
         }
 
         public async Task<Protocols.Response.Analysis> Execute(Protocols.Request.Analysis analysis)
         {
-            var analysisDatas = new List<Models.Analysis>();
+            var analysisDatas = new List<Analysis>();
             analysis.Days = analysis.Days.OrderBy(x => x).ToList();
 
             var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Value) : analysis.Codes;
@@ -42,7 +45,7 @@ namespace Server.Services
 
             Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 256 }, code =>
             {
-                var stockEvaluate = new Models.StockEvaluate();
+                var stockEvaluate = new StockEvaluate();
 
                 var builder = Builders<NaverStock>.Filter;
                 var filter = builder.Lt(x => x.Date, date) & builder.Gte(x => x.Date, date.AddDays(-(analysis.Days.Last() / 5) * 7 + analysis.Days.Last() % 5)) & builder.Eq(x => x.Code, code);
@@ -63,7 +66,7 @@ namespace Server.Services
                 {
                     stockEvaluate.BuyStockValue = (double)stockEvaluate.MovingAverageLines.First().Value - (double)stockEvaluate.MovingAverageLines.Last().Value;
 
-                    var analysisData = new Models.Analysis
+                    var analysisData = new Analysis
                     {
                         Type = analysis.Type,
                         Code = code,
@@ -71,7 +74,7 @@ namespace Server.Services
                         StockEvaluate = stockEvaluate
                     };
 
-                    var origin = _mongoDbAnalysis.FindOne(Builders<Models.Analysis>.Filter.Eq(x => x.Date, date) & Builders<Models.Analysis>.Filter.Eq(x => x.Type, analysis.Type) & Builders<Models.Analysis>.Filter.Eq(x => x.Code, code));
+                    var origin = _mongoDbAnalysis.FindOne(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, analysis.Type) & Builders<Analysis>.Filter.Eq(x => x.Code, code));
                     if (origin != null)
                     {
                         analysisData.Id = origin.Id;
@@ -94,9 +97,9 @@ namespace Server.Services
             };
         }
 
-        public async Task<List<Models.Analysis>> Get(DateTime date, AnalysisType type, int count, int page)
+        public async Task<List<Analysis>> Get(DateTime date, AnalysisType type, int count, int page)
         {
-            return await _mongoDbAnalysis.Page(Builders<Models.Analysis>.Filter.Eq(x => x.Date, date) & Builders<Models.Analysis>.Filter.Eq(x => x.Type, type) & Builders<Models.Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0),
+            return await _mongoDbAnalysis.Page(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, type) & Builders<Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0),
                 page * count, count, ToSortKeyword(type), false);
         }
 
@@ -105,9 +108,9 @@ namespace Server.Services
             switch (type)
             {
                 case AnalysisType.GoldenCrossTradeCount:
-                    return ClassUtil.GetMemberNameWithDeclaringType((Models.Analysis x) => x.StockEvaluate.TradeCount);
+                    return ClassUtil.GetMemberNameWithDeclaringType((Analysis x) => x.StockEvaluate.TradeCount);
                 case AnalysisType.GoldenCrossTransactionPrice:
-                    return ClassUtil.GetMemberNameWithDeclaringType((Models.Analysis x) => x.StockEvaluate.TransactionPrice);
+                    return ClassUtil.GetMemberNameWithDeclaringType((Analysis x) => x.StockEvaluate.TransactionPrice);
                 default:
                     throw new DeveloperException(ResultCode.NotImplementedYet);
             }

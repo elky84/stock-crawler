@@ -63,7 +63,8 @@ namespace Server.Models
                 Code = mockInvest.Code,
                 Amount = mockInvest.Amount,
                 BuyPrice = mockInvest.BuyPrice,
-                CurrentPrice = mockInvest.Price
+                CurrentPrice = mockInvest.Price,
+                Date = mockInvest.Date
             };
         }
 
@@ -77,7 +78,8 @@ namespace Server.Models
                 Code = mockInvest.Code,
                 Amount = mockInvest.Amount,
                 BuyPrice = mockInvest.BuyPrice,
-                Price = mockInvest.CurrentPrice
+                Price = mockInvest.CurrentPrice,
+                Date = mockInvest.Date
             };
         }
 
@@ -91,7 +93,8 @@ namespace Server.Models
                 Code = mockInvestHistory.Code,
                 Amount = mockInvestHistory.Amount,
                 BuyPrice = mockInvestHistory.BuyPrice,
-                Price = mockInvestHistory.Price
+                Price = mockInvestHistory.Price,
+                DateTime = mockInvestHistory.DateTime
             };
         }
 
@@ -106,7 +109,8 @@ namespace Server.Models
                 Code = mockInvestHistory.Code,
                 Amount = mockInvestHistory.Amount,
                 BuyPrice = mockInvestHistory.BuyPrice,
-                Price = mockInvestHistory.Price
+                Price = mockInvestHistory.Price,
+                DateTime = mockInvestHistory.DateTime
             };
         }
 

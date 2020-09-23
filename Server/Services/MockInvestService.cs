@@ -41,6 +41,12 @@ namespace Server.Services
             _crawlingService = crawlingService;
 
             _mongoDbMockInvest = new MongoDbUtil<MockInvest>(mongoDbService.Database);
+
+            _mongoDbMockInvest.Collection.Indexes.CreateOne(new CreateIndexModel<MockInvest>(
+                    Builders<MockInvest>.IndexKeys.Ascending(x => x.UserId)));
+
+            _mongoDbMockInvest.Collection.Indexes.CreateOne(new CreateIndexModel<MockInvest>(
+                    Builders<MockInvest>.IndexKeys.Ascending(x => x.Date)));
         }
 
         public async Task<Protocols.Response.MockInvests> Get(string userId, DateTime? date)
@@ -61,7 +67,7 @@ namespace Server.Services
                 User = user.ToProtocol(),
                 InvestList = invests.ConvertAll(x => x.ToProtocol()),
                 ValuationBalance = valuationBalance,
-                ValuationIncome = 100.0 - (double)user.OriginBalance / (double)valuationBalance * 100,
+                ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
                 Date = date
             };
         }
@@ -87,7 +93,7 @@ namespace Server.Services
                 User = user.ToProtocol(),
                 InvestList = invests.ConvertAll(x => x.ToProtocol()),
                 ValuationBalance = valuationBalance,
-                ValuationIncome = 100.0 - (double)user.OriginBalance / (double)valuationBalance * 100
+                ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
             };
         }
 
@@ -131,6 +137,7 @@ namespace Server.Services
                         Amount = amount,
                         BuyPrice = latest.Latest,
                         Price = latest.Latest,
+                        Date = mockInvestAnalysisBuy.Date.GetValueOrDefault(DateTime.Now).Date
                     });
 
                     investDatas.Add(mockInvest);
@@ -175,6 +182,7 @@ namespace Server.Services
                 Amount = mockInvestBuy.Amount,
                 BuyPrice = latest.Latest,
                 Price = latest.Latest,
+                Date = mockInvestBuy.Date.GetValueOrDefault(DateTime.Now).Date
             });
 
             await _mockInvestHistoryService.Write(Code.HistoryType.Buy, mockInvest);

@@ -22,6 +22,12 @@ namespace Server.Services
         {
             _mongoDbMockInvestHistory = new MongoDbUtil<MockInvestHistory>(mongoDbService.Database);
             _userService = userService;
+
+            _mongoDbMockInvestHistory.Collection.Indexes.CreateOne(new CreateIndexModel<MockInvestHistory>(
+                Builders<MockInvestHistory>.IndexKeys.Ascending(x => x.UserId)));
+
+            _mongoDbMockInvestHistory.Collection.Indexes.CreateOne(new CreateIndexModel<MockInvestHistory>(
+                Builders<MockInvestHistory>.IndexKeys.Descending(x => x.DateTime)));
         }
 
         public async Task<MockInvestHistory> Write(HistoryType type, MockInvest mockInvest, int? amount = null)
