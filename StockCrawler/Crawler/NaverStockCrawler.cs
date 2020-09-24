@@ -1,11 +1,11 @@
 ﻿using Serilog;
-using Server.Models;
+using StockCrawler.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using WebUtil.Util;
 
-namespace StockCrawler
+namespace StockCrawler.Crawler
 {
     public class NaverStockCrawler : CrawlerBase
     {

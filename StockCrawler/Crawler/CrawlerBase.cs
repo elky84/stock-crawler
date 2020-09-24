@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace StockCrawler
+namespace StockCrawler.Crawler
 {
     public abstract class CrawlerBase
     {

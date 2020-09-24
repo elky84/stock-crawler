@@ -1,16 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Text;
 using System.Threading.Tasks;
-using Abot2.Core;
-using Abot2.Crawler;
-using Abot2.Poco;
-using AngleSharp;
 using Serilog;
-using StockCrawler;
+using StockCrawler.Crawler;
 
-namespace cli
+namespace Cli
 {
     class Program
     {

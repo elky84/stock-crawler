@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 
-namespace Server.Models
+namespace StockCrawler.Models
 {
     public class NaverStock
     {

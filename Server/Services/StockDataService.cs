@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Server.Exception;
+using StockCrawler.Models;
 
 namespace Server.Services
 {

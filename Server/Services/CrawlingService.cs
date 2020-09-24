@@ -1,15 +1,10 @@
-﻿using Server.Models;
-using WebUtil.Util;
+﻿using WebUtil.Util;
 using System.Linq;
 using System.Threading.Tasks;
 using WebUtil.Services;
-using StockCrawler;
-using System.Collections.Generic;
 using MongoDB.Driver;
-using System.Threading;
-using Serilog;
-using System;
-using Microsoft.Extensions.Hosting;
+using StockCrawler.Models;
+using StockCrawler.Crawler;
 
 namespace Server.Services
 {

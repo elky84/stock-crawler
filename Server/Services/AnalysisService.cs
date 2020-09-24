@@ -8,6 +8,7 @@ using MongoDB.Driver;
 using System.Linq;
 using Server.Code;
 using Server.Exception;
+using StockCrawler.Models;
 
 namespace Server.Services
 {
