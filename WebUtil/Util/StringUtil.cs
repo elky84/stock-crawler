@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace StockCrawler.Util
+namespace WebUtil.Util
 {
     public static class StringUtil
     {

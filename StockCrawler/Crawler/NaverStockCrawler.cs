@@ -3,7 +3,6 @@ using Server.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using StockCrawler.Util;
 using WebUtil.Util;
 
 namespace StockCrawler
