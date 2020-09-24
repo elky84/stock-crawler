@@ -38,8 +38,8 @@ Content-Type: application/json
 {
     "Id": "5f608e55953dc198528c7e57",
     "UserId":"elky",
-    "Balance": 1000000,
-    "OriginBalance": 1000000,
+    "Balance": 100000000,
+    "OriginBalance": 100000000,
     "AutoTrade": true,
     "AutoTradeCount": 10,
     "AnalysisType": "GoldenCrossTransactionPrice"
