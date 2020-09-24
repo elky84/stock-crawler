@@ -21,7 +21,7 @@ namespace Server.Services
 
         public MockInvestRepeatedService(MockInvestService mockInvestService,
             UserService userService)
-            : base(new TimeSpan(0, 5, 0))
+            : base(new TimeSpan(0, 0, 5))
         {
             _mockInvestService = mockInvestService;
             _userService = userService;
