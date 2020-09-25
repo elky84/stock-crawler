@@ -1,15 +1,11 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using System;
+using WebUtil.Models;
 
 namespace StockCrawler.Models
 {
-    public class NaverStock
+    public class NaverStock : MongoDbHeader
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
         public string Code { get; set; }
 
         public int Change { get; set; }

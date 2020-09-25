@@ -20,16 +20,7 @@ namespace Server.Services
 
         protected override async Task OnCrawlData(NaverStock naverStock)
         {
-            var origin = await _mongoDbNaverStock.FindOneAsync(Builders<NaverStock>.Filter.Eq(x => x.Code, naverStock.Code) & Builders<NaverStock>.Filter.Eq(x => x.Date, naverStock.Date));
-            if (origin != null)
-            {
-                naverStock.Id = origin.Id;
-                await _mongoDbNaverStock.UpdateAsync(origin.Id, naverStock);
-            }
-            else
-            {
-                await _mongoDbNaverStock.CreateAsync(naverStock);
-            }
+            await _mongoDbNaverStock.UpsertAsync(Builders<NaverStock>.Filter.Eq(x => x.Code, naverStock.Code) & Builders<NaverStock>.Filter.Eq(x => x.Date, naverStock.Date), naverStock);
         }
     }
 

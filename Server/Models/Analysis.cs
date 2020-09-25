@@ -2,15 +2,12 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Server.Code;
 using System;
+using WebUtil.Models;
 
 namespace Server.Models
 {
-    public class Analysis
+    public class Analysis : MongoDbHeader
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
         [BsonRepresentation(BsonType.String)]
         public AnalysisType Type { get; set; }
 

@@ -2,15 +2,12 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Server.Code;
 using System;
+using WebUtil.Models;
 
 namespace Server.Models
 {
-    public class User
+    public class User : MongoDbHeader
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
         public string UserId { get; set; }
 
         public long Balance { get; set; }
@@ -23,6 +20,5 @@ namespace Server.Models
 
         [BsonRepresentation(BsonType.String)]
         public AnalysisType? AnalysisType { get; set; }
-
     }
 }

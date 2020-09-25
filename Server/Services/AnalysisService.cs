@@ -75,17 +75,7 @@ namespace Server.Services
                         StockEvaluate = stockEvaluate
                     };
 
-                    var origin = _mongoDbAnalysis.FindOne(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, analysis.Type) & Builders<Analysis>.Filter.Eq(x => x.Code, code));
-                    if (origin != null)
-                    {
-                        analysisData.Id = origin.Id;
-                        _mongoDbAnalysis.Update(analysisData.Id, analysisData);
-                    }
-                    else
-                    {
-                        _mongoDbAnalysis.Create(analysisData);
-                    }
-
+                    _ = _mongoDbAnalysis.UpsertAsync(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, analysis.Type) & Builders<Analysis>.Filter.Eq(x => x.Code, code), analysisData);
                     analysisDatas.Add(analysisData);
                 }
             });

@@ -1,15 +1,12 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
+using WebUtil.Models;
 
 namespace Server.Models
 {
-    public class MockInvest
+    public class MockInvest : MongoDbHeader
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
         public string UserId { get; set; }
 
         public string Code { get; set; }
@@ -38,8 +35,5 @@ namespace Server.Models
 
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime Date { get; set; }
-
-        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime Created { get; set; } = DateTime.Now;
     }
 }

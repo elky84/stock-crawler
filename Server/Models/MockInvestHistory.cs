@@ -2,15 +2,12 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Server.Code;
 using System;
+using WebUtil.Models;
 
 namespace Server.Models
 {
-    public class MockInvestHistory
+    public class MockInvestHistory : MongoDbHeader
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
-
         [BsonRepresentation(BsonType.String)]
         public HistoryType Type { get; set; }
 
@@ -23,9 +20,6 @@ namespace Server.Models
         public int BuyPrice { get; set; }
 
         public int? Price { get; set; }
-
-        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime Created { get; set; } = DateTime.Now;
 
         public MockInvestHistory()
         {
