@@ -113,13 +113,15 @@ namespace Server.Services
 
                 foreach (var analysisData in analysisDatas)
                 {
+                    var usablePrice = user.Balance / mockInvestAnalysisBuy.Count;
+
                     var latest = await _stockDataService.Latest(7, analysisData.Code, mockInvestAnalysisBuy.Date);
-                    if (latest.Latest > mockInvestAnalysisBuy.TotalPrice)
+                    if (latest.Latest > usablePrice)
                     {
                         continue;
                     }
 
-                    var amount = (int)(mockInvestAnalysisBuy.TotalPrice / latest.Latest);
+                    var amount = (int)(usablePrice / latest.Latest);
 
                     user.Balance -= latest.Latest * amount;
 

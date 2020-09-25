@@ -59,7 +59,7 @@ namespace Server.Services
                     {
                         stockEvaluate.MovingAverageLines.Add(day, stocks.Sum(x => x.Latest) / stocks.Count);
                         stockEvaluate.TransactionPrice = stocks.Last().Latest * stocks.Last().TradeCount;
-                        stockEvaluate.TradeCount = stocks.Sum(x => x.TradeCount) / stocks.Count;
+                        stockEvaluate.TradeCount = stocks.Sum(x => (long)x.TradeCount) / stocks.Count;
                     }
                 }
 
@@ -114,6 +114,14 @@ namespace Server.Services
                     return ClassUtil.GetMemberNameWithDeclaringType((Analysis x) => x.StockEvaluate.TransactionPrice);
                 default:
                     throw new DeveloperException(ResultCode.NotImplementedYet);
+            }
+        }
+
+        public async Task ExecuteBackground()
+        {
+            foreach (AnalysisType e in (AnalysisType[])Enum.GetValues(typeof(AnalysisType)))
+            {
+                await Execute(new Protocols.Request.Analysis { All = true, Date = DateTime.Now.Date, Type = e });
             }
         }
     }

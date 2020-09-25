@@ -45,8 +45,7 @@ namespace Server.Services
                         {
                             UserId = user.UserId,
                             Type = user.AnalysisType.GetValueOrDefault(Code.AnalysisType.GoldenCrossTransactionPrice),
-                            Count = user.AutoTradeCount,
-                            TotalPrice = user.Balance
+                            Count = user.AutoTradeCount
                         });
                     }
                 }

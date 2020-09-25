@@ -27,15 +27,3 @@ Content-Type: application/json
     "Codes": ['294090'],
     "Page": 1
 }
-
-
-
-### Crawling valid one
-
-POST {{host}}/Crawling
-Content-Type: application/json
-
-{
-    "Codes": ['294090'],
-    "Page": 1
-}

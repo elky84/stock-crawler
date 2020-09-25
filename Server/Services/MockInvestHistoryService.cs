@@ -27,7 +27,7 @@ namespace Server.Services
                 Builders<MockInvestHistory>.IndexKeys.Ascending(x => x.UserId)));
 
             _mongoDbMockInvestHistory.Collection.Indexes.CreateOne(new CreateIndexModel<MockInvestHistory>(
-                Builders<MockInvestHistory>.IndexKeys.Descending(x => x.DateTime)));
+                Builders<MockInvestHistory>.IndexKeys.Descending(x => x.Created)));
         }
 
         public async Task<MockInvestHistory> Write(HistoryType type, MockInvest mockInvest, int? amount = null)

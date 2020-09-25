@@ -15,7 +15,5 @@ namespace Server.Protocols.Request
         public AnalysisType Type { get; set; }
 
         public int Count { get; set; }
-
-        public long TotalPrice { get; set; }
     }
 }

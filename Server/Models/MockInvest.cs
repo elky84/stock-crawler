@@ -36,6 +36,10 @@ namespace Server.Models
         [BsonIgnore]
         public double? IncomeRate => TotalPrice.HasValue && TotalBuyPrice != 0 ? (double)TotalBuyPrice / (double)TotalPrice.Value * 100.0 : (double?)null;
 
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime Date { get; set; }
+
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
+        public DateTime Created { get; set; } = DateTime.Now;
     }
 }

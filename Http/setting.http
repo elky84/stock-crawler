@@ -50,7 +50,6 @@ Content-Type: application/json
 {
     "UserId":"elky",
     "Type": "GoldenCrossTransactionPrice",
-    "Count":10,    
-    "TotalPrice":10000000,
+    "Count":10,
     "Date": "2020-09-15"
 }

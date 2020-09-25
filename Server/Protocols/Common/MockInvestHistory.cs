@@ -35,6 +35,6 @@ namespace Server.Protocols.Common
 
         public double? IncomeRate => TotalPrice.HasValue && TotalBuyPrice != 0 ? 100.0 - (double)TotalBuyPrice / (double)TotalPrice.Value * 100.0 : (double?)null;
 
-        public DateTime DateTime { get; set; }
+        public DateTime Created { get; set; }
     }
 }
