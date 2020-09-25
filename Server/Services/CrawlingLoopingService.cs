@@ -45,6 +45,11 @@ namespace Server.Services
         protected void DoWork()
         {
             var now = DateTime.Now;
+            // 토요일 일요일은 크롤링 안함
+            if (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return;
+            }
 
             var openTime = now.Date.AddHours(9);
             var closeTime = now.Date.AddHours(15);

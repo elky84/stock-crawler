@@ -45,8 +45,13 @@ namespace Server.Services
         protected void DoWork()
         {
             var now = DateTime.Now;
+            // 토요일 일요일은 분석 안함
+            if (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return;
+            }
 
-            // 1시에 한번!
+            // 새벽 1시에 한번!
             if (now.Hour == 1)
             {
                 _ = _analysisService.ExecuteBackground();

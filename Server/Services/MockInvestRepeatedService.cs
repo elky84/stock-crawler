@@ -30,6 +30,11 @@ namespace Server.Services
         protected override void DoWork(object state)
         {
             var now = DateTime.Now;
+            // 토요일 일요일은 모의 투자 안함
+            if (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
+            {
+                return;
+            }
 
             var buyTime = now.Date.AddHours(9);
             var sellTime = now.Date.AddHours(14).AddMinutes(30);
