@@ -1,22 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Threading.Tasks;
+using WebUtil.Models;
 
 namespace Server.Models
 {
     public static class ModelsExtend
     {
+        public static T ToProtocol<T>(this T t, MongoDbHeader header)
+            where T : Protocols.Common.Header
+        {
+            t.Id = header.Id;
+            t.Created = header.Created;
+            return t;
+        }
 
         public static Protocols.Common.Analysis ToProtocol(this Analysis analysis)
         {
             return new Protocols.Common.Analysis
             {
-                Id = analysis.Id,
                 Code = analysis.Code,
                 StockEvaluate = analysis.StockEvaluate?.ToProtocol(),
                 Date = analysis.Date
-            };
+            }.ToProtocol(analysis);
         }
 
         public static Analysis ToModel(this Protocols.Common.Analysis analysis)
@@ -38,7 +46,7 @@ namespace Server.Models
                 Value = code.Value,
                 Name = code.Name,
                 Type = code.Type
-            };
+            }.ToProtocol(code);
         }
 
         public static Code ToModel(this Protocols.Common.Code code)
@@ -58,15 +66,13 @@ namespace Server.Models
         {
             return new Protocols.Common.MockInvest
             {
-                Id = mockInvest.Id,
                 UserId = mockInvest.UserId,
                 Code = mockInvest.Code,
                 Amount = mockInvest.Amount,
                 BuyPrice = mockInvest.BuyPrice,
                 CurrentPrice = mockInvest.Price,
-                Date = mockInvest.Date,
-                Created = mockInvest.Created
-            };
+                Date = mockInvest.Date
+            }.ToProtocol(mockInvest);
         }
 
 
@@ -88,15 +94,13 @@ namespace Server.Models
         {
             return new Protocols.Common.MockInvestHistory
             {
-                Id = mockInvestHistory.Id,
                 Type = mockInvestHistory.Type,
                 UserId = mockInvestHistory.UserId,
                 Code = mockInvestHistory.Code,
                 Amount = mockInvestHistory.Amount,
                 BuyPrice = mockInvestHistory.BuyPrice,
                 Price = mockInvestHistory.Price,
-                Created = mockInvestHistory.Created
-            };
+            }.ToProtocol(mockInvestHistory);
         }
 
 
@@ -141,14 +145,13 @@ namespace Server.Models
         {
             return new Protocols.Common.User
             {
-                Id = user.Id,
                 UserId = user.UserId,
                 Balance = user.Balance,
                 OriginBalance = user.OriginBalance,
                 AutoTrade = user.AutoTrade,
                 AutoTradeCount = user.AutoTradeCount,
                 AnalysisType = user.AnalysisType
-            };
+            }.ToProtocol(user);
         }
 
         public static User ToModel(this Protocols.Common.User user)

@@ -8,10 +8,8 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Common
 {
-    public class Code
+    public class Code : Header
     {
-        public string Id { get; set; }
-
         public string Value { get; set; }
 
         public string Name { get; set; }

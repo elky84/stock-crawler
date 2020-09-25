@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Common
 {
-    public class MockInvestSell
+    public class MockInvestSell : Header
     {
-        public string Id { get; set; }
-
         public int Amount { get; set; }
     }
 }

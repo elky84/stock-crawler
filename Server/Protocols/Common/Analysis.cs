@@ -5,10 +5,8 @@ using System;
 
 namespace Server.Protocols.Common
 {
-    public class Analysis
+    public class Analysis : Header
     {
-        public string Id { get; set; }
-
         [JsonConverter(typeof(StringEnumConverter))]
         public AnalysisType Type { get; set; }
 

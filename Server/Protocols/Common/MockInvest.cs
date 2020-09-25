@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Common
 {
-    public class MockInvest
+    public class MockInvest : Header
     {
-        public string Id { get; set; }
-
         public string UserId { get; set; }
 
         public string Code { get; set; }
@@ -18,8 +16,6 @@ namespace Server.Protocols.Common
         public int BuyPrice { get; set; }
 
         public DateTime Date { get; set; }
-
-        public DateTime Created { get; set; }
 
         public int? CurrentPrice { get; set; }
 
