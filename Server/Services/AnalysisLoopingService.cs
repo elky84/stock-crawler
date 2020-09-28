@@ -51,11 +51,8 @@ namespace Server.Services
                 return;
             }
 
-            // 새벽 1시에 한번!
-            if (now.Hour == 1)
-            {
-                _ = _analysisService.ExecuteBackground();
-            }
+            // 한시간에 한번 분석
+            _ = _analysisService.ExecuteBackground();
         }
     }
 }
