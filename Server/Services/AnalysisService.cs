@@ -38,6 +38,11 @@ namespace Server.Services
         public async Task<Protocols.Response.Analysis> Execute(Protocols.Request.Analysis analysis)
         {
             var analysisDatas = new List<Analysis>();
+            if (analysis.Days == null || analysis.Days.Count < 2)
+            {
+                throw new DeveloperException(ResultCode.AnalysisNeedComparable2DaysData);
+            }
+
             analysis.Days = analysis.Days.OrderBy(x => x).ToList();
 
             var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Value) : analysis.Codes;
@@ -111,7 +116,13 @@ namespace Server.Services
         {
             foreach (AnalysisType e in (AnalysisType[])Enum.GetValues(typeof(AnalysisType)))
             {
-                await Execute(new Protocols.Request.Analysis { All = true, Date = DateTime.Now.Date, Type = e });
+                await Execute(new Protocols.Request.Analysis
+                {
+                    All = true,
+                    Date = DateTime.Now.Date,
+                    Type = e,
+                    Days = new List<int> { 5, 20 }
+                });
             }
         }
     }
