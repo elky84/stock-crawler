@@ -51,8 +51,9 @@ namespace Server.Services
                 return;
             }
 
-            // 오후 6시에 한번 분석
-            if (now.Hour == 18)
+            // 오전 8시부터 오후 4시까지 실행.
+            if (now.Hour >= 8 &&
+                now.Hour <= 16)
             {
                 _ = _analysisService.ExecuteBackground();
             }
