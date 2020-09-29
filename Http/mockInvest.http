@@ -2,15 +2,6 @@
 
 GET {{host}}/MockInvest?UserId=elky
 
-### MockInvest Refresh
-
-POST {{host}}/MockInvest/Refresh
-Content-Type: application/json
-
-{
-    "UserId":"elky"
-}
-
 
 ### MockInvest Analysis-Buy
 

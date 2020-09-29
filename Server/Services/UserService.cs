@@ -5,6 +5,7 @@ using WebUtil.Services;
 using MongoDB.Driver;
 using Server.Exception;
 using System.Collections.Generic;
+using WebUtil.Models;
 
 namespace Server.Services
 {
@@ -64,9 +65,26 @@ namespace Server.Services
 
         public async Task<Protocols.Response.User> Update(string id, Protocols.Request.User user)
         {
+            user.Id = id;
             var update = user.ToModel();
 
             var updated = await _mongoDbUser.UpdateAsync(id, update);
+            return new Protocols.Response.User
+            {
+                ResultCode = Code.ResultCode.Success,
+                UserData = (updated ?? update).ToProtocol()
+            };
+        }
+
+        public async Task<Protocols.Response.User> UpdateByUserId(string userId, Protocols.Request.User user)
+        {
+            var origin = await GetByUserId(userId);
+
+            user.UserId = userId;
+            var update = user.ToModel();
+            origin.CopyHeader(update);
+
+            var updated = await _mongoDbUser.UpdateAsync(Builders<User>.Filter.Eq(x => x.UserId, userId), update);
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
@@ -87,6 +105,15 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 UserData = (await _mongoDbUser.RemoveAsync(id))?.ToProtocol()
+            };
+        }
+
+        public async Task<Protocols.Response.User> DeleteByUserId(string userId)
+        {
+            return new Protocols.Response.User
+            {
+                ResultCode = Code.ResultCode.Success,
+                UserData = (await _mongoDbUser.RemoveAsync(Builders<User>.Filter.Eq(x => x.UserId, userId)))?.ToProtocol()
             };
         }
     }

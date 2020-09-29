@@ -12,6 +12,12 @@ Content-Type: application/json
     "AnalysisType": "GoldenCrossTransactionPrice"
 }
 
+
+### User By Id
+
+GET {{host}}/User/UserId/elky
+
+
 ### User Get
 
 GET {{host}}/User/5f688d482a5a62ab89dfbe07
@@ -22,7 +28,21 @@ PUT {{host}}/User/5f688d482a5a62ab89dfbe07
 Content-Type: application/json
 
 {
-    "Id": "5f608e55953dc198528c7e57",
+    "Id": "5f688d482a5a62ab89dfbe07",
+    "UserId":"elky",
+    "Balance": 100000000,
+    "OriginBalance": 100000000,
+    "AutoTrade": true,
+    "AutoTradeCount": 10,
+    "AnalysisType": "GoldenCrossTransactionPrice"
+}
+
+### User Update by userId
+
+PUT {{host}}/User/UserId/elky
+Content-Type: application/json
+
+{
     "UserId":"elky",
     "Balance": 100000000,
     "OriginBalance": 100000000,
@@ -35,3 +55,6 @@ Content-Type: application/json
 
 DELETE {{host}}/User/5f688d482a5a62ab89dfbe07
 
+### User Delete by UserId
+
+DELETE {{host}}/User/UserId/elky

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Server.Models;
 using Server.Services;
 
 namespace Server.Controllers
@@ -29,6 +30,16 @@ namespace Server.Controllers
             return await _userService.Create(user);
         }
 
+
+        [HttpGet("UserId/{id}")]
+        public async Task<Protocols.Response.User> GetByUserId(string id)
+        {
+            return new Protocols.Response.User
+            {
+                UserData = (await _userService.GetByUserId(id)).ToProtocol()
+            };
+        }
+
         [HttpGet("{id}")]
         public async Task<Protocols.Response.User> Get(string id)
         {
@@ -41,10 +52,24 @@ namespace Server.Controllers
             return await _userService.Update(id, user);
         }
 
+
+        [HttpPut("UserId/{id}")]
+        public async Task<Protocols.Response.User> UpdateByUserId(string id, [FromBody] Protocols.Request.User user)
+        {
+            return await _userService.UpdateByUserId(id, user);
+        }
+
         [HttpDelete("{id}")]
         public async Task<Protocols.Response.User> Delete(string id)
         {
             return await _userService.Delete(id);
         }
+
+        [HttpDelete("UserId/{id}")]
+        public async Task<Protocols.Response.User> DeleteByUserId(string id)
+        {
+            return await _userService.DeleteByUserId(id);
+        }
+
     }
 }
