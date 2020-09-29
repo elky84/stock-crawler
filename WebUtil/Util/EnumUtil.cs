@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Linq;
 
 namespace WebUtil.Util
 {
@@ -69,6 +70,11 @@ namespace WebUtil.Util
         public static T ToEnumString<T>(this string value)
         {
             return (T)Enum.Parse(typeof(T), value);
+        }
+
+        public static List<T> ToEnumList<T>()
+        {
+            return ((T[])Enum.GetValues(typeof(T))).ToList();
         }
     }
 }

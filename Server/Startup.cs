@@ -48,7 +48,7 @@ namespace Server
 
             services.AddSingleton<IHostedService, CrawlingLoopingService>();
             services.AddSingleton<IHostedService, AnalysisLoopingService>();
-            services.AddSingleton<IHostedService, MockInvestRepeatedService>();
+            services.AddSingleton<IHostedService, MockInvestLoopingService>();
 
             services.AddSingleton<CrawlingService>();
             services.AddSingleton<MockInvestService>();

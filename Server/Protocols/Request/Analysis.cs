@@ -8,7 +8,7 @@ namespace Server.Protocols.Request
 {
     public class Analysis
     {
-        public AnalysisType Type { get; set; }
+        public List<AnalysisType> Types { get; set; }
 
         public List<int> Days { get; set; }
 

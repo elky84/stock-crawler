@@ -72,23 +72,26 @@ namespace Server.Services
                 {
                     stockEvaluate.BuyStockValue = (double)stockEvaluate.MovingAverageLines.First().Value - (double)stockEvaluate.MovingAverageLines.Last().Value;
 
-                    var analysisData = new Analysis
+                    foreach (var analysisType in analysis.Types)
                     {
-                        Type = analysis.Type,
-                        Code = code,
-                        Date = date,
-                        StockEvaluate = stockEvaluate
-                    };
+                        var analysisData = new Analysis
+                        {
+                            Type = analysisType,
+                            Code = code,
+                            Date = date,
+                            StockEvaluate = stockEvaluate
+                        };
 
-                    _ = _mongoDbAnalysis.UpsertAsync(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, analysis.Type) & Builders<Analysis>.Filter.Eq(x => x.Code, code), analysisData);
-                    analysisDatas.Add(analysisData);
+                        _ = _mongoDbAnalysis.UpsertAsync(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, analysisType) & Builders<Analysis>.Filter.Eq(x => x.Code, code), analysisData);
+                        analysisDatas.Add(analysisData);
+                    }
                 }
             });
 
             return new Protocols.Response.Analysis
             {
                 ResultCode = ResultCode.Success,
-                Type = analysis.Type,
+                Types = analysis.Types,
                 AnalysisDatas = analysisDatas.ConvertAll(x => x.ToProtocol())
             };
         }
@@ -114,16 +117,13 @@ namespace Server.Services
 
         public async Task ExecuteBackground()
         {
-            foreach (AnalysisType e in (AnalysisType[])Enum.GetValues(typeof(AnalysisType)))
+            await Execute(new Protocols.Request.Analysis
             {
-                await Execute(new Protocols.Request.Analysis
-                {
-                    All = true,
-                    Date = DateTime.Now.Date,
-                    Type = e,
-                    Days = new List<int> { 5, 20 }
-                });
-            }
+                All = true,
+                Date = DateTime.Now.Date,
+                Types = EnumUtil.ToEnumList<AnalysisType>(),
+                Days = new List<int> { 5, 20 }
+            });
         }
     }
 }

@@ -13,21 +13,40 @@ using Serilog;
 
 namespace Server.Services
 {
-    public class MockInvestRepeatedService : RepeatedService
+    public class MockInvestLoopingService : LoopingService
     {
         private readonly MockInvestService _mockInvestService;
 
         private readonly UserService _userService;
 
-        public MockInvestRepeatedService(MockInvestService mockInvestService,
+        public MockInvestLoopingService(MockInvestService mockInvestService,
             UserService userService)
-            : base(new TimeSpan(0, 0, 5))
         {
             _mockInvestService = mockInvestService;
             _userService = userService;
         }
 
-        protected override void DoWork(object state)
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                try
+                {
+                    DoWork();
+                }
+                catch (System.Exception e)
+                {
+                    Log.Logger.Error($"Implement Task Exception. Reason:{e.Message}");
+
+                }
+
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+            }
+        }
+
+
+        protected void DoWork()
         {
             var now = DateTime.Now;
             // 토요일 일요일은 모의 투자 안함
@@ -42,7 +61,7 @@ namespace Server.Services
             // 매수
             {
                 var diff = buyTime - now;
-                if (Math.Abs(diff.TotalSeconds) <= 5)
+                if (Math.Abs(diff.TotalMinutes) <= 1)
                 {
                     foreach (var user in _userService.GetAutoTradeUsers().Result)
                     {
@@ -59,7 +78,7 @@ namespace Server.Services
             // 매도
             {
                 var diff = sellTime - now;
-                if (Math.Abs(diff.TotalSeconds) <= 5)
+                if (Math.Abs(diff.TotalMinutes) <= 1)
                 {
                     foreach (var user in _userService.GetAutoTradeUsers().Result)
                     {
