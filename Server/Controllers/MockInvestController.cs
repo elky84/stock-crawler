@@ -29,12 +29,6 @@ namespace Server.Controllers
             return await _mockInvestService.Get(userId, date);
         }
 
-        [HttpPost("Refresh")]
-        public async Task<Protocols.Response.MockInvestRefresh> Refresh([FromBody] Protocols.Request.MockInvestRefresh mockInvestRefresh)
-        {
-            return await _mockInvestService.Refresh(mockInvestRefresh.UserId);
-        }
-
         [HttpPost("Analysis-Buy")]
         public async Task<Protocols.Response.MockInvestAnalysisBuy> AnalysisBuy([FromBody] Protocols.Request.MockInvestAnalysisBuy mockInvestAnalysisBuy)
         {

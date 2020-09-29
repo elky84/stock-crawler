@@ -52,14 +52,16 @@ namespace Server.Services
         public async Task<Protocols.Response.MockInvests> Get(string userId, DateTime? date)
         {
             var user = await _userService.GetByUserId(userId);
-
             var invests = (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, userId)));
+
             foreach (var invest in invests)
             {
                 var latest = await _stockDataService.Latest(7, invest.Code, date);
                 invest.Price = latest.Latest;
             }
 
+            var buyPriceSum = invests.Sum(x => x.BuyPrice);
+            var currentPriceSum = invests.Sum(x => x.Price);
             var valuationBalance = user.Balance + invests.Sum(x => x.TotalPrice.GetValueOrDefault(0));
             return new Protocols.Response.MockInvests
             {
@@ -68,32 +70,8 @@ namespace Server.Services
                 InvestList = invests.ConvertAll(x => x.ToProtocol()),
                 ValuationBalance = valuationBalance,
                 ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
-                Date = date
-            };
-        }
-
-
-        public async Task<Protocols.Response.MockInvestRefresh> Refresh(string userId)
-        {
-            var user = await _userService.GetByUserId(userId);
-
-            var invests = (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, userId)));
-            await _crawlingService.Execute(new Protocols.Request.Crawling { Codes = invests.ConvertAll(x => x.Code).ToList(), Page = 1 });
-
-            foreach (var invest in invests)
-            {
-                var latest = await _stockDataService.Latest(7, invest.Code);
-                invest.Price = latest.Latest;
-            }
-
-            var valuationBalance = user.Balance + invests.Sum(x => x.TotalPrice.GetValueOrDefault(0));
-            return new Protocols.Response.MockInvestRefresh
-            {
-                ResultCode = Code.ResultCode.Success,
-                User = user.ToProtocol(),
-                InvestList = invests.ConvertAll(x => x.ToProtocol()),
-                ValuationBalance = valuationBalance,
-                ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
+                InvestedIncome = (double)currentPriceSum / (double)buyPriceSum * 100,
+                Date = date.GetValueOrDefault(DateTime.Now).Date
             };
         }
 

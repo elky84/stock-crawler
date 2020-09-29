@@ -15,6 +15,8 @@ namespace Server.Protocols.Response
 
         public double ValuationIncome { get; set; }
 
+        public double InvestedIncome { get; set; }
+
         public DateTime? Date { get; set; }
     }
 }
