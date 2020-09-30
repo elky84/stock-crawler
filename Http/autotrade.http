@@ -1,0 +1,43 @@
+### AutoTrade Create
+
+POST {{host}}/AutoTrade
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Balance": 10000000,
+    "Code": "118990",
+    "BuyCondition": 2.0,
+    "SellCondition": 2.0,
+}
+
+### AutoTrade By Id
+
+GET {{host}}/AutoTrade/AutoTradeId/elky
+
+
+### AutoTrade Get
+
+GET {{host}}/AutoTrade/5f688d482a5a62ab89dfbe07
+
+### AutoTrade Update
+
+PUT {{host}}/AutoTrade/5f688d482a5a62ab89dfbe07
+Content-Type: application/json
+
+{
+    "Id": "5f688d482a5a62ab89dfbe07",
+    "UserId":"elky",
+    "Balance": 10000000,
+    "Code": "118990",
+    "BuyCondition": 2.0,
+    "SellCondition": 2.0,
+}
+
+### AutoTrade Delete
+
+DELETE {{host}}/AutoTrade/5f688d482a5a62ab89dfbe07
+
+### AutoTrade Delete by UserId
+
+DELETE {{host}}/AutoTrade/UserId/elky

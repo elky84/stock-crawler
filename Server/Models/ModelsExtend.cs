@@ -147,11 +147,8 @@ namespace Server.Models
             {
                 UserId = user.UserId,
                 Balance = user.Balance,
-                OriginBalance = user.OriginBalance,
-                AutoTrade = user.AutoTrade,
-                AutoTradeCount = user.AutoTradeCount,
-                AnalysisType = user.AnalysisType
-            }.ToProtocol(user);
+                OriginBalance = user.OriginBalance
+            };
         }
 
         public static User ToModel(this Protocols.Common.User user)
@@ -161,12 +158,32 @@ namespace Server.Models
                 Id = user.Id,
                 UserId = user.UserId,
                 Balance = user.Balance,
-                OriginBalance = user.OriginBalance,
-                AutoTrade = user.AutoTrade,
-                AutoTradeCount = user.AutoTradeCount,
-                AnalysisType = user.AnalysisType
+                OriginBalance = user.OriginBalance
             };
         }
 
+        public static Protocols.Common.AutoTrade ToProtocol(this AutoTrade autoTrade)
+        {
+            return new Protocols.Common.AutoTrade
+            {
+                UserId = autoTrade.UserId,
+                Balance = autoTrade.Balance,
+                Code = autoTrade.Code,
+                BuyCondition = autoTrade.BuyCondition,
+                SellCondition = autoTrade.SellCondition,
+            }.ToProtocol(autoTrade);
+        }
+
+        public static AutoTrade ToModel(this Protocols.Common.AutoTrade autoTrade)
+        {
+            return new AutoTrade
+            {
+                UserId = autoTrade.UserId,
+                Balance = autoTrade.Balance,
+                Code = autoTrade.Code,
+                BuyCondition = autoTrade.BuyCondition,
+                SellCondition = autoTrade.SellCondition,
+            };
+        }
     }
 }

@@ -6,10 +6,7 @@ Content-Type: application/json
 {
     "UserId":"elky",
     "Balance": 100000000,
-    "OriginBalance": 100000000,
-    "AutoTrade": true,
-    "AutoTradeCount": 10,
-    "AnalysisType": "GoldenCrossTransactionPrice"
+    "OriginBalance": 100000000
 }
 
 
@@ -31,10 +28,7 @@ Content-Type: application/json
     "Id": "5f688d482a5a62ab89dfbe07",
     "UserId":"elky",
     "Balance": 100000000,
-    "OriginBalance": 100000000,
-    "AutoTrade": true,
-    "AutoTradeCount": 10,
-    "AnalysisType": "GoldenCrossTransactionPrice"
+    "OriginBalance": 100000000
 }
 
 ### User Update by userId
@@ -45,10 +39,7 @@ Content-Type: application/json
 {
     "UserId":"elky",
     "Balance": 100000000,
-    "OriginBalance": 100000000,
-    "AutoTrade": true,
-    "AutoTradeCount": 10,
-    "AnalysisType": "GoldenCrossTransactionPrice"
+    "OriginBalance": 100000000
 }
 
 ### User Delete

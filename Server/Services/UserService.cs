@@ -57,12 +57,6 @@ namespace Server.Services
             return await _mongoDbUser.FindAsync(filter);
         }
 
-        public async Task<List<User>> GetAutoTradeUsers()
-        {
-            return await _mongoDbUser.FindAsync(Builders<User>.Filter.Eq(x => x.AutoTrade, true));
-        }
-
-
         public async Task<Protocols.Response.User> Update(string id, Protocols.Request.User user)
         {
             user.Id = id;

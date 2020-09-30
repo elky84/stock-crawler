@@ -8,12 +8,16 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Common
 {
-    public class User : Header
+    public class AutoTrade : Header
     {
         public string UserId { get; set; }
 
         public long Balance { get; set; }
 
-        public long OriginBalance { get; set; }
+        public string Code { get; set; }
+
+        public double BuyCondition { get; set; }
+
+        public double SellCondition { get; set; }
     }
 }

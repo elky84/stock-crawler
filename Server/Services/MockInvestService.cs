@@ -25,20 +25,20 @@ namespace Server.Services
 
         private readonly MockInvestHistoryService _mockInvestHistoryService;
 
-        private readonly CrawlingService _crawlingService;
+        private readonly AutoTradeService _autoTradeService;
 
         public MockInvestService(MongoDbService mongoDbService,
             StockDataService stockDataService,
             AnalysisService analysisService,
             UserService userService,
             MockInvestHistoryService mockInvestHistoryService,
-            CrawlingService crawlingService)
+            AutoTradeService autoTradeService)
         {
             _userService = userService;
             _stockDataService = stockDataService;
             _analysisService = analysisService;
             _mockInvestHistoryService = mockInvestHistoryService;
-            _crawlingService = crawlingService;
+            _autoTradeService = autoTradeService;
 
             _mongoDbMockInvest = new MongoDbUtil<MockInvest>(mongoDbService.Database);
 
@@ -75,12 +75,21 @@ namespace Server.Services
             };
         }
 
+
+        public async Task<MockInvest> Get(string userId, string code, DateTime? date)
+        {
+            return (await _mongoDbMockInvest.FindOneAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, userId) &
+                Builders<MockInvest>.Filter.Eq(x => x.Code, code)));
+        }
+
+
         public async Task<Protocols.Response.MockInvestAnalysisBuy> AnalysisBuy(Protocols.Request.MockInvestAnalysisBuy mockInvestAnalysisBuy)
         {
             var user = await _userService.GetByUserId(mockInvestAnalysisBuy.UserId);
             var investDatas = new List<MockInvest>();
 
             int page = 0;
+            var codePerUsablePrice = user.Balance / mockInvestAnalysisBuy.Count;
             while (investDatas.Count < mockInvestAnalysisBuy.Count)
             {
                 var analysisDatas = await _analysisService.Get(mockInvestAnalysisBuy.Date.GetValueOrDefault(), mockInvestAnalysisBuy.Type, mockInvestAnalysisBuy.Count, page);
@@ -91,15 +100,13 @@ namespace Server.Services
 
                 foreach (var analysisData in analysisDatas)
                 {
-                    var usablePrice = user.Balance / mockInvestAnalysisBuy.Count;
-
                     var latest = await _stockDataService.Latest(7, analysisData.Code, mockInvestAnalysisBuy.Date);
-                    if (latest.Latest > usablePrice)
+                    if (latest.Latest > codePerUsablePrice)
                     {
                         continue;
                     }
 
-                    var amount = (int)(usablePrice / latest.Latest);
+                    var amount = (int)(codePerUsablePrice / latest.Latest);
 
                     user.Balance -= latest.Latest * amount;
 
@@ -136,8 +143,56 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 User = user.ToProtocol(),
+                Type = mockInvestAnalysisBuy.Type,
                 InvestDatas = investDatas.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestAnalysisBuy.Date
+            };
+        }
+
+
+        public async Task<Protocols.Response.MockInvestAnalysisAutoTrade> AnalysisAutoTrade(Protocols.Request.MockInvestAnalysisAutoTrade mockInvestAnalysisAutoTrade)
+        {
+            var user = await _userService.GetByUserId(mockInvestAnalysisAutoTrade.UserId);
+            var autoTrades = new List<AutoTrade>();
+
+            int page = 0;
+            var codePerUsablePrice = user.Balance / mockInvestAnalysisAutoTrade.Count;
+            while (autoTrades.Count < mockInvestAnalysisAutoTrade.Count)
+            {
+                var analysisDatas = await _analysisService.Get(mockInvestAnalysisAutoTrade.Date.GetValueOrDefault(), mockInvestAnalysisAutoTrade.Type, mockInvestAnalysisAutoTrade.Count, page);
+                if (!analysisDatas.Any())
+                {
+                    break;
+                }
+
+                foreach (var analysisData in analysisDatas)
+                {
+                    var autoTrade = await _autoTradeService.CreateAsync(new Protocols.Request.AutoTrade
+                    {
+                        UserId = mockInvestAnalysisAutoTrade.UserId,
+                        Code = analysisData.Code,
+                        Balance = codePerUsablePrice,
+                        BuyCondition = mockInvestAnalysisAutoTrade.BuyCondition,
+                        SellCondition = mockInvestAnalysisAutoTrade.SellCondition
+                    });
+
+                    autoTrades.Add(autoTrade);
+
+                    if (autoTrades.Count >= mockInvestAnalysisAutoTrade.Count)
+                    {
+                        break;
+                    }
+                }
+                ++page;
+            }
+
+            return new Protocols.Response.MockInvestAnalysisAutoTrade
+            {
+                ResultCode = Code.ResultCode.Success,
+                Type = mockInvestAnalysisAutoTrade.Type,
+                User = user.ToProtocol(),
+                AutoTrades = autoTrades.ConvertAll(x => x.ToProtocol()),
+                Date = mockInvestAnalysisAutoTrade.Date
             };
         }
 

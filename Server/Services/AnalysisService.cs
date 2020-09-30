@@ -99,7 +99,7 @@ namespace Server.Services
         public async Task<List<Analysis>> Get(DateTime date, AnalysisType type, int count, int page)
         {
             return await _mongoDbAnalysis.Page(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, type) & Builders<Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0),
-                page * count, count, ToSortKeyword(type), false);
+                count, page * count, ToSortKeyword(type), false);
         }
 
         private string ToSortKeyword(AnalysisType type)

@@ -9,6 +9,7 @@ namespace Server.Code
     {
         Success,
         UsingUserId,
+        UsingAutoTradeId,
         NotEnoughBalance,
         CannotOverHaveStockAmount,
         NotFoundStockCodeData,

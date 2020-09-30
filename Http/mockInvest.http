@@ -12,7 +12,21 @@ Content-Type: application/json
     "UserId":"elky",
     "Type": "GoldenCrossTransactionPrice",
     "Count":10,
-    "Date": "2020-09-28"
+    "Date": "2020-09-25"
+}
+
+### MockInvest Analysis-AutoTrade
+
+POST {{host}}/MockInvest/Analysis-AutoTrade
+Content-Type: application/json
+
+{
+    "UserId":"elky",
+    "Type": "GoldenCrossTransactionPrice",
+    "Count":10,
+    "Date": "2020-09-25",
+    "BuyCondition" : 2.0,
+    "SellCondition" : 2.0,
 }
 
 ### MockInvest Buy

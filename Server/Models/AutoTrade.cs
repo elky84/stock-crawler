@@ -6,12 +6,16 @@ using WebUtil.Models;
 
 namespace Server.Models
 {
-    public class User : MongoDbHeader
+    public class AutoTrade : MongoDbHeader
     {
         public string UserId { get; set; }
 
         public long Balance { get; set; }
 
-        public long OriginBalance { get; set; }
+        public string Code { get; set; }
+
+        public double BuyCondition { get; set; }
+
+        public double SellCondition { get; set; }
     }
 }
