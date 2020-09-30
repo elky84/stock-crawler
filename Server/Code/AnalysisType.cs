@@ -9,5 +9,6 @@ namespace Server.Code
     {
         GoldenCrossTradeCount,
         GoldenCrossTransactionPrice,
+        FluctuationRate,
     }
 }

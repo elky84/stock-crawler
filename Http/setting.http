@@ -12,10 +12,29 @@ Content-Type: application/json
 {
     "UserId":"elky",
     "Balance": 100000000,
-    "OriginBalance": 100000000,
-    "AutoTrade": true,
-    "AutoTradeCount": 10,
-    "AnalysisType": "GoldenCrossTransactionPrice"
+    "OriginBalance": 100000000
+}
+
+### User Create
+
+POST {{host}}/User
+Content-Type: application/json
+
+{
+    "UserId":"elky2",
+    "Balance": 100000000,
+    "OriginBalance": 100000000
+}
+
+### User Create
+
+POST {{host}}/User
+Content-Type: application/json
+
+{
+    "UserId":"elky3",
+    "Balance": 100000000,
+    "OriginBalance": 100000000
 }
 
 ### Crawling All
@@ -37,19 +56,53 @@ Content-Type: application/json
 {
     "All": true,
     "Days":[5, 20],
-    "Types": ["GoldenCrossTradeCount", "GoldenCrossTransactionPrice"]
+    "Types": [
+        "GoldenCrossTradeCount", 
+        "GoldenCrossTransactionPrice",
+        "FluctuationRate"
+    ]
 }
 
+### MockInvest Analysis-AutoTrade
 
-
-### MockInvest Analysis-Buy
-
-POST {{host}}/MockInvest/Analysis-Buy
+POST {{host}}/MockInvest/Analysis-AutoTrade
 Content-Type: application/json
 
 {
     "UserId":"elky",
     "Type": "GoldenCrossTransactionPrice",
     "Count":10,
-    "Date": "2020-09-15"
+    "Date": "2020-09-29",
+    "BuyCondition" : 2.0,
+    "SellCondition" : 2.0,
+}
+
+
+### MockInvest Analysis-AutoTrade
+
+POST {{host}}/MockInvest/Analysis-AutoTrade
+Content-Type: application/json
+
+{
+    "UserId":"elky2",
+    "Type": "GoldenCrossTradeCount",
+    "Count":10,
+    "Date": "2020-09-29",
+    "BuyCondition" : 2.0,
+    "SellCondition" : 2.0,
+}
+
+
+### MockInvest Analysis-AutoTrade
+
+POST {{host}}/MockInvest/Analysis-AutoTrade
+Content-Type: application/json
+
+{
+    "UserId":"elky3",
+    "Type": "FluctuationRate",
+    "Count":10,
+    "Date": "2020-09-29",
+    "BuyCondition" : 2.0,
+    "SellCondition" : 2.0,
 }

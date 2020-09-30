@@ -7,9 +7,6 @@ namespace Server.Protocols.Common
 {
     public class Analysis : Header
     {
-        [JsonConverter(typeof(StringEnumConverter))]
-        public AnalysisType Type { get; set; }
-
         public string Code { get; set; }
 
         public StockEvaluate StockEvaluate { get; set; }

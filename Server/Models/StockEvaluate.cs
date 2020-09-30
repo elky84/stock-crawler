@@ -12,6 +12,8 @@ namespace Server.Models
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public Dictionary<int, int> MovingAverageLines { get; set; } = new Dictionary<int, int>();
 
+        public double Fluctuation { get; set; }
+
         public double TradeCount { get; set; }
 
         public double BuyStockValue { get; set; }

@@ -65,6 +65,7 @@ namespace Server.Services
                         stockEvaluate.MovingAverageLines.Add(day, stocks.Sum(x => x.Latest) / stocks.Count);
                         stockEvaluate.TransactionPrice = stocks.Last().Latest * stocks.Last().TradeCount;
                         stockEvaluate.TradeCount = stocks.Sum(x => (long)x.TradeCount) / stocks.Count;
+                        stockEvaluate.Fluctuation = stocks.Sum(x => (long)x.Change) / stocks.Count; // 현재는 하루단위라서, 하루 내에 변동이 컸어도 인지가 안됨. 추후 데이터 보강시 변경해야 함.
                     }
                 }
 
@@ -72,19 +73,15 @@ namespace Server.Services
                 {
                     stockEvaluate.BuyStockValue = (double)stockEvaluate.MovingAverageLines.First().Value - (double)stockEvaluate.MovingAverageLines.Last().Value;
 
-                    foreach (var analysisType in analysis.Types)
+                    var analysisData = new Analysis
                     {
-                        var analysisData = new Analysis
-                        {
-                            Type = analysisType,
-                            Code = code,
-                            Date = date,
-                            StockEvaluate = stockEvaluate
-                        };
+                        Code = code,
+                        Date = date,
+                        StockEvaluate = stockEvaluate
+                    };
 
-                        _ = _mongoDbAnalysis.UpsertAsync(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, analysisType) & Builders<Analysis>.Filter.Eq(x => x.Code, code), analysisData);
-                        analysisDatas.Add(analysisData);
-                    }
+                    _ = _mongoDbAnalysis.UpsertAsync(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Code, code), analysisData);
+                    analysisDatas.Add(analysisData);
                 }
             });
 
@@ -98,7 +95,8 @@ namespace Server.Services
 
         public async Task<List<Analysis>> Get(DateTime date, AnalysisType type, int count, int page)
         {
-            return await _mongoDbAnalysis.Page(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Type, type) & Builders<Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0),
+            return await _mongoDbAnalysis.Page(Builders<Analysis>.Filter.Eq(x => x.Date, date)
+                & Builders<Analysis>.Filter.Gt(x => x.StockEvaluate.BuyStockValue, 0),
                 count, page * count, ToSortKeyword(type), false);
         }
 
@@ -110,6 +108,8 @@ namespace Server.Services
                     return ClassUtil.GetMemberNameWithDeclaringType((Analysis x) => x.StockEvaluate.TradeCount);
                 case AnalysisType.GoldenCrossTransactionPrice:
                     return ClassUtil.GetMemberNameWithDeclaringType((Analysis x) => x.StockEvaluate.TransactionPrice);
+                case AnalysisType.FluctuationRate:
+                    return ClassUtil.GetMemberNameWithDeclaringType((Analysis x) => x.StockEvaluate.Fluctuation);
                 default:
                     throw new DeveloperException(ResultCode.NotImplementedYet);
             }
