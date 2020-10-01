@@ -38,6 +38,11 @@ namespace Server.Services
             return await _mongoDbCode.All();
         }
 
+        public async Task<Models.Code> Get(string code)
+        {
+            return await _mongoDbCode.FindOneAsync(Builders<Models.Code>.Filter.Eq(x => x.Value, code));
+        }
+
         public async Task<Header> Load(StockType stockType)
         {
             int executionCount = 0;

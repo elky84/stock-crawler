@@ -1,0 +1,75 @@
+### Notification Get
+
+GET {{host}}/Notification
+
+
+### Notification Create Multi Discord
+
+POST {{host}}/Notification/Multi
+Content-Type: application/json
+
+{
+	"NotificationDatas": [
+        {
+            "Type": "Discord",
+            "Name": "Mock-Invest",
+            "IconUrl": "https://cdn6.aptoide.com/imgs/2/1/d/21dd207b9fdce001bea7f436db94bbd4_icon.png",
+            "HookUrl": "https://discordapp.com/api/webhooks/761099199315312671/uYCiWCePMHZjz9nBRd9-u8KRadDfvBDpiu7MWPPGR86mHeUmtJyZ1fupaGInS70zSCjJ",
+            "InvestType": "MockInvest"
+        }
+	]
+}
+
+
+### Notification Create Multi Discord (for local debug)
+
+POST {{host}}/Notification/Multi
+Content-Type: application/json
+
+{
+	"NotificationDatas": [
+        {
+            "Type": "Discord",
+            "Name": "Mock-Invest",
+            "IconUrl": "https://cdn6.aptoide.com/imgs/2/1/d/21dd207b9fdce001bea7f436db94bbd4_icon.png",
+            "HookUrl": "https://discordapp.com/api/webhooks/757093882747158622/m2mrsgUWaPIzi8K7DjuRTLmUZet5VuNllhKRkekhcx_MSNHSRTdmuSISq67HlwN1ehJ6",
+            "InvestType": "MockInvest"
+        }
+	]
+}
+
+
+### Notification Create
+
+POST {{host}}/Notification
+Content-Type: application/json
+
+{
+    "Type": "Discord",
+    "Name": "Mock-Invest",
+    "IconUrl": "https://cdn6.aptoide.com/imgs/2/1/d/21dd207b9fdce001bea7f436db94bbd4_icon.png",
+    "HookUrl": "https://discordapp.com/api/webhooks/757093882747158622/m2mrsgUWaPIzi8K7DjuRTLmUZet5VuNllhKRkekhcx_MSNHSRTdmuSISq67HlwN1ehJ6",
+    "InvestType": "MockInvest"
+}
+
+### Notification Get
+
+GET {{host}}/Notification/5f5a25cc6e6fbaf1a5e7ccca
+
+### Notification Update
+
+PUT {{host}}/Notification/5f5a25cc6e6fbaf1a5e7ccca
+Content-Type: application/json
+
+{
+    "Type": "Discord",
+    "Name": "Mock-Invest",
+    "IconUrl": "https://cdn6.aptoide.com/imgs/2/1/d/21dd207b9fdce001bea7f436db94bbd4_icon.png",
+    "HookUrl": "https://discordapp.com/api/webhooks/757093882747158622/m2mrsgUWaPIzi8K7DjuRTLmUZet5VuNllhKRkekhcx_MSNHSRTdmuSISq67HlwN1ehJ6",
+    "InvestType": "MockInvest"
+}
+
+### Notification Delete
+
+DELETE {{host}}/Notification/5f5a25cc6e6fbaf1a5e7ccca
+

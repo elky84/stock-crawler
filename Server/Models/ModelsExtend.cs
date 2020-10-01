@@ -185,5 +185,42 @@ namespace Server.Models
                 SellCondition = autoTrade.SellCondition,
             };
         }
+
+        public static Protocols.Common.Notification ToProtocol(this Notification notification)
+        {
+            return new Protocols.Common.Notification
+            {
+                Name = notification.Name,
+                HookUrl = notification.HookUrl,
+                Channel = notification.Channel,
+                IconUrl = notification.IconUrl,
+                InvestType = notification.InvestType,
+            }.ToProtocol(notification);
+        }
+
+        public static Notification ToModel(this Protocols.Common.Notification notification)
+        {
+            return new Notification
+            {
+                Id = notification.Id,
+                Name = notification.Name,
+                HookUrl = notification.HookUrl,
+                Channel = notification.Channel,
+                IconUrl = notification.IconUrl,
+                InvestType = notification.InvestType
+            };
+        }
+
+        public static Notification ToModel(this Protocols.Common.NotificationCreate notification)
+        {
+            return new Notification
+            {
+                Name = notification.Name,
+                HookUrl = notification.HookUrl,
+                Channel = notification.Channel,
+                IconUrl = notification.IconUrl,
+                InvestType = notification.InvestType,
+            };
+        }
     }
 }

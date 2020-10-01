@@ -27,18 +27,26 @@ namespace Server.Services
 
         private readonly AutoTradeService _autoTradeService;
 
+        private readonly NotificationService _notificationService;
+
+        private readonly CodeService _codeService;
+
         public MockInvestService(MongoDbService mongoDbService,
             StockDataService stockDataService,
             AnalysisService analysisService,
             UserService userService,
             MockInvestHistoryService mockInvestHistoryService,
-            AutoTradeService autoTradeService)
+            AutoTradeService autoTradeService,
+            NotificationService notificationService,
+            CodeService codeService)
         {
             _userService = userService;
             _stockDataService = stockDataService;
             _analysisService = analysisService;
             _mockInvestHistoryService = mockInvestHistoryService;
             _autoTradeService = autoTradeService;
+            _notificationService = notificationService;
+            _codeService = codeService;
 
             _mongoDbMockInvest = new MongoDbUtil<MockInvest>(mongoDbService.Database);
 
@@ -131,6 +139,8 @@ namespace Server.Services
 
                     await _mockInvestHistoryService.Write(Code.HistoryType.Buy, mockInvest);
 
+                    await Notification(mockInvest);
+
                     if (investDatas.Count >= mockInvestAnalysisBuy.Count)
                     {
                         break;
@@ -147,6 +157,20 @@ namespace Server.Services
                 InvestDatas = investDatas.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestAnalysisBuy.Date
             };
+        }
+
+        private async Task Notification(MockInvest mockInvest, string additional = null)
+        {
+            var code = await _codeService.Get(mockInvest.Code);
+            var message = $"**[종목:{code?.Name}/{mockInvest.Code}]**\n" +
+                $"`[매수] 주당가:{mockInvest.BuyPrice}, 수량:{mockInvest.Amount}, 총액:{mockInvest.TotalBuyPrice}`\n";
+
+            if (!string.IsNullOrEmpty(additional))
+            {
+                message += additional;
+            }
+
+            await _notificationService.Execute(Code.InvestType.MockInvest, message);
         }
 
 
@@ -222,6 +246,8 @@ namespace Server.Services
 
             await _mockInvestHistoryService.Write(Code.HistoryType.Buy, mockInvest);
 
+            await Notification(mockInvest);
+
             return new Protocols.Response.MockInvestBuy
             {
                 ResultCode = Code.ResultCode.Success,
@@ -246,7 +272,8 @@ namespace Server.Services
                 var mockInvest = await _mongoDbMockInvest.FindOneAsyncById(sell.Id);
 
                 var latest = await _stockDataService.Latest(7, mockInvest.Code, mockInvestSell.Date);
-                user.Balance += latest.Latest * sell.Amount;
+                var sellTotalPrice = latest.Latest * sell.Amount;
+                user.Balance += sellTotalPrice;
                 mockInvest.Price = latest.Latest;
 
                 if (mockInvest.Amount < sell.Amount)
@@ -264,6 +291,11 @@ namespace Server.Services
                 }
 
                 await _mockInvestHistoryService.Write(Code.HistoryType.Sell, mockInvest, sell.Amount);
+
+                var sellMessage = $"`[매도] 주당가:{latest.Latest}, 수량:{sell.Amount}, 총액:{sellTotalPrice}`\n" +
+                    $"`[손익] {mockInvest.TotalBuyPrice - sellTotalPrice}`";
+
+                await Notification(mockInvest, sellMessage);
 
                 investDatas.Add(mockInvest);
             }

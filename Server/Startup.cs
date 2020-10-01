@@ -33,6 +33,8 @@ namespace Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpClient();
+
             services.AddControllers().AddNewtonsoftJson();
 
             services.AddSwaggerGen(c =>
@@ -50,6 +52,7 @@ namespace Server
             services.AddSingleton<IHostedService, CrawlingLoopingService>();
             services.AddSingleton<IHostedService, AnalysisLoopingService>();
             services.AddSingleton<IHostedService, MockInvestLoopingService>();
+            services.AddSingleton<IHostedService, NotificationLoopingService>();
 
             services.AddSingleton<CrawlingService>();
             services.AddSingleton<MockInvestService>();
@@ -59,6 +62,7 @@ namespace Server
             services.AddSingleton<MockInvestHistoryService>();
             services.AddSingleton<CodeService>();
             services.AddSingleton<AutoTradeService>();
+            services.AddSingleton<NotificationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

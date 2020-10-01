@@ -12,7 +12,7 @@ Content-Type: application/json
     "UserId":"elky",
     "Type": "GoldenCrossTransactionPrice",
     "Count":10,
-    "Date": "2020-09-25"
+    "Date": "2020-10-01"
 }
 
 ### MockInvest Analysis-AutoTrade
