@@ -139,7 +139,7 @@ namespace Server.Services
 
                     await _mockInvestHistoryService.Write(Code.HistoryType.Buy, mockInvest);
 
-                    await Notification(mockInvest);
+                    await Notification(user, mockInvest);
 
                     if (investDatas.Count >= mockInvestAnalysisBuy.Count)
                     {
@@ -159,7 +159,7 @@ namespace Server.Services
             };
         }
 
-        private async Task Notification(MockInvest mockInvest, string additional = null)
+        private async Task Notification(User user, MockInvest mockInvest, string additional = null)
         {
             var code = await _codeService.Get(mockInvest.Code);
             var message = $"**[종목:{code?.Name}/{mockInvest.Code}]**\n" +
@@ -169,6 +169,8 @@ namespace Server.Services
             {
                 message += additional;
             }
+
+            message += $"`[유저] 아이디:{user.UserId}, 잔액:{user.Balance}`\n";
 
             await _notificationService.Execute(Code.InvestType.MockInvest, message);
         }
@@ -246,7 +248,7 @@ namespace Server.Services
 
             await _mockInvestHistoryService.Write(Code.HistoryType.Buy, mockInvest);
 
-            await Notification(mockInvest);
+            await Notification(user, mockInvest);
 
             return new Protocols.Response.MockInvestBuy
             {
@@ -293,9 +295,9 @@ namespace Server.Services
                 await _mockInvestHistoryService.Write(Code.HistoryType.Sell, mockInvest, sell.Amount);
 
                 var sellMessage = $"`[매도] 주당가:{latest.Latest}, 수량:{sell.Amount}, 총액:{sellTotalPrice}`\n" +
-                    $"`[손익] {mockInvest.TotalBuyPrice - sellTotalPrice}`";
+                    $"`[손익] {mockInvest.TotalBuyPrice - sellTotalPrice}` 손익률 {mockInvest.TotalBuyPrice / sellTotalPrice}\n";
 
-                await Notification(mockInvest, sellMessage);
+                await Notification(user, mockInvest, sellMessage);
 
                 investDatas.Add(mockInvest);
             }
