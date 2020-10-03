@@ -97,7 +97,7 @@ namespace Server.Services
                                 }
                             }).Result;
 
-                            autoTrade.Balance += sell.InvestDatas.Sum(x => x.TotalBuyPrice);
+                            autoTrade.Balance += sell.Datas.Sum(x => x.TotalBuyPrice);
                             _ = _autoTradeService.Update(autoTrade);
                         }
                     }
@@ -113,7 +113,7 @@ namespace Server.Services
                                 Amount = (int)(autoTrade.Balance / latest.Latest)
                             }).Result;
 
-                            autoTrade.Balance -= buy.InvestData.TotalBuyPrice;
+                            autoTrade.Balance -= buy.Data.TotalBuyPrice;
 
                             _ = _autoTradeService.Update(autoTrade);
                         }

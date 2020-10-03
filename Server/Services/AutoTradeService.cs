@@ -29,7 +29,7 @@ namespace Server.Services
                 return new Protocols.Response.AutoTrade
                 {
                     ResultCode = Code.ResultCode.Success,
-                    AutoTradeDatas = new List<Protocols.Common.AutoTrade> { created?.ToProtocol() }
+                    Datas = new List<Protocols.Common.AutoTrade> { created?.ToProtocol() }
                 };
             }
             catch (MongoWriteException)
@@ -55,7 +55,7 @@ namespace Server.Services
             return new Protocols.Response.AutoTrade
             {
                 ResultCode = Code.ResultCode.Success,
-                AutoTradeDatas = new List<Protocols.Common.AutoTrade> { (await _mongoDbAutoTrade.FindOneAsyncById(id))?.ToProtocol() }
+                Datas = new List<Protocols.Common.AutoTrade> { (await _mongoDbAutoTrade.FindOneAsyncById(id))?.ToProtocol() }
             };
         }
 
@@ -83,7 +83,7 @@ namespace Server.Services
             return new Protocols.Response.AutoTrade
             {
                 ResultCode = Code.ResultCode.Success,
-                AutoTradeDatas = new List<Protocols.Common.AutoTrade> { (updated ?? update).ToProtocol() }
+                Datas = new List<Protocols.Common.AutoTrade> { (updated ?? update).ToProtocol() }
             };
         }
 
@@ -99,7 +99,7 @@ namespace Server.Services
             return new Protocols.Response.AutoTrade
             {
                 ResultCode = Code.ResultCode.Success,
-                AutoTradeDatas = new List<Protocols.Common.AutoTrade> {
+                Datas = new List<Protocols.Common.AutoTrade> {
                     (await _mongoDbAutoTrade.RemoveAsync(id))?.ToProtocol()
                 }
             };

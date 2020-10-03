@@ -29,7 +29,7 @@ namespace Server.Services
                 return new Protocols.Response.User
                 {
                     ResultCode = Code.ResultCode.Success,
-                    UserData = created?.ToProtocol()
+                    Data = created?.ToProtocol()
                 };
             }
             catch (MongoWriteException)
@@ -43,7 +43,7 @@ namespace Server.Services
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                UserData = (await _mongoDbUser.FindOneAsyncById(id))?.ToProtocol()
+                Data = (await _mongoDbUser.FindOneAsyncById(id))?.ToProtocol()
             };
         }
 
@@ -66,7 +66,7 @@ namespace Server.Services
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                UserData = (updated ?? update).ToProtocol()
+                Data = (updated ?? update).ToProtocol()
             };
         }
 
@@ -82,7 +82,7 @@ namespace Server.Services
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                UserData = (updated ?? update).ToProtocol()
+                Data = (updated ?? update).ToProtocol()
             };
         }
 
@@ -98,7 +98,7 @@ namespace Server.Services
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                UserData = (await _mongoDbUser.RemoveAsync(id))?.ToProtocol()
+                Data = (await _mongoDbUser.RemoveAsync(id))?.ToProtocol()
             };
         }
 
@@ -107,7 +107,7 @@ namespace Server.Services
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                UserData = (await _mongoDbUser.RemoveAsync(Builders<User>.Filter.Eq(x => x.UserId, userId)))?.ToProtocol()
+                Data = (await _mongoDbUser.RemoveAsync(Builders<User>.Filter.Eq(x => x.UserId, userId)))?.ToProtocol()
             };
         }
     }

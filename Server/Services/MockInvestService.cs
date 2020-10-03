@@ -75,7 +75,7 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 User = user.ToProtocol(),
-                InvestList = invests.ConvertAll(x => x.ToProtocol()),
+                Datas = invests.ConvertAll(x => x.ToProtocol()),
                 ValuationBalance = valuationBalance,
                 ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
                 InvestedIncome = (double)currentPriceSum / (double)buyPriceSum * 100,
@@ -100,13 +100,13 @@ namespace Server.Services
             var codePerUsablePrice = user.Balance / mockInvestAnalysisBuy.Count;
             while (investDatas.Count < mockInvestAnalysisBuy.Count)
             {
-                var analysisDatas = await _analysisService.Get(mockInvestAnalysisBuy.Date.GetValueOrDefault(), mockInvestAnalysisBuy.Type, mockInvestAnalysisBuy.Count, page);
-                if (!analysisDatas.Any())
+                var Datas = await _analysisService.Get(mockInvestAnalysisBuy.Date.GetValueOrDefault(), mockInvestAnalysisBuy.Type, mockInvestAnalysisBuy.Count, page);
+                if (!Datas.Any())
                 {
                     break;
                 }
 
-                foreach (var analysisData in analysisDatas)
+                foreach (var analysisData in Datas)
                 {
                     var latest = await _stockDataService.Latest(7, analysisData.Code, mockInvestAnalysisBuy.Date);
                     if (latest.Latest > codePerUsablePrice)
@@ -154,7 +154,7 @@ namespace Server.Services
                 ResultCode = Code.ResultCode.Success,
                 User = user.ToProtocol(),
                 Type = mockInvestAnalysisBuy.Type,
-                InvestDatas = investDatas.ConvertAll(x => x.ToProtocol()),
+                Datas = investDatas.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestAnalysisBuy.Date
             };
         }
@@ -185,13 +185,13 @@ namespace Server.Services
             var codePerUsablePrice = user.Balance / mockInvestAnalysisAutoTrade.Count;
             while (autoTrades.Count < mockInvestAnalysisAutoTrade.Count)
             {
-                var analysisDatas = await _analysisService.Get(mockInvestAnalysisAutoTrade.Date.GetValueOrDefault(), mockInvestAnalysisAutoTrade.Type, mockInvestAnalysisAutoTrade.Count, page);
-                if (!analysisDatas.Any())
+                var Datas = await _analysisService.Get(mockInvestAnalysisAutoTrade.Date.GetValueOrDefault(), mockInvestAnalysisAutoTrade.Type, mockInvestAnalysisAutoTrade.Count, page);
+                if (!Datas.Any())
                 {
                     break;
                 }
 
-                foreach (var analysisData in analysisDatas)
+                foreach (var analysisData in Datas)
                 {
                     var autoTrade = await _autoTradeService.CreateAsync(new Protocols.Request.AutoTrade
                     {
@@ -217,7 +217,7 @@ namespace Server.Services
                 ResultCode = Code.ResultCode.Success,
                 Type = mockInvestAnalysisAutoTrade.Type,
                 User = user.ToProtocol(),
-                AutoTrades = autoTrades.ConvertAll(x => x.ToProtocol()),
+                Datas = autoTrades.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestAnalysisAutoTrade.Date
             };
         }
@@ -254,7 +254,7 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 User = user.ToProtocol(),
-                InvestData = mockInvest.ToProtocol(),
+                Data = mockInvest.ToProtocol(),
                 Date = mockInvestBuy.Date
             };
         }
@@ -308,7 +308,7 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 User = (await _userService.GetByUserId(mockInvestSell.UserId))?.ToProtocol(),
-                InvestDatas = investDatas.ConvertAll(x => x.ToProtocol()),
+                Datas = investDatas.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestSell.Date
             };
         }

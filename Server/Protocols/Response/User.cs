@@ -7,6 +7,6 @@ namespace Server.Protocols.Response
 {
     public class User : Header
     {
-        public Common.User UserData { get; set; }
+        public Common.User Data { get; set; }
     }
 }

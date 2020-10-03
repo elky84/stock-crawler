@@ -40,7 +40,7 @@ namespace Server.Services
             return new Protocols.Response.MockInvestHistories
             {
                 User = (await _userService.GetByUserId(userId)).ToProtocol(),
-                InvestHistories = (await _mongoDbMockInvestHistory.FindAsync(Builders<MockInvestHistory>.Filter.Eq(x => x.UserId, userId))).ConvertAll(x => x.ToProtocol())
+                Datas = (await _mongoDbMockInvestHistory.FindAsync(Builders<MockInvestHistory>.Filter.Eq(x => x.UserId, userId))).ConvertAll(x => x.ToProtocol())
             };
         }
     }

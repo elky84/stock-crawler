@@ -9,7 +9,7 @@ POST {{host}}/Notification/Multi
 Content-Type: application/json
 
 {
-	"NotificationDatas": [
+	"Datas": [
         {
             "Type": "Discord",
             "Name": "Mock-Invest",
@@ -27,7 +27,7 @@ POST {{host}}/Notification/Multi
 Content-Type: application/json
 
 {
-	"NotificationDatas": [
+	"Datas": [
         {
             "Type": "Discord",
             "Name": "Mock-Invest",
@@ -45,11 +45,13 @@ POST {{host}}/Notification
 Content-Type: application/json
 
 {
-    "Type": "Discord",
-    "Name": "Mock-Invest",
-    "IconUrl": "https://cdn6.aptoide.com/imgs/2/1/d/21dd207b9fdce001bea7f436db94bbd4_icon.png",
-    "HookUrl": "https://discordapp.com/api/webhooks/757093882747158622/m2mrsgUWaPIzi8K7DjuRTLmUZet5VuNllhKRkekhcx_MSNHSRTdmuSISq67HlwN1ehJ6",
-    "InvestType": "MockInvest"
+    "Data": {
+        "Type": "Discord",
+        "Name": "Mock-Invest",
+        "IconUrl": "https://cdn6.aptoide.com/imgs/2/1/d/21dd207b9fdce001bea7f436db94bbd4_icon.png",
+        "HookUrl": "https://discordapp.com/api/webhooks/757093882747158622/m2mrsgUWaPIzi8K7DjuRTLmUZet5VuNllhKRkekhcx_MSNHSRTdmuSISq67HlwN1ehJ6",
+        "InvestType": "MockInvest"
+    }
 }
 
 ### Notification Get
@@ -62,11 +64,13 @@ PUT {{host}}/Notification/5f5a25cc6e6fbaf1a5e7ccca
 Content-Type: application/json
 
 {
-    "Type": "Discord",
-    "Name": "Mock-Invest",
-    "IconUrl": "https://cdn6.aptoide.com/imgs/2/1/d/21dd207b9fdce001bea7f436db94bbd4_icon.png",
-    "HookUrl": "https://discordapp.com/api/webhooks/757093882747158622/m2mrsgUWaPIzi8K7DjuRTLmUZet5VuNllhKRkekhcx_MSNHSRTdmuSISq67HlwN1ehJ6",
-    "InvestType": "MockInvest"
+    "Data": {
+        "Type": "Discord",
+        "Name": "Mock-Invest",
+        "IconUrl": "https://cdn6.aptoide.com/imgs/2/1/d/21dd207b9fdce001bea7f436db94bbd4_icon.png",
+        "HookUrl": "https://discordapp.com/api/webhooks/757093882747158622/m2mrsgUWaPIzi8K7DjuRTLmUZet5VuNllhKRkekhcx_MSNHSRTdmuSISq67HlwN1ehJ6",
+        "InvestType": "MockInvest"
+    }
 }
 
 ### Notification Delete

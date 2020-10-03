@@ -15,7 +15,7 @@ namespace Server.Protocols.Response
 
         public Common.User User { get; set; }
 
-        public List<Common.AutoTrade> AutoTrades { get; set; }
+        public List<Common.AutoTrade> Datas { get; set; }
 
         public DateTime? Date { get; set; }
     }

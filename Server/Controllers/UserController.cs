@@ -36,7 +36,7 @@ namespace Server.Controllers
         {
             return new Protocols.Response.User
             {
-                UserData = (await _userService.GetByUserId(id)).ToProtocol()
+                Data = (await _userService.GetByUserId(id)).ToProtocol()
             };
         }
 

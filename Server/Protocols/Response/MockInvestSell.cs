@@ -9,7 +9,7 @@ namespace Server.Protocols.Response
     {
         public Common.User User { get; set; }
 
-        public List<Common.MockInvest> InvestDatas { get; set; }
+        public List<Common.MockInvest> Datas { get; set; }
 
         public DateTime? Date { get; set; }
     }

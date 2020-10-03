@@ -7,6 +7,6 @@ namespace Server.Protocols.Response
 {
     public class AutoTrade : Header
     {
-        public List<Common.AutoTrade> AutoTradeDatas { get; set; }
+        public List<Common.AutoTrade> Datas { get; set; }
     }
 }

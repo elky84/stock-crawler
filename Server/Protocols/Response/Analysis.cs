@@ -11,6 +11,6 @@ namespace Server.Protocols.Response
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public List<AnalysisType> Types { get; set; }
 
-        public List<Common.Analysis> AnalysisDatas { get; set; }
+        public List<Common.Analysis> Datas { get; set; }
     }
 }

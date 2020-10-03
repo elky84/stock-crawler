@@ -9,6 +9,6 @@ namespace Server.Protocols.Response
     {
         public Common.User User { get; set; }
 
-        public List<Common.MockInvestHistory> InvestHistories { get; set; }
+        public List<Common.MockInvestHistory> Datas { get; set; }
     }
 }

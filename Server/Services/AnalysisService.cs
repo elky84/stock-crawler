@@ -37,7 +37,7 @@ namespace Server.Services
 
         public async Task<Protocols.Response.Analysis> Execute(Protocols.Request.Analysis analysis)
         {
-            var analysisDatas = new List<Analysis>();
+            var Datas = new List<Analysis>();
             if (analysis.Days == null || analysis.Days.Count < 2)
             {
                 throw new DeveloperException(ResultCode.AnalysisNeedComparable2DaysData);
@@ -81,7 +81,7 @@ namespace Server.Services
                     };
 
                     _ = _mongoDbAnalysis.UpsertAsync(Builders<Analysis>.Filter.Eq(x => x.Date, date) & Builders<Analysis>.Filter.Eq(x => x.Code, code), analysisData);
-                    analysisDatas.Add(analysisData);
+                    Datas.Add(analysisData);
                 }
             });
 
@@ -89,7 +89,7 @@ namespace Server.Services
             {
                 ResultCode = ResultCode.Success,
                 Types = analysis.Types,
-                AnalysisDatas = analysisDatas.ConvertAll(x => x.ToProtocol())
+                Datas = Datas.ConvertAll(x => x.ToProtocol())
             };
         }
 

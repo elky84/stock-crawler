@@ -36,7 +36,7 @@ namespace Server.Controllers
         {
             return new Protocols.Response.AutoTrade
             {
-                AutoTradeDatas = (await _autoTradeService.GetByUserId(id)).ConvertAll(x => x.ToProtocol())
+                Datas = (await _autoTradeService.GetByUserId(id)).ConvertAll(x => x.ToProtocol())
             };
         }
 
