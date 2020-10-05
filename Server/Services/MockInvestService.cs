@@ -295,7 +295,7 @@ namespace Server.Services
                 await _mockInvestHistoryService.Write(Code.HistoryType.Sell, mockInvest, sell.Amount);
 
                 var sellMessage = $"`[매도] 주당가:{latest.Latest}, 수량:{sell.Amount}, 총액:{sellTotalPrice}`\n" +
-                    $"`[손익] {mockInvest.TotalBuyPrice - sellTotalPrice}` 손익률 {mockInvest.TotalBuyPrice / sellTotalPrice}\n";
+                    $"`[손익] {sellTotalPrice - mockInvest.TotalBuyPrice}` 손익률 {(double)sellTotalPrice / mockInvest.TotalBuyPrice}\n";
 
                 await Notification(user, mockInvest, sellMessage);
 

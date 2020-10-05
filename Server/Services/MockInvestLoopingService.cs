@@ -83,7 +83,7 @@ namespace Server.Services
                     var mockInvest = _mockInvestService.Get(autoTrade.UserId, autoTrade.Code, null).Result;
                     if (mockInvest != null) // 이미 샀으면 유지
                     {
-                        if (Math.Abs((double)mockInvest.BuyPrice / latest.Latest) > autoTrade.SellCondition)
+                        if (Math.Abs(100 - (double)mockInvest.BuyPrice / latest.Latest * 100) > autoTrade.SellCondition)
                         {
                             // 매도
                             var sell = _mockInvestService.Sell(new Protocols.Request.MockInvestSell
@@ -103,7 +103,7 @@ namespace Server.Services
                     }
                     else
                     {
-                        if (Math.Abs((double)latest.Start / latest.Latest) <= autoTrade.BuyCondition)
+                        if (Math.Abs(100 - (double)latest.Start / latest.Latest * 100) <= autoTrade.BuyCondition)
                         {
                             // 매수
                             var buy = _mockInvestService.Buy(new Protocols.Request.MockInvestBuy
