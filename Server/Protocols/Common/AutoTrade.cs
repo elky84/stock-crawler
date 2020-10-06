@@ -16,7 +16,13 @@ namespace Server.Protocols.Common
 
         public string Code { get; set; }
 
+        public AnalysisType AnalysisType { get; set; }
+
+        public AutoTradeType BuyTradeType { get; set; }
+
         public double BuyCondition { get; set; }
+
+        public AutoTradeType SellTradeType { get; set; }
 
         public double SellCondition { get; set; }
     }

@@ -62,7 +62,6 @@ namespace Server.Models
         }
 
 
-
         public static Protocols.Common.MockInvest ToProtocol(this MockInvest mockInvest)
         {
             return new Protocols.Common.MockInvest
@@ -75,7 +74,6 @@ namespace Server.Models
                 Date = mockInvest.Date
             }.ToProtocol(mockInvest);
         }
-
 
         public static MockInvest ToModel(this Protocols.Common.MockInvest mockInvest)
         {
@@ -170,7 +168,10 @@ namespace Server.Models
                 UserId = autoTrade.UserId,
                 Balance = autoTrade.Balance,
                 Code = autoTrade.Code,
+                AnalysisType = autoTrade.AnalysisType,
+                BuyTradeType = autoTrade.BuyTradeType,
                 BuyCondition = autoTrade.BuyCondition,
+                SellTradeType = autoTrade.SellTradeType,
                 SellCondition = autoTrade.SellCondition,
             }.ToProtocol(autoTrade);
         }
@@ -182,7 +183,10 @@ namespace Server.Models
                 UserId = autoTrade.UserId,
                 Balance = autoTrade.Balance,
                 Code = autoTrade.Code,
+                AnalysisType = autoTrade.AnalysisType,
+                BuyTradeType = autoTrade.BuyTradeType,
                 BuyCondition = autoTrade.BuyCondition,
+                SellTradeType = autoTrade.SellTradeType,
                 SellCondition = autoTrade.SellCondition,
             };
         }

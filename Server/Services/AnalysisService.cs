@@ -35,6 +35,12 @@ namespace Server.Services
                 Builders<Analysis>.IndexKeys.Descending(x => x.Date).Ascending(x => x.Code)));
         }
 
+        public async Task<long> CountAsync(DateTime? dateTime)
+        {
+            var date = dateTime.GetValueOrDefault(DateTime.Now).Date;
+            return await _mongoDbAnalysis.CountAsync(Builders<Analysis>.Filter.Eq(x => x.Date, date));
+        }
+
         public async Task<Protocols.Response.Analysis> Execute(Protocols.Request.Analysis analysis)
         {
             var Datas = new List<Analysis>();

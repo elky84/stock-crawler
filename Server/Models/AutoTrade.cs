@@ -14,7 +14,16 @@ namespace Server.Models
 
         public string Code { get; set; }
 
+        [BsonRepresentation(BsonType.String)]
+        public AnalysisType AnalysisType { get; set; }
+
+        [BsonRepresentation(BsonType.String)]
+        public AutoTradeType BuyTradeType { get; set; }
+
         public double BuyCondition { get; set; }
+
+        [BsonRepresentation(BsonType.String)]
+        public AutoTradeType SellTradeType { get; set; }
 
         public double SellCondition { get; set; }
     }

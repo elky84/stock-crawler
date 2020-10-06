@@ -185,20 +185,23 @@ namespace Server.Services
             var codePerUsablePrice = user.Balance / mockInvestAnalysisAutoTrade.Count;
             while (autoTrades.Count < mockInvestAnalysisAutoTrade.Count)
             {
-                var Datas = await _analysisService.Get(mockInvestAnalysisAutoTrade.Date.GetValueOrDefault(), mockInvestAnalysisAutoTrade.Type, mockInvestAnalysisAutoTrade.Count, page);
-                if (!Datas.Any())
+                var datas = await _analysisService.Get(mockInvestAnalysisAutoTrade.Date.GetValueOrDefault(), mockInvestAnalysisAutoTrade.Type, mockInvestAnalysisAutoTrade.Count, page);
+                if (!datas.Any())
                 {
                     break;
                 }
 
-                foreach (var analysisData in Datas)
+                foreach (var analysisData in datas)
                 {
                     var autoTrade = await _autoTradeService.CreateAsync(new Protocols.Request.AutoTrade
                     {
                         UserId = mockInvestAnalysisAutoTrade.UserId,
                         Code = analysisData.Code,
                         Balance = codePerUsablePrice,
+                        AnalysisType = mockInvestAnalysisAutoTrade.Type,
+                        BuyTradeType = mockInvestAnalysisAutoTrade.BuyTradeType,
                         BuyCondition = mockInvestAnalysisAutoTrade.BuyCondition,
+                        SellTradeType = mockInvestAnalysisAutoTrade.SellTradeType,
                         SellCondition = mockInvestAnalysisAutoTrade.SellCondition
                     });
 
@@ -220,6 +223,30 @@ namespace Server.Services
                 Datas = autoTrades.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestAnalysisAutoTrade.Date
             };
+        }
+
+        public async Task<Analysis> NextAnalysis(AutoTrade autoTrade, List<AutoTrade> allAutoTrades)
+        {
+            var count = await _analysisService.CountAsync(DateTime.Now);
+            for (int page = 0; count > page * allAutoTrades.Count; ++page)
+            {
+                var datas = await _analysisService.Get(DateTime.Now.Date, autoTrade.AnalysisType, allAutoTrades.Count, page);
+                if (!datas.Any())
+                {
+                    break;
+                }
+
+                foreach (var analysisData in datas)
+                {
+                    if (allAutoTrades.Any(x => x.Code == analysisData.Code))
+                    {
+                        continue;
+                    }
+
+                    return analysisData;
+                }
+            }
+            return null;
         }
 
         public async Task<Protocols.Response.MockInvestBuy> Buy(Protocols.Request.MockInvestBuy mockInvestBuy)

@@ -10,8 +10,7 @@ Content-Type: application/json
         "GoldenCrossTradeCount", 
         "GoldenCrossTransactionPrice", 
         "FluctuationRate"
-    ],
-    "Date": "2020-09-29"
+    ]
 }
 
 ### Analysis some
