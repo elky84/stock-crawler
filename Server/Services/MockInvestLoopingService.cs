@@ -96,9 +96,8 @@ namespace Server.Services
                             break;
                         case Code.AutoTradeType.Time:
                             {
-                                var timeSpan = TimeSpan.FromHours(autoTrade.SellCondition);
-                                if (mockInvest.Created.Hour + timeSpan.Hours != DateTime.Now.Hour ||
-                                    mockInvest.Created.Minute + timeSpan.Minutes != DateTime.Now.Minute)
+                                var target = mockInvest.Created.Add(TimeSpan.FromHours(autoTrade.SellCondition));
+                                if (DateTime.Now < target)
                                 {
                                     continue;
                                 }
@@ -126,7 +125,7 @@ namespace Server.Services
                         autoTrade.Code = next.Code;
                     }
 
-                    autoTrade.Balance += sell.Datas.Sum(x => x.TotalBuyPrice);
+                    autoTrade.Balance += sell.Datas.Sum(x => x.TotalCurrentPrice.Value);
                     _ = _autoTradeService.Update(autoTrade);
                 }
                 else
@@ -148,9 +147,8 @@ namespace Server.Services
                             break;
                         case Code.AutoTradeType.Time:
                             {
-                                var timeSpan = TimeSpan.FromHours(autoTrade.BuyCondition);
-                                if (DateTime.Now.Hour != timeSpan.Hours ||
-                                    DateTime.Now.Minute != timeSpan.Minutes)
+                                var target = DateTime.Now.Date.Add(TimeSpan.FromHours(autoTrade.BuyCondition));
+                                if (DateTime.Now < target)
                                 {
                                     continue;
                                 }

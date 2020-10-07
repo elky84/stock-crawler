@@ -24,12 +24,20 @@ namespace Server.Controllers
             _userService = userService;
         }
 
+        [HttpGet]
+        public async Task<Protocols.Response.Users> Get()
+        {
+            return new Protocols.Response.Users
+            {
+                Datas = (await _userService.Get()).ConvertAll(x => x.ToProtocol())
+            };
+        }
+
         [HttpPost]
         public async Task<Protocols.Response.User> Create([FromBody] Protocols.Request.User user)
         {
             return await _userService.Create(user);
         }
-
 
         [HttpGet("UserId/{id}")]
         public async Task<Protocols.Response.User> GetByUserId(string id)

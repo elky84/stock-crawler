@@ -38,6 +38,12 @@ namespace Server.Services
             }
         }
 
+        public async Task<List<User>> Get()
+        {
+            return await _mongoDbUser.All();
+        }
+
+
         public async Task<Protocols.Response.User> Get(string id)
         {
             return new Protocols.Response.User

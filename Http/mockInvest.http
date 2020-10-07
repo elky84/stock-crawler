@@ -1,4 +1,8 @@
-### MockInvest Get
+### MockInvest Get All
+
+GET {{host}}/MockInvest
+
+### MockInvest Get by UserId
 
 GET {{host}}/MockInvest?UserId=elky
 
@@ -27,7 +31,7 @@ Content-Type: application/json
     "BuyTradeType": "PriceUnder",
     "BuyCondition" : 10.0,
     "SellTradeType": "PriceOver",
-    "SellCondition" : 2.0,
+    "SellCondition" : 3.0,
 }
 
 ### MockInvest Analysis-AutoTrade Time
@@ -36,9 +40,8 @@ POST {{host}}/MockInvest/Analysis-AutoTrade
 Content-Type: application/json
 
 {
-    "UserId":"elky",
+    "UserId":"elky3",
     "Type": "GoldenCrossTransactionPrice",
-    "Date": "2020-10-01",
     "Count":10,
     "BuyTradeType": "Time",
     "BuyCondition" : 9, // 구매할 시간

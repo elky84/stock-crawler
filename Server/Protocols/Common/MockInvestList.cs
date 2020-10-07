@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Server.Protocols.Response
+namespace Server.Protocols.Common
 {
-    public class MockInvests : Header
+    public class MockInvestList
     {
-        public Common.User User { get; set; }
+        public User User { get; set; }
 
-        public List<Common.MockInvest> Datas { get; set; }
+        public List<MockInvest> MockInvests { get; set; } = new List<MockInvest>();
 
         public long ValuationBalance { get; set; }
 

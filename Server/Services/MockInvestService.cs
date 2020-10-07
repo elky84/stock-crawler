@@ -57,37 +57,43 @@ namespace Server.Services
                     Builders<MockInvest>.IndexKeys.Ascending(x => x.Date)));
         }
 
-        public async Task<Protocols.Response.MockInvests> Get(string userId, DateTime? date)
+        public async Task<Protocols.Response.MockInvestList> Get(string userId, DateTime? date)
         {
-            var user = await _userService.GetByUserId(userId);
-            var invests = (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, userId)));
-
-            foreach (var invest in invests)
+            var response = new Protocols.Response.MockInvestList();
+            var users = string.IsNullOrEmpty(userId) ? await _userService.Get() : new List<User> { await _userService.GetByUserId(userId) };
+            foreach (var user in users)
             {
-                var latest = await _stockDataService.Latest(7, invest.Code, date);
-                invest.Price = latest.Latest;
+                var invests = (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, user.UserId)));
+
+                foreach (var invest in invests)
+                {
+                    var latest = await _stockDataService.Latest(7, invest.Code, date);
+                    invest.Price = latest.Latest;
+                }
+
+                var buyPriceSum = invests.Sum(x => x.BuyPrice);
+                var currentPriceSum = invests.Sum(x => x.Price);
+                var valuationBalance = user.Balance + invests.Sum(x => x.TotalPrice.GetValueOrDefault(0));
+
+                response.Datas.Add(new Protocols.Common.MockInvestList
+                {
+                    User = user.ToProtocol(),
+                    MockInvests = invests.ConvertAll(x => x.ToProtocol()),
+                    ValuationBalance = valuationBalance,
+                    ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
+                    InvestedIncome = (double)currentPriceSum / (double)buyPriceSum * 100,
+                    Date = date.GetValueOrDefault(DateTime.Now).Date
+                });
             }
-
-            var buyPriceSum = invests.Sum(x => x.BuyPrice);
-            var currentPriceSum = invests.Sum(x => x.Price);
-            var valuationBalance = user.Balance + invests.Sum(x => x.TotalPrice.GetValueOrDefault(0));
-            return new Protocols.Response.MockInvests
-            {
-                ResultCode = Code.ResultCode.Success,
-                User = user.ToProtocol(),
-                Datas = invests.ConvertAll(x => x.ToProtocol()),
-                ValuationBalance = valuationBalance,
-                ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
-                InvestedIncome = (double)currentPriceSum / (double)buyPriceSum * 100,
-                Date = date.GetValueOrDefault(DateTime.Now).Date
-            };
+            return response;
         }
 
 
         public async Task<MockInvest> Get(string userId, string code, DateTime? date)
         {
-            return (await _mongoDbMockInvest.FindOneAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, userId) &
-                Builders<MockInvest>.Filter.Eq(x => x.Code, code)));
+            return await _mongoDbMockInvest.FindOneAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, userId) &
+                Builders<MockInvest>.Filter.Eq(x => x.Code, code) &
+                Builders<MockInvest>.Filter.Eq(x => x.Date, date.GetValueOrDefault(DateTime.Now).Date));
         }
 
 
@@ -251,9 +257,15 @@ namespace Server.Services
 
         public async Task<Protocols.Response.MockInvestBuy> Buy(Protocols.Request.MockInvestBuy mockInvestBuy)
         {
+            if (mockInvestBuy.Amount <= 0)
+            {
+                throw new DeveloperException(Code.ResultCode.BuyAmountGreaterThanZero);
+            }
+
             var user = await _userService.GetByUserId(mockInvestBuy.UserId);
 
             var latest = await _stockDataService.Latest(7, mockInvestBuy.Code, mockInvestBuy.Date);
+
 
             user.Balance -= latest.Latest * mockInvestBuy.Amount;
             if (user.Balance < 0)
@@ -322,7 +334,7 @@ namespace Server.Services
                 await _mockInvestHistoryService.Write(Code.HistoryType.Sell, mockInvest, sell.Amount);
 
                 var sellMessage = $"`[매도] 주당가:{latest.Latest}, 수량:{sell.Amount}, 총액:{sellTotalPrice}`\n" +
-                    $"`[손익] {sellTotalPrice - mockInvest.TotalBuyPrice}` 손익률 {(double)sellTotalPrice / mockInvest.TotalBuyPrice}\n";
+                    $"`[손익] {sellTotalPrice - mockInvest.TotalBuyPrice} 손익률 {(double)sellTotalPrice / mockInvest.TotalBuyPrice}`\n";
 
                 await Notification(user, mockInvest, sellMessage);
 

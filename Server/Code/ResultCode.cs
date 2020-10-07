@@ -17,6 +17,7 @@ namespace Server.Code
         NotFoundStockData,
         AnalysisNeedComparable2DaysData,
         UsingNotificationId,
+        BuyAmountGreaterThanZero,
         UnknownException
     }
 }
