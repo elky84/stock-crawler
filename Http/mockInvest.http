@@ -16,7 +16,7 @@ Content-Type: application/json
     "UserId":"elky",
     "Type": "GoldenCrossTransactionPrice",
     "Count":10,
-    "Date": "2020-10-01"
+    "Date": "2020-10-08"
 }
 
 ### MockInvest Analysis-AutoTrade Price
@@ -25,13 +25,13 @@ POST {{host}}/MockInvest/Analysis-AutoTrade
 Content-Type: application/json
 
 {
-    "UserId":"elky",
-    "Type": "GoldenCrossTransactionPrice",
+    "UserId":"elky2",
+    "Type": "FluctuationRate",
     "Count":10,
     "BuyTradeType": "PriceUnder",
     "BuyCondition" : 10.0,
     "SellTradeType": "PriceOver",
-    "SellCondition" : 3.0,
+    "SellCondition" : 5.0,
 }
 
 ### MockInvest Analysis-AutoTrade Time
@@ -41,7 +41,7 @@ Content-Type: application/json
 
 {
     "UserId":"elky3",
-    "Type": "GoldenCrossTransactionPrice",
+    "Type": "FluctuationRate",
     "Count":10,
     "BuyTradeType": "Time",
     "BuyCondition" : 9, // 구매할 시간
