@@ -91,9 +91,14 @@ namespace Server.Services
 
         public async Task<MockInvest> Get(string userId, string code, DateTime? date)
         {
-            return await _mongoDbMockInvest.FindOneAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, userId) &
-                Builders<MockInvest>.Filter.Eq(x => x.Code, code) &
-                Builders<MockInvest>.Filter.Eq(x => x.Date, date.GetValueOrDefault(DateTime.Now).Date));
+            var filter = Builders<MockInvest>.Filter.Eq(x => x.UserId, userId) &
+                Builders<MockInvest>.Filter.Eq(x => x.Code, code);
+            if (date.HasValue)
+            {
+                filter &= Builders<MockInvest>.Filter.Eq(x => x.Date, date.Value.Date);
+            }
+
+            return await _mongoDbMockInvest.FindOneAsync(filter);
         }
 
 
