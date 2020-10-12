@@ -1,4 +1,4 @@
-### User By Id
+### Users Get
 
 GET {{host}}/User
 
@@ -38,11 +38,10 @@ Content-Type: application/json
 
 ### User Update by userId
 
-PUT {{host}}/User/UserId/elky
+PUT {{host}}/User/UserId/elky3
 Content-Type: application/json
 
 {
-    "UserId":"elky",
     "Balance": 100000000,
     "OriginBalance": 100000000
 }

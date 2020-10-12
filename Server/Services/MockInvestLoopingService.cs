@@ -108,25 +108,34 @@ namespace Server.Services
                     }
 
                     // 매도
-                    var sell = _mockInvestService.Sell(new Protocols.Request.MockInvestSell
+                    try
                     {
-                        UserId = autoTrade.UserId,
-                        SellList = new List<Protocols.Common.MockInvestSell> {
+                        var sell = _mockInvestService.Sell(new Protocols.Request.MockInvestSell
+                        {
+                            UserId = autoTrade.UserId,
+                            SellList = new List<Protocols.Common.MockInvestSell> {
                                             new Protocols.Common.MockInvestSell {
                                                 Id = mockInvest.Id,
                                                 Amount = mockInvest.Amount
                                             }
                                         }
-                    }).Result;
+                        }).Result;
 
-                    var next = _mockInvestService.NextAnalysis(autoTrade, allAutoTrades.Where(x => x.UserId == autoTrade.UserId).ToList()).Result;
-                    if (next != null)
-                    {
-                        autoTrade.Code = next.Code;
+                        var next = _mockInvestService.NextAnalysis(autoTrade, allAutoTrades.Where(x => x.UserId == autoTrade.UserId).ToList()).Result;
+                        if (next != null)
+                        {
+                            autoTrade.Code = next.Code;
+                        }
+
+                        autoTrade.Balance += sell.Datas.Sum(x => x.TotalCurrentPrice.Value);
+                        _ = _autoTradeService.Update(autoTrade);
                     }
-
-                    autoTrade.Balance += sell.Datas.Sum(x => x.TotalCurrentPrice.Value);
-                    _ = _autoTradeService.Update(autoTrade);
+                    catch (DeveloperException e)
+                    {
+                        Log.Logger.Error(e.Message);
+                        Log.Logger.Error(e.Detail);
+                        continue;
+                    }
                 }
                 else
                 {
@@ -159,16 +168,24 @@ namespace Server.Services
                     }
 
                     // 매수
-                    var buy = _mockInvestService.Buy(new Protocols.Request.MockInvestBuy
+                    try
                     {
-                        UserId = autoTrade.UserId,
-                        Code = autoTrade.Code,
-                        Amount = (int)(autoTrade.Balance / latest.Latest)
-                    }).Result;
+                        var buy = _mockInvestService.Buy(new Protocols.Request.MockInvestBuy
+                        {
+                            UserId = autoTrade.UserId,
+                            Code = autoTrade.Code,
+                            Amount = (int)(autoTrade.Balance / latest.Latest)
+                        }).Result;
 
-                    autoTrade.Balance -= buy.Data.TotalBuyPrice;
-
-                    _ = _autoTradeService.Update(autoTrade);
+                        autoTrade.Balance -= buy.Data.TotalBuyPrice;
+                        _ = _autoTradeService.Update(autoTrade);
+                    }
+                    catch (DeveloperException e)
+                    {
+                        Log.Logger.Error(e.Message);
+                        Log.Logger.Error(e.Detail);
+                        continue;
+                    }
                 }
             }
         }

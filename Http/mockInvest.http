@@ -25,7 +25,7 @@ POST {{host}}/MockInvest/Analysis-AutoTrade
 Content-Type: application/json
 
 {
-    "UserId":"elky2",
+    "UserId":"elky",
     "Type": "FluctuationRate",
     "Count":10,
     "BuyTradeType": "PriceUnder",
