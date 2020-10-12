@@ -147,7 +147,7 @@ namespace Server.Models
                 UserId = user.UserId,
                 Balance = user.Balance,
                 OriginBalance = user.OriginBalance
-            };
+            }.ToProtocol(user);
         }
 
         public static User ToModel(this Protocols.Common.User user)
