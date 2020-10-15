@@ -21,6 +21,8 @@ namespace Server.Protocols.Common
 
         public int BuyPrice { get; set; }
 
+        public DateTime Date { get; set; }
+
         public int? Price { get; set; }
 
         public int? Income => Price.HasValue ? BuyPrice - Price.Value : (int?)null;

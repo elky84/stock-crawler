@@ -236,9 +236,11 @@ namespace Server.Services
             };
         }
 
-        public async Task<Analysis> NextAnalysis(AutoTrade autoTrade, List<AutoTrade> allAutoTrades)
+        public async Task<Analysis> NextAnalysis(AutoTrade autoTrade, List<AutoTrade> allAutoTrades, DateTime date)
         {
             var count = await _analysisService.CountAsync(DateTime.Now);
+            var mockInvestHistories = await _mockInvestHistoryService.Get(autoTrade.UserId, date.Date);
+
             for (int page = 0; count > page * allAutoTrades.Count; ++page)
             {
                 var datas = await _analysisService.Get(DateTime.Now.Date, autoTrade.AnalysisType, allAutoTrades.Count, page);
@@ -249,7 +251,8 @@ namespace Server.Services
 
                 foreach (var analysisData in datas)
                 {
-                    if (allAutoTrades.Any(x => x.Code == analysisData.Code))
+                    if (allAutoTrades.Any(x => x.Code == analysisData.Code) ||
+                        mockInvestHistories.Any(x => x.Code == analysisData.Code))
                     {
                         continue;
                     }

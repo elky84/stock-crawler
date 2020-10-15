@@ -27,8 +27,9 @@ namespace Server.Services
                 }
                 catch (System.Exception e)
                 {
-                    _logger.LogError($"Implement Task Exception. Reason:{e.Message}");
-
+                    _logger.LogError($"Exception catch. Reason:{e.Message}");
+                    _logger.LogError($"InnerException:{e.InnerException}");
+                    _logger.LogError($"StackTrace:{e.StackTrace}");
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(1), stoppingToken);

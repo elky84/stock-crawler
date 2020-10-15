@@ -21,6 +21,8 @@ namespace Server.Models
 
         public int? Price { get; set; }
 
+        public DateTime Date { get; set; }
+
         public MockInvestHistory()
         {
         }
@@ -33,6 +35,7 @@ namespace Server.Models
             this.Amount = amount ?? mockInvest.Amount;
             this.BuyPrice = mockInvest.BuyPrice;
             this.Price = mockInvest.Price;
+            this.Date = mockInvest.Date;
         }
     }
 }

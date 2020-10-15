@@ -43,5 +43,11 @@ namespace Server.Services
                 Datas = (await _mongoDbMockInvestHistory.FindAsync(Builders<MockInvestHistory>.Filter.Eq(x => x.UserId, userId))).ConvertAll(x => x.ToProtocol())
             };
         }
+
+        public async Task<List<MockInvestHistory>> Get(string userId, DateTime date)
+        {
+            return await _mongoDbMockInvestHistory.FindAsync(Builders<MockInvestHistory>.Filter.Eq(x => x.UserId, userId) &
+                Builders<MockInvestHistory>.Filter.Eq(x => x.Date, date));
+        }
     }
 }

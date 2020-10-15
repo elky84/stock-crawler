@@ -54,9 +54,14 @@ namespace StockCrawler.Crawler
                 Create();
             }
 
-            while (false == await ExecuteAsync(Page))
+            for (int n = 0; n < 5; ++n)
             {
-                Thread.Sleep(100);
+                if (await ExecuteAsync(Page))
+                {
+                    break;
+                }
+
+                Thread.Sleep(1);
             }
         }
 

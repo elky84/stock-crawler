@@ -69,12 +69,6 @@ namespace Server.Services
                 {
                     continue;
                 }
-#if !DEBUG
-                if (latest.Date != DateTime.Now.Date) // 오늘 데이터가 없으면 패스
-                {
-                    continue;
-                }
-#endif
 
                 var mockInvest = _mockInvestService.Get(autoTrade.UserId, autoTrade.Code, null).Result;
                 if (mockInvest != null) // 이미 샀으면 유지 혹은 매도만
@@ -121,7 +115,10 @@ namespace Server.Services
                                         }
                         }).Result;
 
-                        var next = _mockInvestService.NextAnalysis(autoTrade, allAutoTrades.Where(x => x.UserId == autoTrade.UserId).ToList()).Result;
+                        var next = _mockInvestService.NextAnalysis(autoTrade,
+                            allAutoTrades.Where(x => x.UserId == autoTrade.UserId).ToList(),
+                            DateTime.Now).Result;
+
                         if (next != null)
                         {
                             autoTrade.Code = next.Code;

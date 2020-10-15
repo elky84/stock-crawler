@@ -99,6 +99,7 @@ namespace Server.Models
                 Amount = mockInvestHistory.Amount,
                 BuyPrice = mockInvestHistory.BuyPrice,
                 Price = mockInvestHistory.Price,
+                Date = mockInvestHistory.Date
             }.ToProtocol(mockInvestHistory);
         }
 
@@ -113,7 +114,8 @@ namespace Server.Models
                 Code = mockInvestHistory.Code,
                 Amount = mockInvestHistory.Amount,
                 BuyPrice = mockInvestHistory.BuyPrice,
-                Price = mockInvestHistory.Price
+                Price = mockInvestHistory.Price,
+                Date = mockInvestHistory.Date
             };
         }
 
