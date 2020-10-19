@@ -6,14 +6,14 @@ using System;
 
 namespace Server.Services
 {
-    public class CrawlingLoopingService : LoopingService
+    public class CodeLoopingService : LoopingService
     {
-        private readonly CrawlingService _crawlingService;
+        private readonly CodeService _codeService;
 
-        public CrawlingLoopingService(CrawlingService crawlingService
+        public CodeLoopingService(CodeService codeService
             )
         {
-            _crawlingService = crawlingService;
+            _codeService = codeService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,7 +30,7 @@ namespace Server.Services
 
                 }
 
-                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromHours(1), stoppingToken);
             }
         }
 
@@ -38,18 +38,17 @@ namespace Server.Services
         protected void DoWork()
         {
             var now = DateTime.Now;
-            // 토요일 일요일은 크롤링 안함
+            // 토요일 일요일은 안가져옴 안함
             if (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
             {
                 return;
             }
 
-            var openTime = now.Date.AddHours(9);
-            var closeTime = now.Date.AddHours(15);
-
-            if (openTime <= now && closeTime >= now)
+            // 오전 8시~9시에만 실행
+            if (now.Hour >= 8 &&
+                now.Hour <= 9)
             {
-                _ = _crawlingService.ExecuteBackground();
+                _ = _codeService.ExecuteBackground();
             }
         }
     }

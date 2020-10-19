@@ -87,5 +87,10 @@ namespace Server.Services
                 await _mongoDbCode.CreateAsync(code);
             }
         }
+
+        public async Task ExecuteBackground()
+        {
+            await Load(StockType.All);
+        }
     }
 }

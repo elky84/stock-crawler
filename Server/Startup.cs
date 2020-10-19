@@ -53,6 +53,7 @@ namespace Server
             services.AddSingleton<IHostedService, AnalysisLoopingService>();
             services.AddSingleton<IHostedService, MockInvestLoopingService>();
             services.AddSingleton<IHostedService, NotificationLoopingService>();
+            services.AddSingleton<IHostedService, CodeLoopingService>();
 
             services.AddSingleton<CrawlingService>();
             services.AddSingleton<MockInvestService>();
