@@ -8,11 +8,11 @@ using StockCrawler.Crawler;
 
 namespace Server.Services
 {
-    public class NaverStockCrawlerMongoDb : NaverStockCrawler
+    public class NaverStockDailyCrawlerMongoDb : NaverStockDailyCrawler
     {
         private readonly MongoDbUtil<NaverStock> _mongoDbNaverStock;
 
-        public NaverStockCrawlerMongoDb(MongoDbUtil<NaverStock> mongoDbNaverStock, int page, string code)
+        public NaverStockDailyCrawlerMongoDb(MongoDbUtil<NaverStock> mongoDbNaverStock, int page, string code)
             : base(page, code)
         {
             _mongoDbNaverStock = mongoDbNaverStock;
@@ -28,10 +28,10 @@ namespace Server.Services
     {
         private readonly MongoDbUtil<NaverStock> _mongoDbNaverStock;
 
-        private readonly CodeService _codeService;
+        private readonly CompanyService _codeService;
 
         public CrawlingService(MongoDbService mongoDbService,
-            CodeService codeService)
+            CompanyService codeService)
         {
             _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);
             _codeService = codeService;
@@ -44,7 +44,7 @@ namespace Server.Services
             Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 32 },
                 code =>
                 {
-                    Task.WaitAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());
+                    Task.WaitAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockDailyCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());
                 }
             );
 #else
@@ -68,7 +68,7 @@ namespace Server.Services
             var codes = (await _codeService.All()).Select(x => x.Value);
             foreach (var code in codes)
             {
-                await new NaverStockCrawlerMongoDb(_mongoDbNaverStock, 1, code).RunAsync();
+                await new NaverStockDailyCrawlerMongoDb(_mongoDbNaverStock, 1, code).RunAsync();
             }
         }
     }

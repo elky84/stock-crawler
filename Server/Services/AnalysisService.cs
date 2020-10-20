@@ -18,12 +18,12 @@ namespace Server.Services
 
         private readonly MongoDbUtil<Analysis> _mongoDbAnalysis;
 
-        private readonly CodeService _codeService;
+        private readonly CompanyService _codeService;
 
         private readonly StockDataService _stockDataService;
 
         public AnalysisService(MongoDbService mongoDbService,
-            CodeService codeService,
+            CompanyService codeService,
             StockDataService stockDataService)
         {
             _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);

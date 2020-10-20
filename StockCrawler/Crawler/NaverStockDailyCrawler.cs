@@ -7,11 +7,11 @@ using WebUtil.Util;
 
 namespace StockCrawler.Crawler
 {
-    public class NaverStockCrawler : CrawlerBase
+    public class NaverStockDailyCrawler : CrawlerBase
     {
         private string Code { get; set; }
 
-        public NaverStockCrawler(int page = 1, string code = "263750" /* 펄 어비스 */) :
+        public NaverStockDailyCrawler(int page = 1, string code = "263750" /* 펄 어비스 */) :
             base("https://finance.naver.com/item/sise_day.nhn", page)
         {
             Code = code;

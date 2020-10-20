@@ -1,0 +1,20 @@
+### Company get all
+
+POST {{host}}/Company/Load?stockType=All
+Content-Type: application/json
+
+### Company get Kosdaq
+
+POST {{host}}/Company/Load?stockType=Kosdaq
+Content-Type: application/json
+
+### Company get Kospi
+
+POST {{host}}/Company/Load?stockType=Kospi
+Content-Type: application/json
+
+
+### Company get konex
+
+POST {{host}}/Company/Load?stockType=Konex
+Content-Type: application/json

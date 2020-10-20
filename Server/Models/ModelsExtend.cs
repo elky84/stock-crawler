@@ -39,9 +39,9 @@ namespace Server.Models
             };
         }
 
-        public static Protocols.Common.Code ToProtocol(this Code code)
+        public static Protocols.Common.Company ToProtocol(this Company code)
         {
-            return new Protocols.Common.Code
+            return new Protocols.Common.Company
             {
                 Id = code.Id,
                 Value = code.Value,
@@ -50,9 +50,9 @@ namespace Server.Models
             }.ToProtocol(code);
         }
 
-        public static Code ToModel(this Protocols.Common.Code code)
+        public static Company ToModel(this Protocols.Common.Company code)
         {
-            return new Code
+            return new Company
             {
                 Id = code.Id,
                 Value = code.Value,

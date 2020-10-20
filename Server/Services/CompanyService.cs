@@ -17,33 +17,33 @@ using System.Threading;
 
 namespace Server.Services
 {
-    public class CodeService
+    public class CompanyService
     {
-        private readonly MongoDbUtil<Models.Code> _mongoDbCode;
+        private readonly MongoDbUtil<Models.Company> _mongoDbCode;
 
 
-        public CodeService(MongoDbService mongoDbService)
+        public CompanyService(MongoDbService mongoDbService)
         {
-            _mongoDbCode = new MongoDbUtil<Models.Code>(mongoDbService.Database);
+            _mongoDbCode = new MongoDbUtil<Models.Company>(mongoDbService.Database);
 
-            _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Code>(
-                Builders<Models.Code>.IndexKeys.Ascending(x => x.Value)));
+            _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Company>(
+                Builders<Models.Company>.IndexKeys.Ascending(x => x.Value)));
 
-            _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Code>(
-                Builders<Models.Code>.IndexKeys.Ascending(x => x.Type)));
+            _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Company>(
+                Builders<Models.Company>.IndexKeys.Ascending(x => x.Type)));
         }
 
-        public async Task<List<Models.Code>> All()
+        public async Task<List<Models.Company>> All()
         {
             return await _mongoDbCode.All();
         }
 
-        public async Task<Models.Code> Get(string code)
+        public async Task<Models.Company> Get(string code)
         {
-            return await _mongoDbCode.FindOneAsync(Builders<Models.Code>.Filter.Eq(x => x.Value, code));
+            return await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Value, code));
         }
 
-        public async Task<Header> Load(StockType stockType)
+        public async Task<Header> CrawlingCode(StockType stockType)
         {
             int executionCount = 0;
 
@@ -67,7 +67,7 @@ namespace Server.Services
                 Interlocked.Increment(ref executionCount);
 
                 var cursor = n * thContent.Length;
-                _ = OnLoadData(new Models.Code
+                _ = OnCrawlingCodeData(new Models.Company
                 {
                     Name = tdContent[cursor + 0],
                     Value = tdContent[cursor + 1],
@@ -79,9 +79,9 @@ namespace Server.Services
             return new Header { ResultCode = ResultCode.Success };
         }
 
-        public async Task OnLoadData(Models.Code code)
+        public async Task OnCrawlingCodeData(Models.Company code)
         {
-            var origin = await _mongoDbCode.FindOneAsync(Builders<Models.Code>.Filter.Eq(x => x.Value, code.Value));
+            var origin = await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Value, code.Value));
             if (origin == null)
             {
                 await _mongoDbCode.CreateAsync(code);
@@ -90,7 +90,7 @@ namespace Server.Services
 
         public async Task ExecuteBackground()
         {
-            await Load(StockType.All);
+            await CrawlingCode(StockType.All);
         }
     }
 }

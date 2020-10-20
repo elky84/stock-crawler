@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Common
 {
-    public class Code : Header
+    public class Company : Header
     {
         public string Value { get; set; }
 

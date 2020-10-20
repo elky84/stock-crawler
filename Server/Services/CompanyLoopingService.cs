@@ -6,11 +6,11 @@ using System;
 
 namespace Server.Services
 {
-    public class CodeLoopingService : LoopingService
+    public class CompanyLoopingService : LoopingService
     {
-        private readonly CodeService _codeService;
+        private readonly CompanyService _codeService;
 
-        public CodeLoopingService(CodeService codeService
+        public CompanyLoopingService(CompanyService codeService
             )
         {
             _codeService = codeService;

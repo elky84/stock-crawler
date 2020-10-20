@@ -6,7 +6,7 @@ using WebUtil.Models;
 
 namespace Server.Models
 {
-    public class Code : MongoDbHeader
+    public class Company : MongoDbHeader
     {
         public string Value { get; set; }
 

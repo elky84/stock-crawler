@@ -29,7 +29,7 @@ namespace Server.Services
 
         private readonly NotificationService _notificationService;
 
-        private readonly CodeService _codeService;
+        private readonly CompanyService _codeService;
 
         public MockInvestService(MongoDbService mongoDbService,
             StockDataService stockDataService,
@@ -38,7 +38,7 @@ namespace Server.Services
             MockInvestHistoryService mockInvestHistoryService,
             AutoTradeService autoTradeService,
             NotificationService notificationService,
-            CodeService codeService)
+            CompanyService codeService)
         {
             _userService = userService;
             _stockDataService = stockDataService;

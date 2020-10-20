@@ -53,7 +53,7 @@ namespace Server
             services.AddSingleton<IHostedService, AnalysisLoopingService>();
             services.AddSingleton<IHostedService, MockInvestLoopingService>();
             services.AddSingleton<IHostedService, NotificationLoopingService>();
-            services.AddSingleton<IHostedService, CodeLoopingService>();
+            services.AddSingleton<IHostedService, CompanyLoopingService>();
 
             services.AddSingleton<CrawlingService>();
             services.AddSingleton<MockInvestService>();
@@ -61,7 +61,7 @@ namespace Server
             services.AddSingleton<UserService>();
             services.AddSingleton<StockDataService>();
             services.AddSingleton<MockInvestHistoryService>();
-            services.AddSingleton<CodeService>();
+            services.AddSingleton<CompanyService>();
             services.AddSingleton<AutoTradeService>();
             services.AddSingleton<NotificationService>();
         }
