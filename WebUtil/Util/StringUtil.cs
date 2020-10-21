@@ -6,6 +6,35 @@ namespace WebUtil.Util
 {
     public static class StringUtil
     {
+        public static string CutAndComposite(this string input, string value, int startIndex, int n, string composite)
+        {
+            var position = input.IndexOfNth(value, startIndex, n);
+            return input.Substring(0, position) + composite;
+        }
+
+        public static int IndexOfNth(this string input,
+                             string value, int startIndex, int nth)
+        {
+            if (nth < 1)
+                throw new NotSupportedException("Param 'nth' must be greater than 0!");
+            if (nth == 1)
+                return input.IndexOf(value, startIndex);
+            var idx = input.IndexOf(value, startIndex);
+            if (idx == -1)
+                return -1;
+            return input.IndexOfNth(value, idx + 1, --nth);
+        }
+
+        public static string Substring(this string input, string value)
+        {
+            var index = input.IndexOf(value);
+            if (index == -1)
+            {
+                return input;
+            }
+            return input.Substring(0, index);
+        }
+
         public static int ToInt(this string str)
         {
             return int.Parse(str, NumberStyles.AllowThousands);

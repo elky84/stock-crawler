@@ -1,3 +1,8 @@
+### Company get alerts
+
+POST {{host}}/Company/Crawling/Alerts
+Content-Type: application/json
+
 ### Company get all
 
 POST {{host}}/Company/Crawling/Code?stockType=All

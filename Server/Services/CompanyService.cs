@@ -14,6 +14,8 @@ using MongoDB.Driver;
 using System.Text;
 using Serilog;
 using System.Threading;
+using StockCrawler.Entity;
+using StockCrawler.Crawler;
 
 namespace Server.Services
 {
@@ -41,6 +43,13 @@ namespace Server.Services
         public async Task<Models.Company> Get(string code)
         {
             return await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Code, code));
+        }
+
+
+        public async Task<Models.Company> NotAlert(string code)
+        {
+            var company = await Get(code);
+            return company == null || company.AlertType != AlertType.Normal ? null : company;
         }
 
         public async Task<Header> CrawlingCode(StockType stockType)
@@ -77,6 +86,34 @@ namespace Server.Services
 
             Log.Information($"Pararell.For Count ({tdContent.Length / thContent.Length}) Executing Count ({executionCount})");
             return new Header { ResultCode = ResultCode.Success };
+        }
+
+
+        public async Task<Header> CrawlingAlerts()
+        {
+            await new NaverStockHaltCrawler(OnCrawlAlertHalt).RunAsync();
+            await new NaverStockManagementCrawler(OnCrawlAlertManagement).RunAsync();
+            return new Header { ResultCode = ResultCode.Success };
+        }
+
+        public void OnCrawlAlertHalt(NaverStockHalt naverStockHalt)
+        {
+            var origin = _mongoDbCode.FindOne(Builders<Models.Company>.Filter.Eq(x => x.Code, naverStockHalt.Code));
+            if (origin != null)
+            {
+                origin.AlertType = AlertType.Halt;
+                _mongoDbCode.Update(origin.Id, origin);
+            }
+        }
+
+        public void OnCrawlAlertManagement(NaverStockManagement naverStockManagement)
+        {
+            var origin = _mongoDbCode.FindOne(Builders<Models.Company>.Filter.Eq(x => x.Code, naverStockManagement.Code));
+            if (origin != null)
+            {
+                origin.AlertType = AlertType.Management;
+                _mongoDbCode.Update(origin.Id, origin);
+            }
         }
 
         public async Task OnCrawlingCodeData(Models.Company code)

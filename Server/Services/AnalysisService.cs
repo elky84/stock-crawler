@@ -18,17 +18,17 @@ namespace Server.Services
 
         private readonly MongoDbUtil<Analysis> _mongoDbAnalysis;
 
-        private readonly CompanyService _codeService;
+        private readonly CompanyService _companyService;
 
         private readonly StockDataService _stockDataService;
 
         public AnalysisService(MongoDbService mongoDbService,
-            CompanyService codeService,
+            CompanyService companyService,
             StockDataService stockDataService)
         {
             _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);
             _mongoDbAnalysis = new MongoDbUtil<Analysis>(mongoDbService.Database);
-            _codeService = codeService;
+            _companyService = companyService;
             _stockDataService = stockDataService;
 
             _mongoDbAnalysis.Collection.Indexes.CreateOne(new CreateIndexModel<Analysis>(
@@ -51,7 +51,7 @@ namespace Server.Services
 
             analysis.Days = analysis.Days.OrderBy(x => x).ToList();
 
-            var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Code) : analysis.Codes;
+            var codes = analysis.All ? (await _companyService.All()).ConvertAll(x => x.Code) : analysis.Codes;
 
             var date = analysis.Date.GetValueOrDefault(DateTime.Now).Date;
 

@@ -14,5 +14,8 @@ namespace Server.Models
 
         [BsonRepresentation(BsonType.String)]
         public StockType Type { get; set; }
+
+        [BsonRepresentation(BsonType.String)]
+        public AlertType AlertType { get; set; }
     }
 }

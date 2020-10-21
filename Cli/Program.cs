@@ -19,8 +19,11 @@ namespace Cli
 
             Log.Logger.Information("starting up!");
 
-            var naverStockCrawler = new NaverStockDailyCrawler(1);
-            await naverStockCrawler.RunAsync();
+            await new NaverStockManagementCrawler(null).RunAsync();
+
+            await new NaverStockHaltCrawler(null).RunAsync();
+
+            await new NaverStockDailyCrawler(1).RunAsync();
         }
     }
 }

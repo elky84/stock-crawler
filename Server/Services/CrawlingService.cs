@@ -28,18 +28,18 @@ namespace Server.Services
     {
         private readonly MongoDbUtil<NaverStock> _mongoDbNaverStock;
 
-        private readonly CompanyService _codeService;
+        private readonly CompanyService _companyService;
 
         public CrawlingService(MongoDbService mongoDbService,
-            CompanyService codeService)
+            CompanyService companyService)
         {
             _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);
-            _codeService = codeService;
+            _companyService = companyService;
         }
 
         public async Task<Protocols.Response.Crawling> Execute(Protocols.Request.Crawling crawling)
         {
-            var codes = crawling.All ? (await _codeService.All()).Select(x => x.Code) : crawling.Codes;
+            var codes = crawling.All ? (await _companyService.All()).Select(x => x.Code) : crawling.Codes;
 #if DEBUG //TODO 운용중인 PC 성능 이슈로 DEBUG가 더 빠른컴퓨터인지라 의도적으로 이렇게 처리했다.
             Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 32 },
                 code =>
@@ -65,7 +65,7 @@ namespace Server.Services
 
         public async Task ExecuteBackground()
         {
-            var codes = (await _codeService.All()).Select(x => x.Code);
+            var codes = (await _companyService.All()).Select(x => x.Code);
             foreach (var code in codes)
             {
                 await new NaverStockDailyCrawlerMongoDb(_mongoDbNaverStock, 1, code).RunAsync();

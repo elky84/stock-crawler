@@ -8,12 +8,12 @@ namespace Server.Services
 {
     public class CompanyLoopingService : LoopingService
     {
-        private readonly CompanyService _codeService;
+        private readonly CompanyService _companyService;
 
-        public CompanyLoopingService(CompanyService codeService
+        public CompanyLoopingService(CompanyService companyService
             )
         {
-            _codeService = codeService;
+            _companyService = companyService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -48,7 +48,7 @@ namespace Server.Services
             if (now.Hour >= 8 &&
                 now.Hour <= 9)
             {
-                _ = _codeService.ExecuteBackground();
+                _ = _companyService.ExecuteBackground();
             }
         }
     }

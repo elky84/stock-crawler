@@ -31,5 +31,11 @@ namespace Server.Controllers
         {
             return await _companyService.CrawlingCode(stockType);
         }
+
+        [HttpPost("Crawling/Alerts")]
+        public async Task<Header> CrawlingAlerts()
+        {
+            return await _companyService.CrawlingAlerts();
+        }
     }
 }

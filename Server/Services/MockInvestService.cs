@@ -29,7 +29,7 @@ namespace Server.Services
 
         private readonly NotificationService _notificationService;
 
-        private readonly CompanyService _codeService;
+        private readonly CompanyService _companyService;
 
         public MockInvestService(MongoDbService mongoDbService,
             StockDataService stockDataService,
@@ -38,7 +38,7 @@ namespace Server.Services
             MockInvestHistoryService mockInvestHistoryService,
             AutoTradeService autoTradeService,
             NotificationService notificationService,
-            CompanyService codeService)
+            CompanyService companyService)
         {
             _userService = userService;
             _stockDataService = stockDataService;
@@ -46,7 +46,7 @@ namespace Server.Services
             _mockInvestHistoryService = mockInvestHistoryService;
             _autoTradeService = autoTradeService;
             _notificationService = notificationService;
-            _codeService = codeService;
+            _companyService = companyService;
 
             _mongoDbMockInvest = new MongoDbUtil<MockInvest>(mongoDbService.Database);
 
@@ -125,6 +125,11 @@ namespace Server.Services
                         continue;
                     }
 
+                    if (await _companyService.NotAlert(analysisData.Code) == null)
+                    {
+                        continue;
+                    }
+
                     var amount = (int)(codePerUsablePrice / latest.Latest);
 
                     user.Balance -= latest.Latest * amount;
@@ -172,7 +177,7 @@ namespace Server.Services
 
         private async Task Notification(User user, MockInvest mockInvest, string additional = null)
         {
-            var code = await _codeService.Get(mockInvest.Code);
+            var code = await _companyService.Get(mockInvest.Code);
             var message = $"**[종목:{code?.Name}/{mockInvest.Code}]**\n" +
                 $"`[매수] 주당가:{mockInvest.BuyPrice}, 수량:{mockInvest.Amount}, 총액:{mockInvest.TotalBuyPrice}`\n";
 
@@ -257,6 +262,11 @@ namespace Server.Services
                         continue;
                     }
 
+                    if (await _companyService.NotAlert(analysisData.Code) == null)
+                    {
+                        continue;
+                    }
+
                     return analysisData;
                 }
             }
@@ -274,6 +284,10 @@ namespace Server.Services
 
             var latest = await _stockDataService.Latest(7, mockInvestBuy.Code, mockInvestBuy.Date);
 
+            if (await _companyService.NotAlert(mockInvestBuy.Code) == null)
+            {
+                throw new DeveloperException(Code.ResultCode.InvestAlertCompany);
+            }
 
             user.Balance -= latest.Latest * mockInvestBuy.Amount;
             if (user.Balance < 0)

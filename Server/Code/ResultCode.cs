@@ -18,6 +18,7 @@ namespace Server.Code
         AnalysisNeedComparable2DaysData,
         UsingNotificationId,
         BuyAmountGreaterThanZero,
+        InvestAlertCompany,
         UnknownException
     }
 }
