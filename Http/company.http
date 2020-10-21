@@ -1,20 +1,20 @@
 ### Company get all
 
-POST {{host}}/Company/Load?stockType=All
+POST {{host}}/Company/Crawling/Code?stockType=All
 Content-Type: application/json
 
 ### Company get Kosdaq
 
-POST {{host}}/Company/Load?stockType=Kosdaq
+POST {{host}}/Company/Crawling/Code?stockType=Kosdaq
 Content-Type: application/json
 
 ### Company get Kospi
 
-POST {{host}}/Company/Load?stockType=Kospi
+POST {{host}}/Company/Crawling/Code?stockType=Kospi
 Content-Type: application/json
 
 
 ### Company get konex
 
-POST {{host}}/Company/Load?stockType=Konex
+POST {{host}}/Company/Crawling/Code?stockType=Konex
 Content-Type: application/json

@@ -1,6 +1,6 @@
-### Code get all
+### Company get all
 
-POST {{host}}/Code/Load?stockType=All
+POST {{host}}/Company/Crawling/Code?stockType=All
 Content-Type: application/json
 
 

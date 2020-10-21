@@ -90,7 +90,8 @@ namespace Server.Services
                             break;
                         case Code.AutoTradeType.Time:
                             {
-                                var target = mockInvest.Created.Add(TimeSpan.FromHours(autoTrade.SellCondition));
+                                var target = mockInvest.Created.Date.Add(TimeSpan.FromHours(autoTrade.BuyCondition))
+                                    .Add(TimeSpan.FromHours(autoTrade.SellCondition));
                                 if (DateTime.Now < target)
                                 {
                                     continue;

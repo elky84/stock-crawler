@@ -51,7 +51,7 @@ namespace Server.Services
 
             analysis.Days = analysis.Days.OrderBy(x => x).ToList();
 
-            var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Value) : analysis.Codes;
+            var codes = analysis.All ? (await _codeService.All()).ConvertAll(x => x.Code) : analysis.Codes;
 
             var date = analysis.Date.GetValueOrDefault(DateTime.Now).Date;
 

@@ -44,7 +44,7 @@ namespace Server.Models
             return new Protocols.Common.Company
             {
                 Id = code.Id,
-                Value = code.Value,
+                Value = code.Code,
                 Name = code.Name,
                 Type = code.Type
             }.ToProtocol(code);
@@ -55,7 +55,7 @@ namespace Server.Models
             return new Company
             {
                 Id = code.Id,
-                Value = code.Value,
+                Code = code.Value,
                 Name = code.Name,
                 Type = code.Type
             };

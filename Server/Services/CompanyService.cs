@@ -27,7 +27,7 @@ namespace Server.Services
             _mongoDbCode = new MongoDbUtil<Models.Company>(mongoDbService.Database);
 
             _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Company>(
-                Builders<Models.Company>.IndexKeys.Ascending(x => x.Value)));
+                Builders<Models.Company>.IndexKeys.Ascending(x => x.Code)));
 
             _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Company>(
                 Builders<Models.Company>.IndexKeys.Ascending(x => x.Type)));
@@ -40,7 +40,7 @@ namespace Server.Services
 
         public async Task<Models.Company> Get(string code)
         {
-            return await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Value, code));
+            return await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Code, code));
         }
 
         public async Task<Header> CrawlingCode(StockType stockType)
@@ -70,7 +70,7 @@ namespace Server.Services
                 _ = OnCrawlingCodeData(new Models.Company
                 {
                     Name = tdContent[cursor + 0],
-                    Value = tdContent[cursor + 1],
+                    Code = tdContent[cursor + 1],
                     Type = stockType
                 });
             });
@@ -81,7 +81,7 @@ namespace Server.Services
 
         public async Task OnCrawlingCodeData(Models.Company code)
         {
-            var origin = await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Value, code.Value));
+            var origin = await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Code, code.Code));
             if (origin == null)
             {
                 await _mongoDbCode.CreateAsync(code);
