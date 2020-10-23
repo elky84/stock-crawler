@@ -21,28 +21,28 @@ namespace Server.Services
 {
     public class CompanyService
     {
-        private readonly MongoDbUtil<Models.Company> _mongoDbCode;
+        private readonly MongoDbUtil<Models.Company> _mongoDbCompany;
 
 
         public CompanyService(MongoDbService mongoDbService)
         {
-            _mongoDbCode = new MongoDbUtil<Models.Company>(mongoDbService.Database);
+            _mongoDbCompany = new MongoDbUtil<Models.Company>(mongoDbService.Database);
 
-            _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Company>(
+            _mongoDbCompany.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Company>(
                 Builders<Models.Company>.IndexKeys.Ascending(x => x.Code)));
 
-            _mongoDbCode.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Company>(
+            _mongoDbCompany.Collection.Indexes.CreateOne(new CreateIndexModel<Models.Company>(
                 Builders<Models.Company>.IndexKeys.Ascending(x => x.Type)));
         }
 
         public async Task<List<Models.Company>> All()
         {
-            return await _mongoDbCode.All();
+            return await _mongoDbCompany.All();
         }
 
         public async Task<Models.Company> Get(string code)
         {
-            return await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Code, code));
+            return await _mongoDbCompany.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Code, code));
         }
 
 
@@ -91,6 +91,10 @@ namespace Server.Services
 
         public async Task<Header> CrawlingAlerts()
         {
+            // 기본적으로 모든 변수를 초기화하고 시작
+            await _mongoDbCompany.UpdateManyAsync(Builders<Models.Company>.Filter.Empty,
+                Builders<Models.Company>.Update.Set(x => x.AlertType, AlertType.Normal));
+
             await new NaverStockHaltCrawler(OnCrawlAlertHalt).RunAsync();
             await new NaverStockManagementCrawler(OnCrawlAlertManagement).RunAsync();
             return new Header { ResultCode = ResultCode.Success };
@@ -98,36 +102,37 @@ namespace Server.Services
 
         public void OnCrawlAlertHalt(NaverStockHalt naverStockHalt)
         {
-            var origin = _mongoDbCode.FindOne(Builders<Models.Company>.Filter.Eq(x => x.Code, naverStockHalt.Code));
+            var origin = _mongoDbCompany.FindOne(Builders<Models.Company>.Filter.Eq(x => x.Code, naverStockHalt.Code));
             if (origin != null)
             {
                 origin.AlertType = AlertType.Halt;
-                _mongoDbCode.Update(origin.Id, origin);
+                _mongoDbCompany.Update(origin.Id, origin);
             }
         }
 
         public void OnCrawlAlertManagement(NaverStockManagement naverStockManagement)
         {
-            var origin = _mongoDbCode.FindOne(Builders<Models.Company>.Filter.Eq(x => x.Code, naverStockManagement.Code));
+            var origin = _mongoDbCompany.FindOne(Builders<Models.Company>.Filter.Eq(x => x.Code, naverStockManagement.Code));
             if (origin != null)
             {
                 origin.AlertType = AlertType.Management;
-                _mongoDbCode.Update(origin.Id, origin);
+                _mongoDbCompany.Update(origin.Id, origin);
             }
         }
 
         public async Task OnCrawlingCodeData(Models.Company code)
         {
-            var origin = await _mongoDbCode.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Code, code.Code));
+            var origin = await _mongoDbCompany.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Code, code.Code));
             if (origin == null)
             {
-                await _mongoDbCode.CreateAsync(code);
+                await _mongoDbCompany.CreateAsync(code);
             }
         }
 
         public async Task ExecuteBackground()
         {
             await CrawlingCode(StockType.All);
+            await CrawlingAlerts();
         }
     }
 }
