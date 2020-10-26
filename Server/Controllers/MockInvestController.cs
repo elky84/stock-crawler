@@ -35,13 +35,18 @@ namespace Server.Controllers
             return await _mockInvestService.AnalysisBuy(mockInvestAnalysisBuy);
         }
 
-
         [HttpPost("Analysis-AutoTrade")]
         public async Task<Protocols.Response.MockInvestAnalysisAutoTrade> AnalysisAutoTrade([FromBody] Protocols.Request.MockInvestAnalysisAutoTrade mockInvestAnalysisAutoTrade)
         {
             return await _mockInvestService.AnalysisAutoTrade(mockInvestAnalysisAutoTrade);
         }
 
+
+        [HttpPost("AutoTrade-Refresh")]
+        public async Task<Protocols.Response.MockInvestAutoTradeRefresh> AutoTradeRefresh([FromBody] Protocols.Request.MockInvestAutoTradeRefresh mockInvestAutoTradeRefresh)
+        {
+            return await _mockInvestService.AutoTradeRefresh(mockInvestAutoTradeRefresh);
+        }
 
         [HttpPost("Buy")]
         public async Task<Protocols.Response.MockInvestBuy> Buy([FromBody] Protocols.Request.MockInvestBuy mockInvestBuy)

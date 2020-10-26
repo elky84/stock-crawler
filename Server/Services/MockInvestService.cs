@@ -233,13 +233,34 @@ namespace Server.Services
 
             return new Protocols.Response.MockInvestAnalysisAutoTrade
             {
-                ResultCode = Code.ResultCode.Success,
                 Type = mockInvestAnalysisAutoTrade.Type,
                 User = user.ToProtocol(),
                 Datas = autoTrades.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestAnalysisAutoTrade.Date
             };
         }
+
+        public async Task<Protocols.Response.MockInvestAutoTradeRefresh> AutoTradeRefresh(Protocols.Request.MockInvestAutoTradeRefresh mockInvestAutoTradeRefresh)
+        {
+            var user = await _userService.GetByUserId(mockInvestAutoTradeRefresh.UserId);
+            var autoTrades = await _autoTradeService.GetByUserId(mockInvestAutoTradeRefresh.UserId);
+            foreach (var autoTrade in autoTrades)
+            {
+                var analysis = await NextAnalysis(autoTrade, autoTrades, mockInvestAutoTradeRefresh.Date.GetValueOrDefault(DateTime.Now));
+                if (analysis != null)
+                {
+                    autoTrade.Code = analysis.Code;
+                    await _autoTradeService.Update(autoTrade);
+                }
+            }
+
+            return new Protocols.Response.MockInvestAutoTradeRefresh
+            {
+                Datas = autoTrades.ConvertAll(x => x.ToProtocol()),
+                Date = mockInvestAutoTradeRefresh.Date
+            };
+        }
+
 
         public async Task<Analysis> NextAnalysis(AutoTrade autoTrade, List<AutoTrade> allAutoTrades, DateTime date)
         {

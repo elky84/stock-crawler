@@ -49,6 +49,14 @@ Content-Type: application/json
     "SellCondition" : 24, // 구매한 시간에서의 경과 시간
 }
 
+### MockInvest AutoTrade-Refresh
+
+POST {{host}}/MockInvest/AutoTrade-Refresh
+Content-Type: application/json
+
+{
+    "UserId":"elky3"
+}
 
 ### MockInvest Buy
 

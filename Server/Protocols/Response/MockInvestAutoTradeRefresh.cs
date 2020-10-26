@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class MockInvestAutoTradeRefresh : Header
+    public class MockInvestAnalysisAutoTrade : Header
     {
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AnalysisType Type { get; set; }
+
+        public Common.User User { get; set; }
+
         public List<Common.AutoTrade> Datas { get; set; }
 
         public DateTime? Date { get; set; }

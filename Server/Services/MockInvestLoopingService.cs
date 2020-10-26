@@ -30,7 +30,6 @@ namespace Server.Services
             _stockDataService = stockDataService;
         }
 
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
@@ -41,8 +40,7 @@ namespace Server.Services
                 }
                 catch (System.Exception e)
                 {
-                    Log.Logger.Error($"Implement Task Exception. Reason:{e.Message}");
-
+                    e.ExceptionLog();
                 }
 
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
@@ -61,6 +59,17 @@ namespace Server.Services
             }
 #endif
 
+            var openTime = now.Date.AddHours(9);
+            var closeTime = now.Date.AddHours(15).AddMinutes(30);
+
+            if (openTime <= now && closeTime >= now)
+            {
+                ExecuteAutoTrade();
+            }
+        }
+
+        private void ExecuteAutoTrade()
+        {
             var allAutoTrades = _autoTradeService.GetAutoTrades().Result;
             foreach (var autoTrade in allAutoTrades)
             {
@@ -130,8 +139,7 @@ namespace Server.Services
                     }
                     catch (DeveloperException e)
                     {
-                        Log.Logger.Error(e.Message);
-                        Log.Logger.Error(e.Detail);
+                        e.ExceptionLog();
                         continue;
                     }
                 }
@@ -180,8 +188,20 @@ namespace Server.Services
                     }
                     catch (DeveloperException e)
                     {
-                        Log.Logger.Error(e.Message);
-                        Log.Logger.Error(e.Detail);
+                        if (e.ResultCode == Code.ResultCode.InvestAlertCompany)
+                        {
+                            var next = _mockInvestService.NextAnalysis(autoTrade,
+                                allAutoTrades.Where(x => x.UserId == autoTrade.UserId).ToList(), DateTime.Now).Result;
+
+                            if (next != null)
+                            {
+                                autoTrade.Code = next.Code;
+                            }
+
+                            _ = _autoTradeService.Update(autoTrade);
+                        }
+
+                        e.ExceptionLog();
                         continue;
                     }
                 }

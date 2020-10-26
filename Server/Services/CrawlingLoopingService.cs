@@ -3,6 +3,7 @@ using WebUtil.Services;
 using System.Threading;
 using Serilog;
 using System;
+using Server.Exception;
 
 namespace Server.Services
 {
@@ -26,8 +27,7 @@ namespace Server.Services
                 }
                 catch (System.Exception e)
                 {
-                    Log.Logger.Error($"Implement Task Exception. Reason:{e.Message}");
-
+                    e.ExceptionLog();
                 }
 
                 await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
@@ -45,7 +45,7 @@ namespace Server.Services
             }
 
             var openTime = now.Date.AddHours(9);
-            var closeTime = now.Date.AddHours(15);
+            var closeTime = now.Date.AddHours(15).AddMinutes(30);
 
             if (openTime <= now && closeTime >= now)
             {
