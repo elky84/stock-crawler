@@ -186,9 +186,9 @@ namespace Server.Services
                         autoTrade.Balance -= buy.Data.TotalBuyPrice;
                         _ = _autoTradeService.Update(autoTrade);
                     }
-                    catch (DeveloperException e)
+                    catch (System.Exception e) when (e.InnerException is DeveloperException exception)
                     {
-                        if (e.ResultCode == Code.ResultCode.InvestAlertCompany)
+                        if (exception.ResultCode == Code.ResultCode.InvestAlertCompany)
                         {
                             var next = _mockInvestService.NextAnalysis(autoTrade,
                                 allAutoTrades.Where(x => x.UserId == autoTrade.UserId).ToList(), DateTime.Now).Result;
@@ -201,7 +201,7 @@ namespace Server.Services
                             _ = _autoTradeService.Update(autoTrade);
                         }
 
-                        e.ExceptionLog();
+                        exception.ExceptionLog();
                         continue;
                     }
                 }
