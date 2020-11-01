@@ -104,7 +104,7 @@ namespace Server.Services
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                Data = (await _mongoDbUser.RemoveAsync(id))?.ToProtocol()
+                Data = (await _mongoDbUser.RemoveGetAsync(id))?.ToProtocol()
             };
         }
 
@@ -113,7 +113,7 @@ namespace Server.Services
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                Data = (await _mongoDbUser.RemoveAsync(Builders<User>.Filter.Eq(x => x.UserId, userId)))?.ToProtocol()
+                Data = (await _mongoDbUser.RemoveGetAsync(Builders<User>.Filter.Eq(x => x.UserId, userId)))?.ToProtocol()
             };
         }
     }

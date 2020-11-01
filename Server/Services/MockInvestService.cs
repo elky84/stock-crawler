@@ -366,7 +366,7 @@ namespace Server.Services
                 }
                 else if (mockInvest.Amount == sell.Amount)
                 {
-                    await _mongoDbMockInvest.RemoveAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, mockInvestSell.UserId) & Builders<MockInvest>.Filter.Eq(x => x.Code, mockInvest.Code));
+                    await _mongoDbMockInvest.RemoveGetAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, mockInvestSell.UserId) & Builders<MockInvest>.Filter.Eq(x => x.Code, mockInvest.Code));
                 }
                 else
                 {

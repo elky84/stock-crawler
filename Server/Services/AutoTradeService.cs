@@ -100,7 +100,7 @@ namespace Server.Services
             {
                 ResultCode = Code.ResultCode.Success,
                 Datas = new List<Protocols.Common.AutoTrade> {
-                    (await _mongoDbAutoTrade.RemoveAsync(id))?.ToProtocol()
+                    (await _mongoDbAutoTrade.RemoveGetAsync(id))?.ToProtocol()
                 }
             };
         }
