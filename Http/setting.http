@@ -72,7 +72,7 @@ Content-Type: application/json
     "UserId":"elky",
     "Type": "GoldenCrossTransactionPrice",
     "Count":10,
-    "Date": "2020-09-29",
+    "Date": "2020-11-21",
     "BuyCondition" : 2.0,
     "SellCondition" : 2.0,
 }
@@ -87,7 +87,7 @@ Content-Type: application/json
     "UserId":"elky2",
     "Type": "GoldenCrossTradeCount",
     "Count":10,
-    "Date": "2020-09-29",
+    "Date": "2020-11-21",
     "BuyCondition" : 2.0,
     "SellCondition" : 2.0,
 }
@@ -102,7 +102,7 @@ Content-Type: application/json
     "UserId":"elky3",
     "Type": "FluctuationRate",
     "Count":10,
-    "Date": "2020-09-29",
+    "Date": "2020-11-21",
     "BuyCondition" : 2.0,
     "SellCondition" : 2.0,
 }
