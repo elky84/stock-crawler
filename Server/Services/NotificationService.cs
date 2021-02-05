@@ -136,7 +136,7 @@ namespace Server.Services
         private void ProcessDiscordWebHooks()
         {
             var processList = new ConcurrentBag<Protocols.Notification.Request.DiscordWebHook>();
-            Parallel.ForEach(_discordWebHooks.GroupBy(x => x.HookUrl), group =>
+            Parallel.ForEach(_discordWebHooks.GroupBy(x => x.HookUrl).ToList(), group =>
             {
                 foreach (var webHook in group.Select(x => x))
                 {
