@@ -35,7 +35,11 @@ namespace StockCrawler.Crawler
             Parallel.For(0, tdContent.Length / thContent.Length, n =>
             {
                 var cursor = n * thContent.Length;
-                var date = DateTime.Parse(tdContent[cursor + 0]);
+                if (false == DateTime.TryParse(tdContent[cursor + 0], out var date))
+                {
+                    return;
+                }
+
                 var latest = tdContent[cursor + 1].ToInt();
                 var start = tdContent[cursor + 3].ToInt();
                 var change = latest - start;
