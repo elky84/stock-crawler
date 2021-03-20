@@ -74,41 +74,40 @@ namespace Server.Services
             foreach (var autoTrade in allAutoTrades)
             {
                 var latest = _stockDataService.Latest(7, autoTrade.Code).Result;
-                if (latest == null)
-                {
-                    continue;
-                }
 
                 var mockInvest = _mockInvestService.Get(autoTrade.UserId, autoTrade.Code, null).Result;
                 if (mockInvest != null) // 이미 샀으면 유지 혹은 매도만
                 {
-                    // enum behaviour로 함수 추가해서 리팩토링
-                    switch (autoTrade.SellTradeType)
+                    if (latest != null)
                     {
-                        case Code.AutoTradeType.PriceUnder:
-                            if (Math.Abs(100 - ((double)mockInvest.BuyPrice / latest.Latest * 100)) > autoTrade.SellCondition)
-                            {
-                                continue;
-                            }
-                            break;
-                        case Code.AutoTradeType.PriceOver:
-                            if (Math.Abs(100 - ((double)mockInvest.BuyPrice / latest.Latest * 100)) < autoTrade.SellCondition)
-                            {
-                                continue;
-                            }
-                            break;
-                        case Code.AutoTradeType.Time:
-                            {
-                                var target = mockInvest.Created.Date.Add(TimeSpan.FromHours(autoTrade.BuyCondition))
-                                    .Add(TimeSpan.FromHours(autoTrade.SellCondition));
-                                if (DateTime.Now < target)
+                        // enum behaviour로 함수 추가해서 리팩토링
+                        switch (autoTrade.SellTradeType)
+                        {
+                            case Code.AutoTradeType.PriceUnder:
+                                if (Math.Abs(100 - ((double)mockInvest.BuyPrice / latest.Latest * 100)) > autoTrade.SellCondition)
                                 {
                                     continue;
                                 }
-                            }
-                            break;
-                        default:
-                            throw new DeveloperException(Code.ResultCode.NotImplementedYet);
+                                break;
+                            case Code.AutoTradeType.PriceOver:
+                                if (Math.Abs(100 - ((double)mockInvest.BuyPrice / latest.Latest * 100)) < autoTrade.SellCondition)
+                                {
+                                    continue;
+                                }
+                                break;
+                            case Code.AutoTradeType.Time:
+                                {
+                                    var target = mockInvest.Created.Date.Add(TimeSpan.FromHours(autoTrade.BuyCondition))
+                                        .Add(TimeSpan.FromHours(autoTrade.SellCondition));
+                                    if (DateTime.Now < target)
+                                    {
+                                        continue;
+                                    }
+                                }
+                                break;
+                            default:
+                                throw new DeveloperException(Code.ResultCode.NotImplementedYet);
+                        }
                     }
 
                     // 매도
@@ -145,6 +144,21 @@ namespace Server.Services
                 }
                 else
                 {
+                    if (latest == null)
+                    {
+                        var next = _mockInvestService.NextAnalysis(autoTrade,
+                            allAutoTrades.Where(x => x.UserId == autoTrade.UserId).ToList(),
+                            DateTime.Now).Result;
+
+                        if (next != null)
+                        {
+                            autoTrade.Code = next.Code;
+                        }
+
+                        _ = _autoTradeService.Update(autoTrade);
+                        continue;
+                    }
+
                     // enum behaviour로 함수 추가해서 리팩토링
                     switch (autoTrade.BuyTradeType)
                     {

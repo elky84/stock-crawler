@@ -39,12 +39,7 @@ namespace Server.Services
             var builder = Builders<NaverStock>.Filter;
             var filter = builder.Lte(x => x.Date, date.Value) & builder.Gte(x => x.Date, date.Value.AddDays(-day)) & builder.Eq(x => x.Code, code);
             var stockDatas = await _mongoDbNaverStock.FindAsync(filter);
-            var first = stockDatas.OrderByDescending(x => x.Date).FirstOrDefault();
-            if (first == null)
-            {
-                throw new DeveloperException(Code.ResultCode.NotFoundStockData);
-            }
-            return first;
+            return stockDatas.OrderByDescending(x => x.Date).FirstOrDefault();
         }
     }
 }
