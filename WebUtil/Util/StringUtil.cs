@@ -37,7 +37,10 @@ namespace WebUtil.Util
 
         public static int ToInt(this string str)
         {
-            return int.Parse(str, NumberStyles.AllowThousands);
+            if (string.IsNullOrEmpty(str))
+                return 0;
+
+             return int.Parse(str, NumberStyles.AllowThousands);
         }
 
         public static int ToInt(this double value)
@@ -47,11 +50,17 @@ namespace WebUtil.Util
 
         public static double ToDouble(this string str)
         {
+            if (string.IsNullOrEmpty(str))
+                return 0;
+
             return double.Parse(Regex.Match(str, @"[0-9\-.]+").Value);
         }
 
         public static float ToFloat(this string str)
         {
+            if (string.IsNullOrEmpty(str))
+                return 0f;
+
             return float.Parse(Regex.Match(str, @"[0-9\-.]+").Value);
         }
 

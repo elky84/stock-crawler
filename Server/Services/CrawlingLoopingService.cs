@@ -44,7 +44,7 @@ namespace Server.Services
                 return;
             }
 
-            var openTime = now.Date.AddHours(9);
+            var openTime = now.Date.AddHours(8).AddMinutes(30); // 30분 일찍 크롤링SDS시작!
             var closeTime = now.Date.AddHours(15).AddMinutes(30);
 
             if (openTime <= now && closeTime >= now)

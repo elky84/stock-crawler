@@ -346,8 +346,10 @@ namespace Server.Services
         {
             var user = await _userService.GetByUserId(mockInvestSell.UserId);
             var sellList = mockInvestSell.All ?
-                (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, mockInvestSell.UserId))).ConvertAll(x => new Protocols.Common.MockInvestSell { Id = x.Id, Amount = x.Amount }) :
-                mockInvestSell.SellList;
+                (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, mockInvestSell.UserId))).ConvertAll(x => new Protocols.Common.MockInvestSell { 
+                    Id = x.Id, 
+                    Amount = x.Amount
+                }) : mockInvestSell.SellList;
 
             var investDatas = new List<MockInvest>();
 
@@ -356,6 +358,12 @@ namespace Server.Services
                 var mockInvest = await _mongoDbMockInvest.FindOneAsyncById(sell.Id);
 
                 var latest = await _stockDataService.Latest(7, mockInvest.Code, mockInvestSell.Date);
+                if(latest == null)
+                {
+                    Log.Information($"Not found latest.");
+                    continue;
+                }
+
                 var sellTotalPrice = latest.Latest * sell.Amount;
                 user.Balance += sellTotalPrice;
                 mockInvest.Price = latest.Latest;

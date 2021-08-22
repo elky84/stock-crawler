@@ -72,9 +72,10 @@ Content-Type: application/json
     "UserId":"elky",
     "Type": "GoldenCrossTransactionPrice",
     "Count":10,
-    "Date": "2020-11-21",
-    "BuyCondition" : 2.0,
-    "SellCondition" : 2.0,
+    "BuyTradeType": "PriceUnder",
+    "BuyCondition" : 10.0,
+    "SellTradeType": "PriceOver",
+    "SellCondition" : 5.0,
 }
 
 
@@ -87,9 +88,10 @@ Content-Type: application/json
     "UserId":"elky2",
     "Type": "GoldenCrossTradeCount",
     "Count":10,
-    "Date": "2020-11-21",
-    "BuyCondition" : 2.0,
-    "SellCondition" : 2.0,
+    "BuyTradeType": "PriceUnder",
+    "BuyCondition" : 10.0,
+    "SellTradeType": "PriceOver",
+    "SellCondition" : 5.0,
 }
 
 
@@ -102,7 +104,9 @@ Content-Type: application/json
     "UserId":"elky3",
     "Type": "FluctuationRate",
     "Count":10,
-    "Date": "2020-11-21",
-    "BuyCondition" : 2.0,
-    "SellCondition" : 2.0,
+    "BuyTradeType": "Time",
+    "BuyCondition" : 9, // 구매할 시간
+    "SellTradeType": "Time",
+    "SellCondition" : 24, // 구매한 시간에서의 경과 시간
+
 }

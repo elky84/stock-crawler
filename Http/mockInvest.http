@@ -16,7 +16,10 @@ Content-Type: application/json
     "UserId":"elky",
     "Type": "GoldenCrossTransactionPrice",
     "Count":10,
-    "Date": "2020-10-08"
+    "BuyTradeType": "PriceUnder",
+    "BuyCondition" : 10.0,
+    "SellTradeType": "PriceOver",
+    "SellCondition" : 5.0,
 }
 
 ### MockInvest Analysis-AutoTrade Price
