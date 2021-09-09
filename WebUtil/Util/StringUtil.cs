@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
@@ -40,7 +41,13 @@ namespace WebUtil.Util
             if (string.IsNullOrEmpty(str))
                 return 0;
 
-             return int.Parse(str, NumberStyles.AllowThousands);
+            if( false == int.TryParse(str, NumberStyles.AllowThousands, null, out var value) )
+            {
+                Log.Error($"ToInt() failed. <str:{str}>");
+                return 0;
+            }
+
+            return value;
         }
 
         public static int ToInt(this double value)
