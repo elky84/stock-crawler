@@ -8,7 +8,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0-buster-slim AS build
 WORKDIR /src
 COPY ["Server/Server.csproj", "Server/"]
-COPY ["WebUtil/WebUtil.csproj", "WebUtil/"]
+COPY ["MongoDbWebUtil/MongoDbWebUtil.csproj", "MongoDbWebUtil/"]
 COPY ["StockCrawler/StockCrawler.csproj", "StockCrawler/"]
 RUN dotnet restore "Server/Server.csproj"
 COPY . .

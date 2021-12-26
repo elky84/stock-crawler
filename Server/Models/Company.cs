@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Server.Code;
 using System;
-using WebUtil.Models;
+using MongoDbWebUtil.Models;
 
 namespace Server.Models
 {

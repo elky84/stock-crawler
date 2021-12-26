@@ -1,5 +1,5 @@
 ﻿using Server.Code;
-using WebUtil.Models;
+using MongoDbWebUtil.Models;
 
 namespace Server.Models
 {

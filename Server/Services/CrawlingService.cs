@@ -1,7 +1,7 @@
-﻿using WebUtil.Util;
+﻿using MongoDbWebUtil.Util;
 using System.Linq;
 using System.Threading.Tasks;
-using WebUtil.Services;
+using MongoDbWebUtil.Services;
 using MongoDB.Driver;
 using StockCrawler.Models;
 using StockCrawler.Crawler;
