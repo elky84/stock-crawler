@@ -6,10 +6,9 @@ using MongoDB.Driver;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Server.Exception;
-using Microsoft.Extensions.Hosting;
-using System.Threading;
 using Serilog;
+using EzAspDotNet.Exception;
+using EzAspDotNet.Services;
 
 namespace Server.Services
 {
@@ -27,7 +26,7 @@ namespace Server.Services
 
         private readonly AutoTradeService _autoTradeService;
 
-        private readonly NotificationService _notificationService;
+        private readonly WebHookService _webHookService;
 
         private readonly CompanyService _companyService;
 
@@ -37,7 +36,7 @@ namespace Server.Services
             UserService userService,
             MockInvestHistoryService mockInvestHistoryService,
             AutoTradeService autoTradeService,
-            NotificationService notificationService,
+            WebHookService webHookService,
             CompanyService companyService)
         {
             _userService = userService;
@@ -45,7 +44,7 @@ namespace Server.Services
             _analysisService = analysisService;
             _mockInvestHistoryService = mockInvestHistoryService;
             _autoTradeService = autoTradeService;
-            _notificationService = notificationService;
+            _webHookService = webHookService;
             _companyService = companyService;
 
             _mongoDbMockInvest = new MongoDbUtil<MockInvest>(mongoDbService.Database);
@@ -167,7 +166,7 @@ namespace Server.Services
 
             return new Protocols.Response.MockInvestAnalysisBuy
             {
-                ResultCode = Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Code.ResultCode.Success,
                 User = user.ToProtocol(),
                 Type = mockInvestAnalysisBuy.Type,
                 Datas = investDatas.ConvertAll(x => x.ToProtocol()),
@@ -188,7 +187,8 @@ namespace Server.Services
 
             message += $"`[유저] 아이디:{user.UserId}, 잔액:{user.Balance}`\n";
 
-            await _notificationService.Execute(Code.InvestType.MockInvest, message);
+            await _webHookService.Execute(Builders<EzAspDotNet.Notification.Models.Notification>.Filter.Eq(x => x.CrawlingType, Code.InvestType.MockInvest.ToString()), 
+                String.Empty, message);
         }
 
 
@@ -334,7 +334,7 @@ namespace Server.Services
 
             return new Protocols.Response.MockInvestBuy
             {
-                ResultCode = Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Code.ResultCode.Success,
                 User = user.ToProtocol(),
                 Data = mockInvest.ToProtocol(),
                 Date = mockInvestBuy.Date
@@ -396,7 +396,7 @@ namespace Server.Services
 
             return new Protocols.Response.MockInvestSell
             {
-                ResultCode = Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Code.ResultCode.Success,
                 User = (await _userService.GetByUserId(mockInvestSell.UserId))?.ToProtocol(),
                 Datas = investDatas.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestSell.Date

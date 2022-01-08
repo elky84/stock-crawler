@@ -3,9 +3,8 @@ using MongoDbWebUtil.Util;
 using System.Threading.Tasks;
 using MongoDbWebUtil.Services;
 using MongoDB.Driver;
-using Server.Exception;
 using System.Collections.Generic;
-using MongoDbWebUtil.Models;
+using EzAspDotNet.Exception;
 
 namespace Server.Services
 {

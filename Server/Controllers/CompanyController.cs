@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Server.Code;
+using Server.Protocols.Common;
 using Server.Protocols.Response;
 using Server.Services;
 
@@ -27,13 +28,13 @@ namespace Server.Controllers
 
 
         [HttpPost("Crawling/Code")]
-        public async Task<Header> CrawlingCode([FromQuery] StockType stockType)
+        public async Task<EzAspDotNet.Protocols.ResponseHeader> CrawlingCode([FromQuery] StockType stockType)
         {
             return await _companyService.CrawlingCode(stockType);
         }
 
         [HttpPost("Crawling/Alerts")]
-        public async Task<Header> CrawlingAlerts()
+        public async Task<EzAspDotNet.Protocols.ResponseHeader> CrawlingAlerts()
         {
             return await _companyService.CrawlingAlerts();
         }

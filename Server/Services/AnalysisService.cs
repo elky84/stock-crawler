@@ -7,8 +7,9 @@ using System.Collections.Generic;
 using MongoDB.Driver;
 using System.Linq;
 using Server.Code;
-using Server.Exception;
 using StockCrawler.Models;
+using EzAspDotNet.Exception;
+using EnumExtend;
 
 namespace Server.Services
 {

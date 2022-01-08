@@ -1,15 +1,11 @@
-﻿using Server.Models;
-using MongoDbWebUtil.Util;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MongoDbWebUtil.Services;
 using MongoDB.Driver;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Server.Exception;
-using Microsoft.Extensions.Hosting;
 using System.Threading;
-using Serilog;
+using EzAspDotNet.Exception;
 
 namespace Server.Services
 {

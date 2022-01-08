@@ -6,10 +6,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
-using Server.Exception;
-using Server.Models;
 using Server.Services;
 using MongoDbWebUtil.Services;
+using EzAspDotNet.Services;
+using EzAspDotNet.Exception;
 
 namespace Server
 {
@@ -52,7 +52,7 @@ namespace Server
             services.AddSingleton<IHostedService, CrawlingLoopingService>();
             services.AddSingleton<IHostedService, AnalysisLoopingService>();
             services.AddSingleton<IHostedService, MockInvestLoopingService>();
-            services.AddSingleton<IHostedService, NotificationLoopingService>();
+            services.AddSingleton<IHostedService, WebHookLoopingService>();
             services.AddSingleton<IHostedService, CompanyLoopingService>();
 
             services.AddSingleton<CrawlingService>();
@@ -64,6 +64,8 @@ namespace Server
             services.AddSingleton<CompanyService>();
             services.AddSingleton<AutoTradeService>();
             services.AddSingleton<NotificationService>();
+
+            services.AddSingleton<WebHookService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

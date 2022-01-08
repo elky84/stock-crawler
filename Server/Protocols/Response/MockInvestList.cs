@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class MockInvestList : Header
+    public class MockInvestList : EzAspDotNet.Protocols.ResponseHeader
     {
         public List<Common.MockInvestList> Datas { get; set; } = new List<Common.MockInvestList>();
     }

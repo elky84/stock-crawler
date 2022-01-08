@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class MockInvestHistories : Header
+    public class MockInvestHistories : EzAspDotNet.Protocols.ResponseHeader
     {
         public Common.User User { get; set; }
 

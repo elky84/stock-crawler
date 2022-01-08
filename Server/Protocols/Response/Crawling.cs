@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class Crawling : Header
+    public class Crawling : EzAspDotNet.Protocols.ResponseHeader
     {
     }
 }

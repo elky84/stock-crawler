@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class Users : Header
+    public class Users : EzAspDotNet.Protocols.ResponseHeader
     {
         public List<Common.User> Datas { get; set; }
     }

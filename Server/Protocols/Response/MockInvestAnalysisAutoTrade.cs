@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class MockInvestAutoTradeRefresh : Header
+    public class MockInvestAutoTradeRefresh : EzAspDotNet.Protocols.ResponseHeader
     {
         public List<Common.AutoTrade> Datas { get; set; }
 

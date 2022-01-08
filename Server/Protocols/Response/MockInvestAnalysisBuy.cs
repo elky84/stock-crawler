@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class MockInvestAnalysisBuy : Header
+    public class MockInvestAnalysisBuy : EzAspDotNet.Protocols.ResponseHeader
     {
         [JsonConverter(typeof(StringEnumConverter))]
         public AnalysisType Type { get; set; }

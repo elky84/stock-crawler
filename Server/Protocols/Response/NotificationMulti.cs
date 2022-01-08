@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Server.Protocols.Response
 {
-    public class NotificationMulti : Header
+    public class NotificationMulti : EzAspDotNet.Protocols.ResponseHeader
     {
         public List<Common.Notification> Datas { get; set; }
     }

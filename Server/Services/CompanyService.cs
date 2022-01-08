@@ -6,16 +6,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Data;
-using Server.Protocols.Response;
 using AngleSharp.Html.Parser;
 using Server.Code;
-using Server.Exception;
 using MongoDB.Driver;
 using System.Text;
 using Serilog;
 using System.Threading;
 using StockCrawler.Entity;
 using StockCrawler.Crawler;
+using EzAspDotNet.Exception;
+using EnumExtend;
+using System.Net.Http;
 
 namespace Server.Services
 {
@@ -52,14 +53,13 @@ namespace Server.Services
             return company == null || company.AlertType != AlertType.Normal ? null : company;
         }
 
-        public async Task<Header> CrawlingCode(StockType stockType)
+        public async Task<EzAspDotNet.Protocols.ResponseHeader> CrawlingCode(StockType stockType)
         {
             int executionCount = 0;
 
-            WebClient client = new WebClient();
             var queryMarketType = string.IsNullOrEmpty(stockType.GetDescription()) ? string.Empty : "marketType=" + stockType.GetDescription();
-            var byteArr = await client.DownloadDataTaskAsync(new Uri($"http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&{queryMarketType}"));
-            var str = Encoding.GetEncoding("ksc_5601").GetString(byteArr);
+            var responseMessage = await (new HttpClient()).GetAsync(new Uri($"http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&{queryMarketType}"));
+            var str = await responseMessage.Content.ReadAsStringAsync();
 
             var parser = new HtmlParser();
             var document = await parser.ParseDocumentAsync(str);
@@ -85,11 +85,11 @@ namespace Server.Services
             });
 
             Log.Information($"Pararell.For Count ({tdContent.Length / thContent.Length}) Executing Count ({executionCount})");
-            return new Header { ResultCode = ResultCode.Success };
+            return new EzAspDotNet.Protocols.ResponseHeader { ResultCode = ResultCode.Success };
         }
 
 
-        public async Task<Header> CrawlingAlerts()
+        public async Task<EzAspDotNet.Protocols.ResponseHeader> CrawlingAlerts()
         {
             // 기본적으로 모든 변수를 초기화하고 시작
             await _mongoDbCompany.UpdateManyAsync(Builders<Models.Company>.Filter.Empty,
@@ -97,7 +97,7 @@ namespace Server.Services
 
             await new NaverStockHaltCrawler(OnCrawlAlertHalt).RunAsync();
             await new NaverStockManagementCrawler(OnCrawlAlertManagement).RunAsync();
-            return new Header { ResultCode = ResultCode.Success };
+            return new EzAspDotNet.Protocols.ResponseHeader { ResultCode = ResultCode.Success };
         }
 
         public void OnCrawlAlertHalt(NaverStockHalt naverStockHalt)
