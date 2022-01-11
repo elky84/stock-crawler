@@ -10,6 +10,7 @@ using System.Threading;
 using Serilog;
 using System;
 using Microsoft.Extensions.Hosting;
+using EzAspDotNet.Services;
 
 namespace Server.Services
 {

@@ -3,7 +3,7 @@ using StockCrawler.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using MongoDbWebUtil.Util;
+using EzAspDotNet.Util;
 
 namespace StockCrawler.Crawler
 {

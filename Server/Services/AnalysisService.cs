@@ -10,6 +10,7 @@ using Server.Code;
 using StockCrawler.Models;
 using EzAspDotNet.Exception;
 using EnumExtend;
+using EzAspDotNet.Util;
 
 namespace Server.Services
 {

@@ -3,6 +3,7 @@ using MongoDbWebUtil.Services;
 using System.Threading;
 using System;
 using EzAspDotNet.Exception;
+using EzAspDotNet.Services;
 
 namespace Server.Services
 {
