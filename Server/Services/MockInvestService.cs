@@ -185,10 +185,13 @@ namespace Server.Services
                 message += additional;
             }
 
-            message += $"`[유저] 아이디:{user.UserId}, 잔액:{user.Balance}`\n";
+            message += $"`잔액:{user.Balance}`\n";
 
             await _webHookService.Execute(Builders<EzAspDotNet.Notification.Models.Notification>.Filter.Eq(x => x.CrawlingType, Code.InvestType.MockInvest.ToString()), 
-                String.Empty, message);
+                "주식 거래 알리미", 
+                message,
+                user.UserId, String.Empty,
+                DateTime.Now);
         }
 
 
