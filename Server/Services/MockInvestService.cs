@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using Serilog;
 using EzAspDotNet.Exception;
 using EzAspDotNet.Services;
+using EzAspDotNet.Util;
 
 namespace Server.Services
 {
@@ -187,11 +188,14 @@ namespace Server.Services
 
             message += $"`잔액:{user.Balance}`\n";
 
-            await _webHookService.Execute(Builders<EzAspDotNet.Notification.Models.Notification>.Filter.Eq(x => x.CrawlingType, Code.InvestType.MockInvest.ToString()), 
-                "주식 거래 알리미", 
-                message,
-                user.UserId, String.Empty,
-                DateTime.Now);
+            await _webHookService.Execute(Builders<EzAspDotNet.Notification.Models.Notification>.Filter.Eq(x => x.CrawlingType, Code.InvestType.MockInvest.ToString()),
+                new EzAspDotNet.Notification.Data.WebHook
+                {
+                    Title = "주식 거래 알리미",
+                    Text = message,
+                    Footer = user.UserId,
+                    TimeStamp = DateTime.UtcNow.ToTimeStamp()
+                });
         }
 
 
