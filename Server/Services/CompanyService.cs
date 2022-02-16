@@ -1,7 +1,7 @@
-﻿using MongoDbWebUtil.Util;
+﻿using EzAspDotNet.Util;
 using System;
 using System.Threading.Tasks;
-using MongoDbWebUtil.Services;
+using EzAspDotNet.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;

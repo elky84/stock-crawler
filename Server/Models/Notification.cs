@@ -1,5 +1,5 @@
 ﻿using Server.Code;
-using MongoDbWebUtil.Models;
+using EzAspDotNet.Models;
 
 namespace Server.Models
 {

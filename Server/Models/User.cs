@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Server.Code;
 using System;
-using MongoDbWebUtil.Models;
+using EzAspDotNet.Models;
 
 namespace Server.Models
 {

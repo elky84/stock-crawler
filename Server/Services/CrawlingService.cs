@@ -1,7 +1,7 @@
-﻿using MongoDbWebUtil.Util;
+﻿using EzAspDotNet.Util;
 using System.Linq;
 using System.Threading.Tasks;
-using MongoDbWebUtil.Services;
+using EzAspDotNet.Services;
 using MongoDB.Driver;
 using StockCrawler.Models;
 using StockCrawler.Crawler;

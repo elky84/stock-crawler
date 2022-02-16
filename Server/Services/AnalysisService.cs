@@ -1,8 +1,8 @@
 ﻿using Server.Models;
-using MongoDbWebUtil.Util;
+using EzAspDotNet.Util;
 using System;
 using System.Threading.Tasks;
-using MongoDbWebUtil.Services;
+using EzAspDotNet.Services;
 using System.Collections.Generic;
 using MongoDB.Driver;
 using System.Linq;
@@ -10,7 +10,6 @@ using Server.Code;
 using StockCrawler.Models;
 using EzAspDotNet.Exception;
 using EnumExtend;
-using EzAspDotNet.Util;
 
 namespace Server.Services
 {

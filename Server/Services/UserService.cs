@@ -1,10 +1,10 @@
 ﻿using Server.Models;
-using MongoDbWebUtil.Util;
+using EzAspDotNet.Util;
 using System.Threading.Tasks;
-using MongoDbWebUtil.Services;
+using EzAspDotNet.Services;
 using MongoDB.Driver;
 using System.Collections.Generic;
-using MongoDbWebUtil.Models;
+using EzAspDotNet.Models;
 using EzAspDotNet.Exception;
 
 namespace Server.Services

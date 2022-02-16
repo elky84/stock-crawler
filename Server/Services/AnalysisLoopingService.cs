@@ -1,16 +1,8 @@
-﻿using Server.Models;
-using MongoDbWebUtil.Util;
-using System.Linq;
-using System.Threading.Tasks;
-using MongoDbWebUtil.Services;
-using StockCrawler;
-using System.Collections.Generic;
-using MongoDB.Driver;
+﻿using System.Threading.Tasks;
+using EzAspDotNet.Services;
 using System.Threading;
 using Serilog;
 using System;
-using Microsoft.Extensions.Hosting;
-using EzAspDotNet.Services;
 
 namespace Server.Services
 {
