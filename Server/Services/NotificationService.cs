@@ -37,7 +37,7 @@ namespace Server.Services
 
             return new Protocols.Response.Notification
             {
-                ResultCode = EzAspDotNet.Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
                 Data = created?.ToProtocol()
             };
 
@@ -73,7 +73,7 @@ namespace Server.Services
         {
             return new Protocols.Response.Notification
             {
-                ResultCode = EzAspDotNet.Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
                 Data = (await _mongoDbNotification.FindOneAsyncById(id))?.ToProtocol()
             };
         }
@@ -86,7 +86,7 @@ namespace Server.Services
             var updated = await _mongoDbNotification.UpdateAsync(id, update);
             return new Protocols.Response.Notification
             {
-                ResultCode = EzAspDotNet.Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
                 Data = (updated ?? update).ToProtocol()
             };
         }

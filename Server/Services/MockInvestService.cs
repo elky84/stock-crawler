@@ -165,7 +165,7 @@ namespace Server.Services
 
             return new Protocols.Response.MockInvestAnalysisBuy
             {
-                ResultCode = EzAspDotNet.Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
                 User = user.ToProtocol(),
                 Type = mockInvestAnalysisBuy.Type,
                 Datas = investDatas.ConvertAll(x => x.ToProtocol()),
@@ -339,7 +339,7 @@ namespace Server.Services
 
             return new Protocols.Response.MockInvestBuy
             {
-                ResultCode = EzAspDotNet.Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
                 User = user.ToProtocol(),
                 Data = mockInvest.ToProtocol(),
                 Date = mockInvestBuy.Date
@@ -401,7 +401,7 @@ namespace Server.Services
 
             return new Protocols.Response.MockInvestSell
             {
-                ResultCode = EzAspDotNet.Code.ResultCode.Success,
+                ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
                 User = (await _userService.GetByUserId(mockInvestSell.UserId))?.ToProtocol(),
                 Datas = investDatas.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestSell.Date
