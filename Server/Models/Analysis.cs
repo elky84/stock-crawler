@@ -1,8 +1,5 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using Server.Code;
+﻿using EzMongoDb.Models;
 using System;
-using EzAspDotNet.Models;
 
 namespace Server.Models
 {

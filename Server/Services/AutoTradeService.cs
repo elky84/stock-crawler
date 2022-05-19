@@ -1,7 +1,7 @@
 ﻿using EzAspDotNet.Exception;
 using EzAspDotNet.Models;
 using EzAspDotNet.Services;
-using EzAspDotNet.Util;
+using EzMongoDb.Util;
 using MongoDB.Driver;
 using Server.Models;
 using System.Collections.Generic;

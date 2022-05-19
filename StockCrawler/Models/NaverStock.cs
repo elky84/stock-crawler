@@ -1,6 +1,6 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using EzMongoDb.Models;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
-using EzAspDotNet.Models;
 
 namespace StockCrawler.Models
 {

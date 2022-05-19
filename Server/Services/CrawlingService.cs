@@ -1,10 +1,10 @@
-﻿using EzAspDotNet.Util;
+﻿using EzAspDotNet.Services;
+using EzMongoDb.Util;
+using MongoDB.Driver;
+using StockCrawler.Crawler;
+using StockCrawler.Models;
 using System.Linq;
 using System.Threading.Tasks;
-using EzAspDotNet.Services;
-using MongoDB.Driver;
-using StockCrawler.Models;
-using StockCrawler.Crawler;
 
 namespace Server.Services
 {

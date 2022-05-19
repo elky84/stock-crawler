@@ -1,22 +1,20 @@
-﻿using EzAspDotNet.Util;
-using System;
-using System.Threading.Tasks;
-using EzAspDotNet.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Data;
-using AngleSharp.Html.Parser;
-using Server.Code;
-using MongoDB.Driver;
-using System.Text;
-using Serilog;
-using System.Threading;
-using StockCrawler.Entity;
-using StockCrawler.Crawler;
-using EzAspDotNet.Exception;
+﻿using AngleSharp.Html.Parser;
 using EnumExtend;
+using EzAspDotNet.Exception;
+using EzAspDotNet.Services;
+using EzMongoDb.Util;
+using MongoDB.Driver;
+using Serilog;
+using Server.Code;
+using StockCrawler.Crawler;
+using StockCrawler.Entity;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Server.Services
 {
