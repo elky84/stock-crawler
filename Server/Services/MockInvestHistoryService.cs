@@ -1,11 +1,13 @@
-﻿using Server.Models;
-using EzAspDotNet.Util;
-using System.Threading.Tasks;
+﻿using EzAspDotNet.Exception;
+using EzAspDotNet.Models;
 using EzAspDotNet.Services;
+using EzAspDotNet.Util;
 using MongoDB.Driver;
+using Server.Code;
+using Server.Models;
 using System;
 using System.Collections.Generic;
-using Server.Code;
+using System.Threading.Tasks;
 
 namespace Server.Services
 {
@@ -35,10 +37,17 @@ namespace Server.Services
 
         public async Task<Protocols.Response.MockInvestHistories> Get(string userId)
         {
+            var user = await _userService.GetByUserId(userId);
+            if (user == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.MockInvestHistories
             {
-                User = (await _userService.GetByUserId(userId)).ToProtocol(),
-                Datas = (await _mongoDbMockInvestHistory.FindAsync(Builders<MockInvestHistory>.Filter.Eq(x => x.UserId, userId))).ConvertAll(x => x.ToProtocol())
+                User = MapperUtil.Map<Protocols.Common.User>(user),
+                Datas = MapperUtil.Map<List<MockInvestHistory>, List<Protocols.Common.MockInvestHistory>>
+                                      (await _mongoDbMockInvestHistory.FindAsync(Builders<MockInvestHistory>.Filter.Eq(x => x.UserId, userId)))
             };
         }
 

@@ -1,5 +1,5 @@
-﻿using Server.Code;
-using EzAspDotNet.Models;
+﻿using EzAspDotNet.Models;
+using Server.Code;
 
 namespace Server.Models
 {

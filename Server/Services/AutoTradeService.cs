@@ -1,10 +1,11 @@
-﻿using Server.Models;
-using EzAspDotNet.Util;
-using System.Threading.Tasks;
+﻿using EzAspDotNet.Exception;
+using EzAspDotNet.Models;
 using EzAspDotNet.Services;
+using EzAspDotNet.Util;
 using MongoDB.Driver;
+using Server.Models;
 using System.Collections.Generic;
-using EzAspDotNet.Exception;
+using System.Threading.Tasks;
 
 namespace Server.Services
 {
@@ -25,10 +26,15 @@ namespace Server.Services
             try
             {
                 var created = await CreateAsync(autoTrade);
+                if (created == null)
+                {
+                    throw new DeveloperException(Code.ResultCode.InsertFailed);
+                }
+
                 return new Protocols.Response.AutoTrade
                 {
                     ResultCode = Code.ResultCode.Success,
-                    Datas = new List<Protocols.Common.AutoTrade> { created?.ToProtocol() }
+                    Datas = new List<Protocols.Common.AutoTrade> { MapperUtil.Map<Protocols.Common.AutoTrade>(created) }
                 };
             }
             catch (MongoWriteException)
@@ -41,7 +47,7 @@ namespace Server.Services
         {
             try
             {
-                return await _mongoDbAutoTrade.CreateAsync(autoTrade.ToModel());
+                return await _mongoDbAutoTrade.CreateAsync(MapperUtil.Map<AutoTrade>(autoTrade));
             }
             catch (MongoWriteException)
             {
@@ -54,7 +60,9 @@ namespace Server.Services
             return new Protocols.Response.AutoTrade
             {
                 ResultCode = Code.ResultCode.Success,
-                Datas = new List<Protocols.Common.AutoTrade> { (await _mongoDbAutoTrade.FindOneAsyncById(id))?.ToProtocol() }
+                Datas = new List<Protocols.Common.AutoTrade> {
+                    MapperUtil.Map<Protocols.Common.AutoTrade>(await _mongoDbAutoTrade.FindOneAsyncById(id))
+                }
             };
         }
 
@@ -76,13 +84,20 @@ namespace Server.Services
         public async Task<Protocols.Response.AutoTrade> Update(string id, Protocols.Request.AutoTrade autoTrade)
         {
             autoTrade.Id = id;
-            var update = autoTrade.ToModel();
+            var update = MapperUtil.Map<AutoTrade>(autoTrade);
 
             var updated = await _mongoDbAutoTrade.UpdateAsync(id, update);
+            if (updated == null)
+            {
+                throw new DeveloperException(Code.ResultCode.UpdateFailed);
+            }
+
             return new Protocols.Response.AutoTrade
             {
                 ResultCode = Code.ResultCode.Success,
-                Datas = new List<Protocols.Common.AutoTrade> { (updated ?? update).ToProtocol() }
+                Datas = new List<Protocols.Common.AutoTrade> {
+                    MapperUtil.Map<Protocols.Common.AutoTrade>(updated)
+                }
             };
         }
 
@@ -95,11 +110,17 @@ namespace Server.Services
 
         public async Task<Protocols.Response.AutoTrade> Delete(string id)
         {
+            var deleted = await _mongoDbAutoTrade.RemoveGetAsync(id);
+            if (deleted == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.AutoTrade
             {
                 ResultCode = Code.ResultCode.Success,
                 Datas = new List<Protocols.Common.AutoTrade> {
-                    (await _mongoDbAutoTrade.RemoveGetAsync(id))?.ToProtocol()
+                    MapperUtil.Map<Protocols.Common.AutoTrade>(deleted)
                 }
             };
         }

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EzAspDotNet.Exception;
+using EzAspDotNet.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Server.Models;
 using Server.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Server.Controllers
 {
@@ -29,7 +29,9 @@ namespace Server.Controllers
         {
             return new Protocols.Response.Users
             {
-                Datas = (await _userService.Get()).ConvertAll(x => x.ToProtocol())
+                Datas = MapperUtil.Map<List<User>,
+                                       List<Protocols.Common.User>>
+                                       (await _userService.Get())
             };
         }
 
@@ -42,9 +44,15 @@ namespace Server.Controllers
         [HttpGet("UserId/{id}")]
         public async Task<Protocols.Response.User> GetByUserId(string id)
         {
+            var user = await _userService.GetByUserId(id);
+            if (user == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.User
             {
-                Data = (await _userService.GetByUserId(id)).ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.User>(user)
             };
         }
 

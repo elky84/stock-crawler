@@ -1,4 +1,5 @@
 ﻿using EzAspDotNet.Exception;
+using EzAspDotNet.Models;
 using EzAspDotNet.Services;
 using EzAspDotNet.Util;
 using MongoDB.Driver;
@@ -34,11 +35,15 @@ namespace Server.Services
         public async Task<Protocols.Response.Notification> Create(Protocols.Request.NotificationCreate notification)
         {
             var created = await Create(notification.Data);
+            if (created == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
 
             return new Protocols.Response.Notification
             {
                 ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
-                Data = created?.ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.Notification>(created)
             };
 
         }
@@ -47,7 +52,8 @@ namespace Server.Services
         {
             try
             {
-                return await _mongoDbNotification.UpsertAsync(Builders<Notification>.Filter.Eq(x => x.InvestType, notification.InvestType), notification.ToModel());
+                return await _mongoDbNotification.UpsertAsync(Builders<Notification>.Filter.Eq(x => x.InvestType, notification.InvestType),
+                    MapperUtil.Map<Notification>(notification));
             }
             catch (MongoWriteException)
             {
@@ -65,38 +71,55 @@ namespace Server.Services
 
             return new Protocols.Response.NotificationMulti
             {
-                Datas = notifications.ConvertAll(x => x.ToProtocol())
+                Datas = MapperUtil.Map<List<Notification>, List<Protocols.Common.Notification>>(notifications)
             };
         }
 
         public async Task<Protocols.Response.Notification> Get(string id)
         {
+            var notification = await _mongoDbNotification.FindOneAsyncById(id);
+            if (notification == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.Notification
             {
                 ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
-                Data = (await _mongoDbNotification.FindOneAsyncById(id))?.ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.Notification>(notification)
             };
         }
 
 
         public async Task<Protocols.Response.Notification> Update(string id, Protocols.Request.NotificationUpdate notificationUpdate)
         {
-            var update = notificationUpdate.Data.ToModel();
+            var update = MapperUtil.Map<Notification>(notificationUpdate.Data);
 
             var updated = await _mongoDbNotification.UpdateAsync(id, update);
+            if (updated == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.Notification
             {
                 ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
-                Data = (updated ?? update).ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.Notification>(updated)
             };
         }
 
         public async Task<Protocols.Response.Notification> Delete(string id)
         {
+            var deleted = await _mongoDbNotification.RemoveGetAsync(id);
+            if (deleted == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.Notification
             {
                 ResultCode = ResultCode.Success,
-                Data = (await _mongoDbNotification.RemoveGetAsync(id))?.ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.Notification>(deleted)
             };
         }
     }

@@ -1,11 +1,11 @@
-﻿using Server.Models;
-using EzAspDotNet.Util;
-using System.Threading.Tasks;
-using EzAspDotNet.Services;
-using MongoDB.Driver;
-using System.Collections.Generic;
+﻿using EzAspDotNet.Exception;
 using EzAspDotNet.Models;
-using EzAspDotNet.Exception;
+using EzAspDotNet.Services;
+using EzAspDotNet.Util;
+using MongoDB.Driver;
+using Server.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Server.Services
 {
@@ -24,12 +24,12 @@ namespace Server.Services
         {
             try
             {
-                var created = await _mongoDbUser.CreateAsync(user.ToModel());
+                var created = await _mongoDbUser.CreateAsync(MapperUtil.Map<User>(user));
 
                 return new Protocols.Response.User
                 {
                     ResultCode = Code.ResultCode.Success,
-                    Data = created?.ToProtocol()
+                    Data = MapperUtil.Map<Protocols.Common.User>(created)
                 };
             }
             catch (MongoWriteException)
@@ -46,10 +46,16 @@ namespace Server.Services
 
         public async Task<Protocols.Response.User> Get(string id)
         {
+            var user = await _mongoDbUser.FindOneAsyncById(id);
+            if (user == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                Data = (await _mongoDbUser.FindOneAsyncById(id))?.ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.User>(user)
             };
         }
 
@@ -66,13 +72,18 @@ namespace Server.Services
         public async Task<Protocols.Response.User> Update(string id, Protocols.Request.User user)
         {
             user.Id = id;
-            var update = user.ToModel();
+            var update = MapperUtil.Map<User>(user);
 
             var updated = await _mongoDbUser.UpdateAsync(id, update);
+            if (updated == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                Data = (updated ?? update).ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.User>(updated)
             };
         }
 
@@ -81,14 +92,19 @@ namespace Server.Services
             var origin = await GetByUserId(userId);
 
             user.UserId = userId;
-            var update = user.ToModel();
+            var update = MapperUtil.Map<User>(user);
             origin.CopyHeader(update);
 
             var updated = await _mongoDbUser.UpdateAsync(Builders<User>.Filter.Eq(x => x.UserId, userId), update);
+            if (updated == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                Data = (updated ?? update).ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.User>(updated)
             };
         }
 
@@ -101,19 +117,30 @@ namespace Server.Services
 
         public async Task<Protocols.Response.User> Delete(string id)
         {
+            var deleted = await _mongoDbUser.RemoveGetAsync(id);
+            if (deleted == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                Data = (await _mongoDbUser.RemoveGetAsync(id))?.ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.User>(deleted)
             };
         }
 
         public async Task<Protocols.Response.User> DeleteByUserId(string userId)
         {
+            var deleted = await _mongoDbUser.RemoveGetAsync(Builders<User>.Filter.Eq(x => x.UserId, userId));
+            if (deleted == null)
+            {
+                throw new DeveloperException(Code.ResultCode.NotFoundData);
+            }
+
             return new Protocols.Response.User
             {
                 ResultCode = Code.ResultCode.Success,
-                Data = (await _mongoDbUser.RemoveGetAsync(Builders<User>.Filter.Eq(x => x.UserId, userId)))?.ToProtocol()
+                Data = MapperUtil.Map<Protocols.Common.User>(deleted)
             };
         }
     }

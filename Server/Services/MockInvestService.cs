@@ -1,13 +1,14 @@
-﻿using Server.Models;
-using EzAspDotNet.Util;
-using System.Threading.Tasks;
+﻿using EzAspDotNet.Exception;
+using EzAspDotNet.Models;
 using EzAspDotNet.Services;
+using EzAspDotNet.Util;
 using MongoDB.Driver;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using Serilog;
-using EzAspDotNet.Exception;
+using Server.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Server.Services
 {
@@ -75,8 +76,8 @@ namespace Server.Services
 
                 response.Datas.Add(new Protocols.Common.MockInvestList
                 {
-                    User = user.ToProtocol(),
-                    MockInvests = invests.ConvertAll(x => x.ToProtocol()),
+                    User = MapperUtil.Map<Protocols.Common.User>(user),
+                    MockInvests = MapperUtil.Map<List<MockInvest>, List<Protocols.Common.MockInvest>>(invests),
                     ValuationBalance = valuationBalance,
                     ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
                     InvestedIncome = (double)currentPriceSum / (double)buyPriceSum * 100,
@@ -166,9 +167,9 @@ namespace Server.Services
             return new Protocols.Response.MockInvestAnalysisBuy
             {
                 ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
-                User = user.ToProtocol(),
+                User = MapperUtil.Map<Protocols.Common.User>(user),
+                Datas = MapperUtil.Map<List<MockInvest>, List<Protocols.Common.MockInvest>>(investDatas),
                 Type = mockInvestAnalysisBuy.Type,
-                Datas = investDatas.ConvertAll(x => x.ToProtocol()),
                 Date = mockInvestAnalysisBuy.Date
             };
         }
@@ -239,8 +240,8 @@ namespace Server.Services
             return new Protocols.Response.MockInvestAnalysisAutoTrade
             {
                 Type = mockInvestAnalysisAutoTrade.Type,
-                User = user.ToProtocol(),
-                Datas = autoTrades.ConvertAll(x => x.ToProtocol()),
+                User = MapperUtil.Map<Protocols.Common.User>(user),
+                Datas = MapperUtil.Map<List<AutoTrade>, List<Protocols.Common.AutoTrade>>(autoTrades),
                 Date = mockInvestAnalysisAutoTrade.Date
             };
         }
@@ -261,7 +262,7 @@ namespace Server.Services
 
             return new Protocols.Response.MockInvestAutoTradeRefresh
             {
-                Datas = autoTrades.ConvertAll(x => x.ToProtocol()),
+                Datas = MapperUtil.Map<List<AutoTrade>, List<Protocols.Common.AutoTrade>>(autoTrades),
                 Date = mockInvestAutoTradeRefresh.Date
             };
         }
@@ -340,8 +341,8 @@ namespace Server.Services
             return new Protocols.Response.MockInvestBuy
             {
                 ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
-                User = user.ToProtocol(),
-                Data = mockInvest.ToProtocol(),
+                User = MapperUtil.Map<Protocols.Common.User>(user),
+                Data = MapperUtil.Map<Protocols.Common.MockInvest>(mockInvest),
                 Date = mockInvestBuy.Date
             };
         }
@@ -351,8 +352,9 @@ namespace Server.Services
         {
             var user = await _userService.GetByUserId(mockInvestSell.UserId);
             var sellList = mockInvestSell.All ?
-                (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, mockInvestSell.UserId))).ConvertAll(x => new Protocols.Common.MockInvestSell { 
-                    Id = x.Id, 
+                (await _mongoDbMockInvest.FindAsync(Builders<MockInvest>.Filter.Eq(x => x.UserId, mockInvestSell.UserId))).ConvertAll(x => new Protocols.Common.MockInvestSell
+                {
+                    Id = x.Id,
                     Amount = x.Amount
                 }) : mockInvestSell.SellList;
 
@@ -363,7 +365,7 @@ namespace Server.Services
                 var mockInvest = await _mongoDbMockInvest.FindOneAsyncById(sell.Id);
 
                 var latest = await _stockDataService.Latest(7, mockInvest.Code, mockInvestSell.Date);
-                if(latest == null)
+                if (latest == null)
                 {
                     Log.Information($"Not found latest.");
                     continue;
@@ -402,8 +404,8 @@ namespace Server.Services
             return new Protocols.Response.MockInvestSell
             {
                 ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
-                User = (await _userService.GetByUserId(mockInvestSell.UserId))?.ToProtocol(),
-                Datas = investDatas.ConvertAll(x => x.ToProtocol()),
+                User = MapperUtil.Map<Protocols.Common.User>(user),
+                Datas = MapperUtil.Map<List<MockInvest>, List<Protocols.Common.MockInvest>>(investDatas),
                 Date = mockInvestSell.Date
             };
         }

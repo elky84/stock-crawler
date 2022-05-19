@@ -1,15 +1,16 @@
-﻿using Server.Models;
-using EzAspDotNet.Util;
-using System;
-using System.Threading.Tasks;
-using EzAspDotNet.Services;
-using System.Collections.Generic;
-using MongoDB.Driver;
-using System.Linq;
-using Server.Code;
-using StockCrawler.Models;
+﻿using EnumExtend;
 using EzAspDotNet.Exception;
-using EnumExtend;
+using EzAspDotNet.Models;
+using EzAspDotNet.Services;
+using EzAspDotNet.Util;
+using MongoDB.Driver;
+using Server.Code;
+using Server.Models;
+using StockCrawler.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Server.Services
 {
@@ -100,7 +101,7 @@ namespace Server.Services
             {
                 ResultCode = ResultCode.Success,
                 Types = analysis.Types,
-                Datas = Datas.ConvertAll(x => x.ToProtocol())
+                Datas = MapperUtil.Map<List<Analysis>, List<Protocols.Common.Analysis>>(Datas)
             };
         }
 

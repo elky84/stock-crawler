@@ -1,3 +1,4 @@
+using AutoMapper;
 using EzAspDotNet.Exception;
 using EzAspDotNet.Services;
 using EzAspDotNet.StartUp;
@@ -33,6 +34,39 @@ namespace Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            EzAspDotNet.Models.MapperUtil.Initialize(
+                new MapperConfiguration(cfg =>
+                {
+                    cfg.CreateMap<EzAspDotNet.Notification.Models.Notification, Protocols.Common.Notification>();
+                    cfg.CreateMap<Protocols.Common.Notification, EzAspDotNet.Notification.Models.Notification>();
+
+                    cfg.CreateMap<Models.Notification, Protocols.Common.Notification>();
+                    cfg.CreateMap<Protocols.Common.Notification, Models.Notification>();
+
+                    cfg.CreateMap<Models.AutoTrade, Protocols.Common.AutoTrade>();
+                    cfg.CreateMap<Protocols.Common.AutoTrade, Models.AutoTrade>();
+
+                    cfg.CreateMap<Models.Analysis, Protocols.Common.Analysis>();
+                    cfg.CreateMap<Protocols.Common.Analysis, Models.Analysis>();
+
+                    cfg.CreateMap<Models.Company, Protocols.Common.Company>();
+                    cfg.CreateMap<Protocols.Common.Company, Models.Company>();
+
+                    cfg.CreateMap<Models.MockInvest, Protocols.Common.MockInvest>();
+                    cfg.CreateMap<Protocols.Common.MockInvest, Models.MockInvest>();
+
+                    cfg.CreateMap<Models.MockInvestHistory, Protocols.Common.MockInvestHistory>();
+                    cfg.CreateMap<Protocols.Common.MockInvestHistory, Models.MockInvestHistory>();
+
+                    cfg.CreateMap<Models.StockEvaluate, Protocols.Common.StockEvaluate>();
+                    cfg.CreateMap<Protocols.Common.StockEvaluate, Models.StockEvaluate>();
+
+                    cfg.CreateMap<Models.User, Protocols.Common.User>();
+                    cfg.CreateMap<Protocols.Common.User, Models.User>();
+
+                })
+            );
+
             services.CommonConfigureServices();
 
             services.AddHttpClient();

@@ -18,5 +18,11 @@
         public readonly static ResultCode UsingNotificationId = new(10007, "UsingNotificationId");
         public readonly static ResultCode BuyAmountGreaterThanZero = new(10008, "BuyAmountGreaterThanZero");
         public readonly static ResultCode InvestAlertCompany = new(10009, "InvestAlertCompany");
+
+        public readonly static ResultCode InsertFailed = new(10011, "InsertFailed");
+        public readonly static ResultCode UpdateFailed = new(10012, "UpdateFailed");
+
+        public readonly static ResultCode NotFoundData = new(10013, "NotFoundData");
+
     }
 }

@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using EzAspDotNet.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Server.Models;
 using Server.Services;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Server.Controllers
 {
@@ -36,7 +34,9 @@ namespace Server.Controllers
         {
             return new Protocols.Response.AutoTrade
             {
-                Datas = (await _autoTradeService.GetByUserId(id)).ConvertAll(x => x.ToProtocol())
+                Datas = MapperUtil.Map<List<Models.AutoTrade>,
+                                       List<Protocols.Common.AutoTrade>>
+                                       (await _autoTradeService.GetByUserId(id))
             };
         }
 
