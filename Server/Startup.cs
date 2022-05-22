@@ -37,32 +37,34 @@ namespace Server
             EzAspDotNet.Models.MapperUtil.Initialize(
                 new MapperConfiguration(cfg =>
                 {
-                    cfg.CreateMap<EzAspDotNet.Notification.Models.Notification, Protocols.Common.Notification>();
-                    cfg.CreateMap<Protocols.Common.Notification, EzAspDotNet.Notification.Models.Notification>();
+                    cfg.AllowNullDestinationValues = true;
 
-                    cfg.CreateMap<Models.Notification, Protocols.Common.Notification>();
-                    cfg.CreateMap<Protocols.Common.Notification, Models.Notification>();
+                    cfg.CreateMap<EzAspDotNet.Notification.Models.Notification, Protocols.Common.Notification>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.Notification, EzAspDotNet.Notification.Models.Notification>(MemberList.None);
 
-                    cfg.CreateMap<Models.AutoTrade, Protocols.Common.AutoTrade>();
-                    cfg.CreateMap<Protocols.Common.AutoTrade, Models.AutoTrade>();
+                    cfg.CreateMap<Models.Notification, Protocols.Common.Notification>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.Notification, Models.Notification>(MemberList.None);
 
-                    cfg.CreateMap<Models.Analysis, Protocols.Common.Analysis>();
-                    cfg.CreateMap<Protocols.Common.Analysis, Models.Analysis>();
+                    cfg.CreateMap<Models.AutoTrade, Protocols.Common.AutoTrade>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.AutoTrade, Models.AutoTrade>(MemberList.None);
 
-                    cfg.CreateMap<Models.Company, Protocols.Common.Company>();
-                    cfg.CreateMap<Protocols.Common.Company, Models.Company>();
+                    cfg.CreateMap<Models.Analysis, Protocols.Common.Analysis>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.Analysis, Models.Analysis>(MemberList.None);
 
-                    cfg.CreateMap<Models.MockInvest, Protocols.Common.MockInvest>();
-                    cfg.CreateMap<Protocols.Common.MockInvest, Models.MockInvest>();
+                    cfg.CreateMap<Models.Company, Protocols.Common.Company>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.Company, Models.Company>(MemberList.None);
 
-                    cfg.CreateMap<Models.MockInvestHistory, Protocols.Common.MockInvestHistory>();
-                    cfg.CreateMap<Protocols.Common.MockInvestHistory, Models.MockInvestHistory>();
+                    cfg.CreateMap<Models.MockInvest, Protocols.Common.MockInvest>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.MockInvest, Models.MockInvest>(MemberList.None);
 
-                    cfg.CreateMap<Models.StockEvaluate, Protocols.Common.StockEvaluate>();
-                    cfg.CreateMap<Protocols.Common.StockEvaluate, Models.StockEvaluate>();
+                    cfg.CreateMap<Models.MockInvestHistory, Protocols.Common.MockInvestHistory>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.MockInvestHistory, Models.MockInvestHistory>(MemberList.None);
 
-                    cfg.CreateMap<Models.User, Protocols.Common.User>();
-                    cfg.CreateMap<Protocols.Common.User, Models.User>();
+                    cfg.CreateMap<Models.StockEvaluate, Protocols.Common.StockEvaluate>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.StockEvaluate, Models.StockEvaluate>(MemberList.None);
+
+                    cfg.CreateMap<Models.User, Protocols.Common.User>(MemberList.None);
+                    cfg.CreateMap<Protocols.Common.User, Models.User>(MemberList.None);
 
                 })
             );
