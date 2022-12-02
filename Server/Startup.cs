@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Server.Services;
+using System;
 using System.Text;
 
 namespace Server
@@ -44,6 +45,9 @@ namespace Server
 
                     cfg.CreateMap<Models.Notification, Protocols.Common.Notification>(MemberList.None);
                     cfg.CreateMap<Protocols.Common.Notification, Models.Notification>(MemberList.None);
+
+                    cfg.CreateMap<Protocols.Common.NotificationCreate, EzAspDotNet.Notification.Models.Notification>(MemberList.None)
+                        .ForMember(d => d.Created, o => o.MapFrom(s => DateTime.Now));
 
                     cfg.CreateMap<Models.AutoTrade, Protocols.Common.AutoTrade>(MemberList.None);
                     cfg.CreateMap<Protocols.Common.AutoTrade, Models.AutoTrade>(MemberList.None);
