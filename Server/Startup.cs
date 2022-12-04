@@ -22,9 +22,12 @@ namespace Server
             System.Text.EncodingProvider provider = System.Text.CodePagesEncodingProvider.Instance;
             Encoding.RegisterProvider(provider);
 
+            var serilogConfig = new ConfigurationBuilder()
+                .AddJsonFile("serilog.json")
+                .Build();
+
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Error()
-                .WriteTo.Console()
+                .ReadFrom.Configuration(serilogConfig)
                 .CreateLogger();
 
             Configuration = configuration;

@@ -8,9 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Protocols\Response\dj3xrjap.5uy~" />
+	<None Include="serilog.json">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</None>
   </ItemGroup>
-
+	
   <ItemGroup>
     <ProjectReference Include="..\StockCrawler\StockCrawler.csproj" />
   </ItemGroup>
