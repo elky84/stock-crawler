@@ -1,5 +1,5 @@
 [![Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg?label=elky-essay)](https://elky84.github.io)
-![Made with](https://img.shields.io/badge/made%20with-.NET6-brightgreen.svg)
+![Made with](https://img.shields.io/badge/made%20with-.NET7-brightgreen.svg)
 ![Made with](https://img.shields.io/badge/made%20with-JavaScript-blue.svg)
 ![Made with](https://img.shields.io/badge/made%20with-MongoDB-red.svg)
 
@@ -17,7 +17,7 @@
 # stock-crawler
 
 ## 소개
-* .NET 6, ASP NET CORE 3를 기반으로 작성되었습니다.
+* .NET 7, ASP NET CORE 3를 기반으로 작성되었습니다.
 * 웹 크롤러로는 [abot2](https://github.com/sjdirect/abot) 를 사용했습니다.
 * DB로는 mongoDB를 사용합니다.
 * API는 swagger를 통해 확인하셔도 좋지만, http 폴더 안에 예제가 포함되어있습니다.
