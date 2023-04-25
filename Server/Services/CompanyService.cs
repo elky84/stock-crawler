@@ -53,7 +53,7 @@ namespace Server.Services
 
         public async Task<EzAspDotNet.Protocols.ResponseHeader> CrawlingCode(StockType stockType)
         {
-            int executionCount = 0;
+            var executionCount = 0;
 
             var queryMarketType = string.IsNullOrEmpty(stockType.GetDescription()) ? string.Empty : "marketType=" + stockType.GetDescription();
             var responseMessage = await (new HttpClient()).GetAsync(new Uri($"http://kind.krx.co.kr/corpgeneral/corpList.do?method=download&searchType=13&{queryMarketType}"));
@@ -82,8 +82,8 @@ namespace Server.Services
                 });
             });
 
-            Log.Information($"Pararell.For Count ({tdContent.Length / thContent.Length}) Executing Count ({executionCount})");
-            return new EzAspDotNet.Protocols.ResponseHeader { ResultCode = ResultCode.Success };
+            Log.Information("Parallel.For Count ({TdContentLength}) Executing Count ({ExecutionCount})", tdContent.Length / thContent.Length, executionCount);
+            return new EzAspDotNet.Protocols.ResponseHeader();
         }
 
 
@@ -98,27 +98,25 @@ namespace Server.Services
             return new EzAspDotNet.Protocols.ResponseHeader { ResultCode = ResultCode.Success };
         }
 
-        public void OnCrawlAlertHalt(NaverStockHalt naverStockHalt)
+        private void OnCrawlAlertHalt(NaverStockHalt naverStockHalt)
         {
             var origin = _mongoDbCompany.FindOne(Builders<Models.Company>.Filter.Eq(x => x.Code, naverStockHalt.Code));
-            if (origin != null)
-            {
-                origin.AlertType = AlertType.Halt;
-                _mongoDbCompany.Update(origin.Id, origin);
-            }
+            if (origin == null) return;
+            
+            origin.AlertType = AlertType.Halt;
+            _mongoDbCompany.Update(origin.Id, origin);
         }
 
-        public void OnCrawlAlertManagement(NaverStockManagement naverStockManagement)
+        private void OnCrawlAlertManagement(NaverStockManagement naverStockManagement)
         {
             var origin = _mongoDbCompany.FindOne(Builders<Models.Company>.Filter.Eq(x => x.Code, naverStockManagement.Code));
-            if (origin != null)
-            {
-                origin.AlertType = AlertType.Management;
-                _mongoDbCompany.Update(origin.Id, origin);
-            }
+            if (origin == null) return;
+            
+            origin.AlertType = AlertType.Management;
+            _mongoDbCompany.Update(origin.Id, origin);
         }
 
-        public async Task OnCrawlingCodeData(Models.Company code)
+        private async Task OnCrawlingCodeData(Models.Company code)
         {
             var origin = await _mongoDbCompany.FindOneAsync(Builders<Models.Company>.Filter.Eq(x => x.Code, code.Code));
             if (origin == null)

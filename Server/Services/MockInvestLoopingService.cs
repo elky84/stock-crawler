@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading;
 using EzAspDotNet.Exception;
+using EzAspDotNet.Protocols.Code;
 using EzAspDotNet.Services;
 
 namespace Server.Services
@@ -44,7 +45,7 @@ namespace Server.Services
         }
 
 
-        protected void DoWork()
+        private void DoWork()
         {
             var now = DateTime.Now;
 #if !DEBUG
@@ -129,7 +130,7 @@ namespace Server.Services
                             autoTrade.Code = next.Code;
                         }
 
-                        autoTrade.Balance += sell.Datas.Sum(x => x.TotalCurrentPrice.Value);
+                        autoTrade.Balance += sell.Datas.Sum(x => x.TotalCurrentPrice.GetValueOrDefault(0));
                         _ = _autoTradeService.Update(autoTrade);
                     }
                     catch (DeveloperException e)
@@ -180,7 +181,7 @@ namespace Server.Services
                             }
                             break;
                         default:
-                            throw new DeveloperException(Code.ResultCode.NotImplementedYet);
+                            throw new DeveloperException(ResultCode.NotImplementedYet);
                     }
 
                     // 매수
@@ -198,7 +199,7 @@ namespace Server.Services
                     }
                     catch (System.Exception e) when (e.InnerException is DeveloperException exception)
                     {
-                        if (exception.ResultCode == Code.ResultCode.InvestAlertCompany)
+                        if (Equals(exception.ResultCode, Code.ResultCode.InvestAlertCompany))
                         {
                             var next = _mockInvestService.NextAnalysis(autoTrade,
                                 allAutoTrades.Where(x => x.UserId == autoTrade.UserId).ToList(), DateTime.Now).Result;

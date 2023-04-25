@@ -23,7 +23,7 @@ namespace Server.Services
 
         public async Task<List<NaverStock>> Get(int day, string code, DateTime? date = null)
         {
-            date = date.HasValue ? date.Value.Date : DateTime.Now.Date;
+            date = date?.Date ?? DateTime.Now.Date;
 
             var builder = Builders<NaverStock>.Filter;
             var filter = builder.Lte(x => x.Date, date.Value) & builder.Gte(x => x.Date, date.Value.AddDays(-day)) & builder.Eq(x => x.Code, code);
@@ -33,11 +33,11 @@ namespace Server.Services
 
         public async Task<NaverStock> Latest(int day, string code, DateTime? date = null)
         {
-            date = date.HasValue ? date.Value.Date : DateTime.Now.Date;
+            date = date?.Date ?? DateTime.Now.Date;
             var builder = Builders<NaverStock>.Filter;
             var filter = builder.Lte(x => x.Date, date.Value) & builder.Gte(x => x.Date, date.Value.AddDays(-day)) & builder.Eq(x => x.Code, code);
-            var stockDatas = await _mongoDbNaverStock.FindAsync(filter);
-            return stockDatas.OrderByDescending(x => x.Date).FirstOrDefault();
+            var naverStocks = await _mongoDbNaverStock.FindAsync(filter);
+            return naverStocks.MaxBy(x => x.Date);
         }
     }
 }

@@ -80,8 +80,8 @@ namespace Server.Services
                     User = MapperUtil.Map<Protocols.Common.User>(user),
                     MockInvests = MapperUtil.Map<List<MockInvest>, List<Protocols.Common.MockInvest>>(invests),
                     ValuationBalance = valuationBalance,
-                    ValuationIncome = (double)valuationBalance / (double)user.OriginBalance * 100,
-                    InvestedIncome = (double)currentPriceSum / (double)buyPriceSum * 100,
+                    ValuationIncome = (double)valuationBalance / user.OriginBalance * 100,
+                    InvestedIncome = (double)currentPriceSum.GetValueOrDefault(0) / buyPriceSum * 100,
                     Date = date.GetValueOrDefault(DateTime.Now).Date
                 });
             }
@@ -105,11 +105,11 @@ namespace Server.Services
         public async Task<Protocols.Response.MockInvestAnalysisBuy> AnalysisBuy(Protocols.Request.MockInvestAnalysisBuy mockInvestAnalysisBuy)
         {
             var user = await _userService.GetByUserId(mockInvestAnalysisBuy.UserId);
-            var investDatas = new List<MockInvest>();
+            var mockInvests = new List<MockInvest>();
 
-            int page = 0;
+            var page = 0;
             var codePerUsablePrice = user.Balance / mockInvestAnalysisBuy.Count;
-            while (investDatas.Count < mockInvestAnalysisBuy.Count)
+            while (mockInvests.Count < mockInvestAnalysisBuy.Count)
             {
                 var Datas = await _analysisService.Get(mockInvestAnalysisBuy.Date.GetValueOrDefault(), mockInvestAnalysisBuy.Type, mockInvestAnalysisBuy.Count, page);
                 if (!Datas.Any())
@@ -151,13 +151,13 @@ namespace Server.Services
                         Date = mockInvestAnalysisBuy.Date.GetValueOrDefault(DateTime.Now).Date
                     });
 
-                    investDatas.Add(mockInvest);
+                    mockInvests.Add(mockInvest);
 
                     await _mockInvestHistoryService.Write(Code.HistoryType.Buy, mockInvest);
 
                     await Notification(user, mockInvest);
 
-                    if (investDatas.Count >= mockInvestAnalysisBuy.Count)
+                    if (mockInvests.Count >= mockInvestAnalysisBuy.Count)
                     {
                         break;
                     }
@@ -169,7 +169,7 @@ namespace Server.Services
             {
                 ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
                 User = MapperUtil.Map<Protocols.Common.User>(user),
-                Datas = MapperUtil.Map<List<MockInvest>, List<Protocols.Common.MockInvest>>(investDatas),
+                Datas = MapperUtil.Map<List<MockInvest>, List<Protocols.Common.MockInvest>>(mockInvests),
                 Type = mockInvestAnalysisBuy.Type,
                 Date = mockInvestAnalysisBuy.Date
             };
@@ -204,17 +204,17 @@ namespace Server.Services
             var user = await _userService.GetByUserId(mockInvestAnalysisAutoTrade.UserId);
             var autoTrades = new List<AutoTrade>();
 
-            int page = 0;
+            var page = 0;
             var codePerUsablePrice = user.Balance / mockInvestAnalysisAutoTrade.Count;
             while (autoTrades.Count < mockInvestAnalysisAutoTrade.Count)
             {
-                var datas = await _analysisService.Get(mockInvestAnalysisAutoTrade.Date.GetValueOrDefault(), mockInvestAnalysisAutoTrade.Type, mockInvestAnalysisAutoTrade.Count, page);
-                if (!datas.Any())
+                var analyses = await _analysisService.Get(mockInvestAnalysisAutoTrade.Date.GetValueOrDefault(), mockInvestAnalysisAutoTrade.Type, mockInvestAnalysisAutoTrade.Count, page);
+                if (!analyses.Any())
                 {
                     break;
                 }
 
-                foreach (var analysisData in datas)
+                foreach (var analysisData in analyses)
                 {
                     var autoTrade = await _autoTradeService.CreateAsync(new Protocols.Request.AutoTrade
                     {
@@ -254,11 +254,10 @@ namespace Server.Services
             foreach (var autoTrade in autoTrades)
             {
                 var analysis = await NextAnalysis(autoTrade, autoTrades, mockInvestAutoTradeRefresh.Date.GetValueOrDefault(DateTime.Now));
-                if (analysis != null)
-                {
-                    autoTrade.Code = analysis.Code;
-                    await _autoTradeService.Update(autoTrade);
-                }
+                if (analysis == null) continue;
+                
+                autoTrade.Code = analysis.Code;
+                await _autoTradeService.Update(autoTrade);
             }
 
             return new Protocols.Response.MockInvestAutoTradeRefresh
@@ -274,22 +273,18 @@ namespace Server.Services
             var count = await _analysisService.CountAsync(DateTime.Now);
             var mockInvestHistories = await _mockInvestHistoryService.Get(autoTrade.UserId, date.Date);
 
-            for (int page = 0; count > page * allAutoTrades.Count; ++page)
+            for (var page = 0; count > page * allAutoTrades.Count; ++page)
             {
-                var datas = await _analysisService.Get(DateTime.Now.Date, autoTrade.AnalysisType, allAutoTrades.Count, page);
-                if (!datas.Any())
+                var analyses = await _analysisService.Get(DateTime.Now.Date, autoTrade.AnalysisType, allAutoTrades.Count, page);
+                if (!analyses.Any())
                 {
                     break;
                 }
 
-                foreach (var analysisData in datas)
+                foreach (var analysisData in analyses.Where(analysisData => 
+                             allAutoTrades.All(x => x.Code != analysisData.Code) && 
+                             mockInvestHistories.All(x => x.Code != analysisData.Code)))
                 {
-                    if (allAutoTrades.Any(x => x.Code == analysisData.Code) ||
-                        mockInvestHistories.Any(x => x.Code == analysisData.Code))
-                    {
-                        continue;
-                    }
-
                     if (await _companyService.NotAlert(analysisData.Code) == null)
                     {
                         continue;
@@ -359,7 +354,7 @@ namespace Server.Services
                     Amount = x.Amount
                 }) : mockInvestSell.SellList;
 
-            var investDatas = new List<MockInvest>();
+            var mockInvests = new List<MockInvest>();
 
             foreach (var sell in sellList)
             {
@@ -397,7 +392,7 @@ namespace Server.Services
 
                 await Notification(user, mockInvest, sellMessage);
 
-                investDatas.Add(mockInvest);
+                mockInvests.Add(mockInvest);
             }
 
             await _userService.Update(user);
@@ -406,7 +401,7 @@ namespace Server.Services
             {
                 ResultCode = EzAspDotNet.Protocols.Code.ResultCode.Success,
                 User = MapperUtil.Map<Protocols.Common.User>(user),
-                Datas = MapperUtil.Map<List<MockInvest>, List<Protocols.Common.MockInvest>>(investDatas),
+                Datas = MapperUtil.Map<List<MockInvest>, List<Protocols.Common.MockInvest>>(mockInvests),
                 Date = mockInvestSell.Date
             };
         }

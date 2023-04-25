@@ -34,7 +34,7 @@ namespace Server.Services
         }
 
 
-        protected void DoWork()
+        private void DoWork()
         {
             var now = DateTime.Now;
             // 토요일 일요일은 안가져옴 안함

@@ -33,7 +33,6 @@ namespace Server.Services
 
                 return new Protocols.Response.AutoTrade
                 {
-                    ResultCode = Code.ResultCode.Success,
                     Datas = new List<Protocols.Common.AutoTrade> { MapperUtil.Map<Protocols.Common.AutoTrade>(created) }
                 };
             }
@@ -59,7 +58,6 @@ namespace Server.Services
         {
             return new Protocols.Response.AutoTrade
             {
-                ResultCode = Code.ResultCode.Success,
                 Datas = new List<Protocols.Common.AutoTrade> {
                     MapperUtil.Map<Protocols.Common.AutoTrade>(await _mongoDbAutoTrade.FindOneAsyncById(id))
                 }
@@ -94,7 +92,6 @@ namespace Server.Services
 
             return new Protocols.Response.AutoTrade
             {
-                ResultCode = Code.ResultCode.Success,
                 Datas = new List<Protocols.Common.AutoTrade> {
                     MapperUtil.Map<Protocols.Common.AutoTrade>(updated)
                 }
@@ -118,7 +115,6 @@ namespace Server.Services
 
             return new Protocols.Response.AutoTrade
             {
-                ResultCode = Code.ResultCode.Success,
                 Datas = new List<Protocols.Common.AutoTrade> {
                     MapperUtil.Map<Protocols.Common.AutoTrade>(deleted)
                 }
@@ -128,10 +124,7 @@ namespace Server.Services
         public async Task<Protocols.Response.AutoTrade> DeleteByUserId(string userId)
         {
             await _mongoDbAutoTrade.RemoveManyAsync(Builders<AutoTrade>.Filter.Eq(x => x.UserId, userId));
-            return new Protocols.Response.AutoTrade
-            {
-                ResultCode = Code.ResultCode.Success
-            };
+            return new Protocols.Response.AutoTrade();
         }
     }
 }

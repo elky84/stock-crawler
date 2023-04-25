@@ -26,7 +26,7 @@ namespace Server.Services
                 }
                 catch (System.Exception e)
                 {
-                    Log.Logger.Error($"Implement Task Exception. Reason:{e.Message}");
+                    Log.Logger.Error("Implement Task Exception. Reason:{EMessage}", e.Message);
 
                 }
 
@@ -35,7 +35,7 @@ namespace Server.Services
         }
 
 
-        protected void DoWork()
+        private void DoWork()
         {
             var now = DateTime.Now;
             // 토요일 일요일은 분석 안함

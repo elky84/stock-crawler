@@ -56,10 +56,7 @@ namespace Server.Services
             );
 #endif
 
-            return new Protocols.Response.Crawling
-            {
-                ResultCode = Code.ResultCode.Success
-            };
+            return new Protocols.Response.Crawling();
         }
 
 

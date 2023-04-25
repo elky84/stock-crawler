@@ -29,7 +29,6 @@ namespace Server.Services
 
                 return new Protocols.Response.User
                 {
-                    ResultCode = Code.ResultCode.Success,
                     Data = MapperUtil.Map<Protocols.Common.User>(created)
                 };
             }
@@ -55,7 +54,6 @@ namespace Server.Services
 
             return new Protocols.Response.User
             {
-                ResultCode = Code.ResultCode.Success,
                 Data = MapperUtil.Map<Protocols.Common.User>(user)
             };
         }
@@ -83,7 +81,6 @@ namespace Server.Services
 
             return new Protocols.Response.User
             {
-                ResultCode = Code.ResultCode.Success,
                 Data = MapperUtil.Map<Protocols.Common.User>(updated)
             };
         }
@@ -104,7 +101,6 @@ namespace Server.Services
 
             return new Protocols.Response.User
             {
-                ResultCode = Code.ResultCode.Success,
                 Data = MapperUtil.Map<Protocols.Common.User>(updated)
             };
         }
@@ -125,7 +121,6 @@ namespace Server.Services
             }
             return new Protocols.Response.User
             {
-                ResultCode = Code.ResultCode.Success,
                 Data = MapperUtil.Map<Protocols.Common.User>(deleted)
             };
         }
@@ -140,7 +135,6 @@ namespace Server.Services
 
             return new Protocols.Response.User
             {
-                ResultCode = Code.ResultCode.Success,
                 Data = MapperUtil.Map<Protocols.Common.User>(deleted)
             };
         }
