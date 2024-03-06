@@ -1,13 +1,4 @@
 {
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:12069",
-      "sslPort": 44363
-    }
-  },
-  "$schema": "http://json.schemastore.org/launchsettings.json",
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
@@ -22,6 +13,7 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
+        "MONGODB_CONNECTION": "mongodb+srv://elky84:%23mongoakwkdy12@cluster0.gv66drx.mongodb.net/?maxPoolSize=500&waitQueueSize=2000",
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
@@ -32,6 +24,26 @@
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/values",
       "publishAllPorts": true,
       "useSSL": true
+    },
+    "Container (.NET SDK)": {
+      "commandName": "SdkContainer",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/api/values",
+      "environmentVariables": {
+        "ASPNETCORE_HTTPS_PORTS": "8081",
+        "ASPNETCORE_HTTP_PORTS": "8080"
+      },
+      "publishAllPorts": true,
+      "useSSL": true
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:12069",
+      "sslPort": 44363
     }
   }
 }
