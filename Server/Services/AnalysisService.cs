@@ -58,11 +58,7 @@ namespace Server.Services
 
             var date = analysis.Date.GetValueOrDefault(DateTime.Now).Date;
 
-#if DEBUG //TODO 운용중인 PC 성능 이슈로 DEBUG가 더 빠른컴퓨터인지라 의도적으로 이렇게 처리했다.
-            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 256 }, code =>
-#else
             Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 4 }, code =>
-#endif
             {
                 var stockEvaluate = new StockEvaluate();
 
@@ -130,7 +126,7 @@ namespace Server.Services
             {
                 All = true,
                 Date = DateTime.Now.Date,
-                Types = EnumUtil.ToEnumList<AnalysisType>(),
+                Types = EnumUtil.GetEnumList<AnalysisType>(),
                 Days = new List<int> { 5, 20 }
             });
         }

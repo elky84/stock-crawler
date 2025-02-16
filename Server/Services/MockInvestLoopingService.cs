@@ -197,7 +197,7 @@ namespace Server.Services
                         autoTrade.Balance -= buy.Data.TotalBuyPrice;
                         _ = _autoTradeService.Update(autoTrade);
                     }
-                    catch (System.Exception e) when (e.InnerException is DeveloperException exception)
+                    catch (Exception e) when (e.InnerException is DeveloperException exception)
                     {
                         if (Equals(exception.ResultCode, Code.ResultCode.InvestAlertCompany))
                         {
@@ -213,7 +213,6 @@ namespace Server.Services
                         }
 
                         exception.ExceptionLog();
-                        continue;
                     }
                 }
             }

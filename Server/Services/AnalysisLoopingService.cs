@@ -6,15 +6,8 @@ using System;
 
 namespace Server.Services
 {
-    public class AnalysisLoopingService : LoopingService
+    public class AnalysisLoopingService(AnalysisService analysisService) : LoopingService
     {
-        private readonly AnalysisService _analysisService;
-
-        public AnalysisLoopingService(AnalysisService analysisService
-            )
-        {
-            _analysisService = analysisService;
-        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -48,7 +41,7 @@ namespace Server.Services
             if (now.Hour >= 8 &&
                 now.Hour <= 16)
             {
-                _ = _analysisService.ExecuteBackground();
+                _ = analysisService.ExecuteBackground();
             }
         }
     }

@@ -6,15 +6,8 @@ using EzAspDotNet.Exception;
 
 namespace Server.Services
 {
-    public class CompanyLoopingService : LoopingService
+    public class CompanyLoopingService(CompanyService companyService) : LoopingService
     {
-        private readonly CompanyService _companyService;
-
-        public CompanyLoopingService(CompanyService companyService
-            )
-        {
-            _companyService = companyService;
-        }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -38,7 +31,7 @@ namespace Server.Services
         {
             var now = DateTime.Now;
             // 토요일 일요일은 안가져옴 안함
-            if (now.DayOfWeek == DayOfWeek.Saturday || now.DayOfWeek == DayOfWeek.Sunday)
+            if (now.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 return;
             }
@@ -47,7 +40,7 @@ namespace Server.Services
             if (now.Hour >= 8 &&
                 now.Hour <= 9)
             {
-                _ = _companyService.ExecuteBackground();
+                _ = companyService.ExecuteBackground();
             }
         }
     }

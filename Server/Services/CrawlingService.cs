@@ -8,53 +8,31 @@ using System.Threading.Tasks;
 
 namespace Server.Services
 {
-    public class NaverStockDailyCrawlerMongoDb : NaverStockDailyCrawler
+    public class NaverStockDailyCrawlerMongoDb(MongoDbUtil<NaverStock> mongoDbNaverStock, int page, string code) : NaverStockDailyCrawler(page, code)
     {
-        private readonly MongoDbUtil<NaverStock> _mongoDbNaverStock;
-
-        public NaverStockDailyCrawlerMongoDb(MongoDbUtil<NaverStock> mongoDbNaverStock, int page, string code)
-            : base(page, code)
-        {
-            _mongoDbNaverStock = mongoDbNaverStock;
-        }
 
         protected override async Task OnCrawlData(NaverStock naverStock)
         {
-            await _mongoDbNaverStock.UpsertAsync(Builders<NaverStock>.Filter.Eq(x => x.Code, naverStock.Code) & Builders<NaverStock>.Filter.Eq(x => x.Date, naverStock.Date), naverStock);
+            await mongoDbNaverStock.UpsertAsync(Builders<NaverStock>.Filter.Eq(x => x.Code, naverStock.Code) & Builders<NaverStock>.Filter.Eq(x => x.Date, naverStock.Date), naverStock);
         }
     }
 
-    public class CrawlingService
+    public class CrawlingService(
+        MongoDbService mongoDbService,
+        CompanyService companyService)
     {
-        private readonly MongoDbUtil<NaverStock> _mongoDbNaverStock;
-
-        private readonly CompanyService _companyService;
-
-        public CrawlingService(MongoDbService mongoDbService,
-            CompanyService companyService)
-        {
-            _mongoDbNaverStock = new MongoDbUtil<NaverStock>(mongoDbService.Database);
-            _companyService = companyService;
-        }
+        private readonly MongoDbUtil<NaverStock> _mongoDbNaverStock = new(mongoDbService.Database);
 
         public async Task<Protocols.Response.Crawling> Execute(Protocols.Request.Crawling crawling)
         {
-            var codes = crawling.All ? (await _companyService.All()).Select(x => x.Code) : crawling.Codes;
-#if DEBUG //TODO 운용중인 PC 성능 이슈로 DEBUG가 더 빠른컴퓨터인지라 의도적으로 이렇게 처리했다.
-            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 32 },
-                code =>
+            var codes = crawling.All ? (await companyService.All()).Select(x => x.Code) : crawling.Codes;
+
+            foreach(var code in codes)
+            {
+                foreach (var _ in Enumerable.Range(1, crawling.Page).Select(y => new NaverStockDailyCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()))
                 {
-                    Task.WaitAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockDailyCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());
                 }
-            );
-#else
-            Parallel.ForEach(codes, new ParallelOptions { MaxDegreeOfParallelism = 4 },
-                code =>
-                {
-                    Task.WaitAll(Enumerable.Range(1, crawling.Page).ToList().ConvertAll(y => new NaverStockDailyCrawlerMongoDb(_mongoDbNaverStock, y, code).RunAsync()).ToArray());
-                }
-            );
-#endif
+            }
 
             return new Protocols.Response.Crawling();
         }
@@ -62,7 +40,7 @@ namespace Server.Services
 
         public async Task ExecuteBackground()
         {
-            var codes = (await _companyService.All()).Select(x => x.Code);
+            var codes = (await companyService.All()).Select(x => x.Code);
             foreach (var code in codes)
             {
                 await new NaverStockDailyCrawlerMongoDb(_mongoDbNaverStock, 1, code).RunAsync();
